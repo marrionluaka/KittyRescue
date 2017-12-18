@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react';
 
 import { 
-    View, 
+    View,
+    TouchableOpacity,
     Text,
     Image,
     StyleSheet
@@ -9,21 +10,51 @@ import {
 
   const styles = StyleSheet.create({
     box:{
-      margin: '1%',
-      backgroundColor: 'powderblue'
+      margin: '1%'
     }
   });
 
   export default class Tile extends Component{
+    constructor(props){
+        super(props);
+    }
+
+    tileFlipHandler = () => {
+        this.props.tile.isFlipped = true; 
+        this.props.onTileFlipped(this.props.tile);
+    }
+
+    tileGenerator = () => {
+        const { tile, width, height } = this.props;
+        const _styles = [styles.box, {
+            width: width, 
+            height: height
+        }];
+
+        if(tile.isMatched){
+            return (
+                <View style={
+                    [..._styles, { opacity: 0 }]
+                }>
+                </View>
+            )
+        } else {
+            return(
+                <TouchableOpacity 
+                style={
+                    [{ backgroundColor: 'powderblue'}, ..._styles]
+                }
+                onPress={this.tileFlipHandler}
+                >
+                    {
+                        tile.isFlipped ? <Text>{tile.src} </Text> : null
+                    }
+                </TouchableOpacity>
+            );
+        }
+    }
 
     render(){
-        return(
-            <View style={[styles.box, {
-                 width: this.props.width, 
-                 height: this.props.height
-            }]}>
-                <Text>{this.props.tile.value} </Text>
-            </View>
-        );
+        return this.tileGenerator();
     }
   }

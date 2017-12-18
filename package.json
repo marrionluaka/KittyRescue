@@ -8,8 +8,11 @@
 	},
 	"dependencies": {
 		"native-base": "^2.3.3",
+		"ramda": "^0.25.0",
 		"react": "16.0.0",
-		"react-native": "0.50.4"
+		"react-native": "0.50.4",
+		"react-redux": "^5.0.6",
+		"redux": "^3.7.2"
 	},
 	"devDependencies": {
 		"babel-jest": "21.2.0",
@@ -18,6 +21,9 @@
 		"react-test-renderer": "16.0.0"
 	},
 	"jest": {
-		"preset": "react-native"
+		"preset": "react-native",
+		"transformIgnorePatterns": [
+			"node_modules/(?!react-native|native-base-shoutem-theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)"
+		]
 	}
 }

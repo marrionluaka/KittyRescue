@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { PropTypes, Component } from 'react';
 import { 
   View, 
   Text,
@@ -6,7 +6,11 @@ import {
   StyleSheet,
   Dimensions
 } from 'react-native';
+
+import { connect } from 'react-redux';
+
 import Tile from '../Tile';
+import * as tileActions from '../actions/tiles'
 
 const styles = StyleSheet.create({
   container:{
@@ -14,97 +18,117 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     overflow: 'hidden'
-  },
-  box:{
-    margin: '1%',
-    backgroundColor: 'powderblue'
   }
 });
 
-const arrText4 = [
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
+class Grid extends Component{
+  constructor(props){
+    super(props);
 
-  { key: 5, value: 'E' },
-  { key: 6, value: 'F' },
-  { key: 7, value: 'G' },
-  { key: 8, value: 'H' },
+    this.levels = {
+      easy: 2,
+      medium: 4,
+      hard: 6
+    };
+  }
 
-  { key: 9, value: 'I' },
-  { key: 10, value: 'J' },
-  { key: 11, value: 'K' },
-  { key: 12, value: 'L' },
-
-  { key: 13, value: 'M' },
-  { key: 14, value: 'N' },
-  { key: 15, value: 'O' },
-  { key: 16, value: 'P' }
-];
-
-const arrText5 = [
-
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
-  { key: 2, value: 'E' },
-
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
-  { key: 2, value: 'E' },
-
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
-  { key: 2, value: 'E' },
-
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
-  { key: 2, value: 'E' },
-
-  { key: 1, value: 'A' },
-  { key: 2, value: 'B' },
-  { key: 3, value: 'C' },
-  { key: 4, value: 'D' },
-  { key: 2, value: 'E' }
-];
-
-const gridBuilder = (arr, size) => {
-  const _dimensions = { // TODO: Come up with a mathematical formula
-    "4x4": { width: "23%", height: 4 },
-    "5x5": { width: "18%", height: 5 }
+  state = {
+    tile: null,
+    memory_tiles: [],
+    tiles_flipped: 0
   };
 
-  return arr.map((el, idx) => {
-    return (
-      <Tile 
-        key={idx}
-        tile={el}
-        width={_dimensions[size].width}
-        height={(Dimensions.get('window').width / _dimensions[size].height)}
-      />
-    );
-  });
-};
+  componentWillMount(){
+   this.props.fetchTiles("4x4", "easy");
+  }
 
-const Grid = () =>(
-    <View style={styles.container}>
-      {
-        gridBuilder(arrText5, "5x5")
+  memoryFlipTile = tile => {
+    const { tiles } = this.props;
+    let { memory_tiles, tiles_flipped } = this.state;
+
+    const len = tiles.length - this.levels["easy"];
+    
+    if( memory_tiles.length < 2){
+      this.setState({ tile });// causes a re-render
+      if(memory_tiles.length == 0){
+        memory_tiles.push(tile);
+      } else if(memory_tiles.length == 1 && memory_tiles[0].id !== tile.id){
+          memory_tiles.push(tile);
+          if(memory_tiles[0].src == tile.src){
+
+            this.regenerateGrid(() => tile.isTrap, "Game Over");
+            
+            this.setState({ memory_tiles: [], tiles_flipped: tiles_flipped += 2 });
+           
+            this.props.tilesMatched(memory_tiles[0].src);
+            
+            this.regenerateGrid(() => tiles_flipped == len, "Board cleared... generating new board");
+
+          } else {
+            this.flip2Back(memory_tiles);
+          }
       }
-      {/* <Text>Clean up </Text> */}
-    </View>
-);
+    }
+  }
+
+  regenerateGrid = (predicate, message) => {
+    if(predicate()){
+      alert(message);
+      this.setState({
+         memory_tiles: [],
+         tiles_flipped: 0 
+      }, () => this.props.fetchTiles("4x4", "easy"));
+    }
+  }
+
+  flip2Back = memory_tiles => {
+    setTimeout(() => {
+      this.props.flipToBack(memory_tiles);
+      
+      this.setState({ memory_tiles:[] });
+    }, 1);
+  }
+  
+  gridBuilder = (size) => {
+    const { tiles } = this.props;
+    let { numbOfTraps } = this.state;
+
+    const _dimensions = { // TODO: Come up with a mathematical formula
+      "4x4": { width: "23%", height: 4 },
+      "6x6": { width: "14.65%", height: 6 }
+    };
+
+    return tiles.map( el => {
+      return (
+        <Tile 
+          key={el.id}
+          tile={el}
+          width={_dimensions[size].width}
+          height={(Dimensions.get('window').width / _dimensions[size].height)}
+          onTileFlipped={this.memoryFlipTile}
+        />
+      )
+    });
+  }
+
+  render(){
+    return(
+      <View style={styles.container}>
+        {
+          this.gridBuilder("4x4")
+        }
+      </View>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  tiles: state.tiles
+});
+
+export default connect(mapStateToProps, tileActions)(Grid);
+
 
 // Grid.propTypes = {
 //   children: PropTypes.array
 // };
-
-export default Grid;
