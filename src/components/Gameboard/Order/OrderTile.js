@@ -5,26 +5,23 @@ import {
     StyleSheet
 } from 'react-native';
 
-export default class OrderTile extends Component {
-    constructor(props){
-        super(props);
-    }
+const OrderTile = ({
+    tileMatched, 
+    matched, 
+    src, 
+    currentPointer 
+}) => {
 
-    componentDidUpdate(){
-        if(this.props.matched)
-            this.props.onTileMatched(this.props.src);
-    }
+    let _style = !!matched ? tileMatched(src) ? 'green' : 'red' : null;
+    let _border = currentPointer(src) ? 1 : 0;
+  
+    return (
+        <View
+            style={{ padding: "4%", backgroundColor: _style, borderWidth: _border }}
+        >
+            <Text>{src}</Text>
+        </View>
+    );
+};
 
-    render() {
-        const { tileMatched, matched, src } = this.props;
-        let _style = !!matched ? tileMatched(src) ? 'green' : 'red' : null;
-      
-        return (
-            <View
-                style={{ padding: "4%", backgroundColor: _style }}
-            >
-                <Text>{this.props.src}</Text>
-            </View>
-        );
-    }
-}
+export default OrderTile;

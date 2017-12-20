@@ -15,45 +15,18 @@ class Order extends Component {
         super(props)
     }
 
-    componentWillMount(){
-        this.setState({ hashTile: {} });
+    tileMatched = src => {
+        const { alreadyMatchedTiles } = this.props.order;
+        return alreadyMatchedTiles[src] && alreadyMatchedTiles[src].isMatched;
     }
 
-    state = {
-        hashTile: {},
-        pointer: 0,
-        tileMatched: () => false
-    }
-
-    orderMatched = src => {
-        const { hashTile } = this.state;
-        const { order } = this.props;
-
-        if(!hashTile[src]){
-            this.setState({ 
-                hashTile: Object.assign({}, hashTile, {
-                     [src]: {
-                        src,
-                        isMatched: src === this.props.order[this.getLastPointer(this.state.hashTile)].src
-                     },
-                     count: this.state.pointer += 1
-                }), 
-
-                tileMatched: src => { 
-                    return this.state.hashTile[src] ? 
-                        this.state.hashTile[src].isMatched : 
-                        src === this.props.order[this.state.hashTile.count].src;
-                }
-            });
-        }
-    }
-
-    getLastPointer = hash => {
-        var matched = Object.values(hash);
-        return matched.length === 0 ? 0 : matched.length - 1;
+    currentPointer = src => {
+        const { tiles, pointer } = this.props.order;
+        return pointer < tiles.length ? tiles[pointer].src === src : 0;
     }
 
     render(){
+        const { tiles } = this.props.order;
         return(
             <View style={{ 
                     flex: 1, 
@@ -62,13 +35,14 @@ class Order extends Component {
                     justifyContent: 'center'
                 }}>
                 {
-                    this.props.order.map((val, idx) => {
+                    tiles.map((val, idx) => {
                         return (
                             <OrderTile 
                                 key={idx}
                                 {...val}
-                                tileMatched={this.state.tileMatched}
+                                tileMatched={this.tileMatched}
                                 onTileMatched={this.orderMatched}
+                                currentPointer={this.currentPointer}
                             />
                         );
                     } )
@@ -81,6 +55,5 @@ class Order extends Component {
 const mapStateToProps  = state => ({
     order: state.order
 });
-
 
 export default connect(mapStateToProps, orderActions)(Order);
