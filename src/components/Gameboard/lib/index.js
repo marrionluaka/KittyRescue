@@ -9,13 +9,14 @@ const s4 = () =>
         .substring(1);
 
 
-export const duplicateEl = idGen => arr => 
-    arr.reduce((acc, val) => 
+export const duplicateEl = R.curry((idGen, arr) => {
+   return arr.reduce((acc, val) => 
     [
         ...acc,
         Object.assign({}, val, { id: idGen() }),
         Object.assign({}, val, { id: idGen() })
     ], []);
+});
 
 export const addTrapBasedOnLevelChosen = (function(){
     const levels = {
@@ -25,21 +26,12 @@ export const addTrapBasedOnLevelChosen = (function(){
     };
 
     return lvl => arr => {
-
-        const traps = levels[lvl] > 1 ? 
-            [...Array(levels[lvl]).keys()]
-                .reduce((acc, val) => 
-                    [
-                        ...acc, 
-                        { src: "TRAP", isFlipped: false, isTrap: true }
-                    ]
-                , []) 
-            : [ { src: "TRAP", isFlipped: false, isTrap: true } ];
+        let array = new Array(levels[lvl]);
+        
+        let traps = levels[lvl] > 1 ? 
+            array.fill({ src: "TRAP", isFlipped: false, isTrap: true }) : [ { src: "TRAP", isFlipped: false, isTrap: true } ];
     
-        return [
-            ...arr,
-            ...traps
-        ];
+        return arr.concat(traps);
     };
 }());
 

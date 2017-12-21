@@ -3,7 +3,7 @@ import R from 'ramda';
 import grid from '../dataTiles.json';
 
 import { 
-    FETCH_TILES, 
+    NEW_GAME, 
     FLIP_TO_BACK,
     TILES_MATCHED
 } from '../types';
@@ -17,7 +17,7 @@ import {
   
 export default (function(){
     const _actions = {
-        "FETCH_TILES": (tiles, { gridSize, lvl }) => 
+        [NEW_GAME]: (tiles, { gridSize, lvl }) => 
             R.compose(
                 shuffle,
                 duplicateEl(guid),
@@ -52,8 +52,8 @@ export default (function(){
 
     return (tiles=[], action) => {
 
-        if(action.type === FETCH_TILES)
-            return execute(FETCH_TILES, tiles, action);
+        if(action.type === NEW_GAME)
+            return execute(NEW_GAME, tiles, action);
         
         if(action.type === TILES_MATCHED)
             return execute(TILES_MATCHED, tiles, action);

@@ -7,12 +7,20 @@ import {
  } from 'react-native';
 import { connect } from 'react-redux';
 
-import { orderActions } from '../actions/order';
+import * as orderActions from '../actions/order';
 import OrderTile from './OrderTile';
 
 class Order extends Component {
     constructor(props){
         super(props)
+    }
+
+    componentWillReceiveProps(prev, next){
+        const { alreadyMatchedTiles } = prev.order;
+        let values = Object.values(alreadyMatchedTiles);
+        
+        if(!!values.length && this.isValidPointer()) 
+            this.props.addPoints(values[values.length - 1 || 0].isMatched ? 10 : 5)
     }
 
     tileMatched = src => {
@@ -22,7 +30,12 @@ class Order extends Component {
 
     currentPointer = src => {
         const { tiles, pointer } = this.props.order;
-        return pointer < tiles.length ? tiles[pointer].src === src : 0;
+        return this.isValidPointer() ? tiles[pointer].src === src : 0;
+    }
+
+    isValidPointer = () => {
+        const { tiles, pointer } = this.props.order;
+        return pointer < tiles.length;
     }
 
     render(){
@@ -30,7 +43,8 @@ class Order extends Component {
         return(
             <View style={{ 
                     flex: 1, 
-                    flexDirection: 'row', 
+                    flexDirection: 'row',
+                    flexWrap: "wrap", 
                     alignItems: 'center', 
                     justifyContent: 'center'
                 }}>

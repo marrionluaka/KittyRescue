@@ -35,7 +35,36 @@
     },
 
     "medium": {
+        "4x4":[
+            { "src": "A", "isFlipped": false },
+            { "src": "B", "isFlipped": false },
+            
+            { "src": "D", "isFlipped": false },
+            { "src": "E", "isFlipped": false },
+            { "src": "F", "isFlipped": false },
+            { "src": "G", "isFlipped": false  }
+        ],
         
+        "6x6":[
+            { "src": "A", "isFlipped": false },
+            { "src": "B", "isFlipped": false },
+            { "src": "C", "isFlipped": false  },
+            { "src": "D", "isFlipped": false  },
+    
+            { "src": "F", "isFlipped": false },
+            { "src": "G", "isFlipped": false  },
+            { "src": "H", "isFlipped": false  },
+            { "src": "I", "isFlipped": false  },
+            { "src": "J", "isFlipped": false  },
+            { "src": "K", "isFlipped": false  },
+    
+            { "src": "L", "isFlipped": false },
+            { "src": "M", "isFlipped": false },
+            { "src": "N", "isFlipped": false  },
+            { "src": "O", "isFlipped": false  },
+            { "src": "P", "isFlipped": false  },
+            { "src": "Q", "isFlipped": false  }
+        ]
     },
 
     "hard": {

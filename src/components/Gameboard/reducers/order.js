@@ -1,6 +1,6 @@
 import { 
     TILES_MATCHED,
-    FETCH_TILES
+    NEW_GAME
 } from '../types';
 
 import grid from '../dataTiles.json';
@@ -11,7 +11,7 @@ import {
 } from '../lib';
 
 export default (order = {}, action) => {
-    if(action.type === FETCH_TILES)
+    if(action.type === NEW_GAME)
         return {
             tiles: shuffle(grid[action.lvl][action.gridSize]),
             pointer: 0,
@@ -31,7 +31,7 @@ export default (order = {}, action) => {
                     isMatched: action.src === order.tiles[order.pointer].src
                 }
             })
-        }
+        };
     }
 
     return order;

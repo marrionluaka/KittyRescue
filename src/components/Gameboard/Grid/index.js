@@ -39,14 +39,14 @@ class Grid extends Component{
   };
 
   componentWillMount(){
-   this.props.fetchTiles("4x4", "easy");
+   this.props.newGame("4x4", "medium");
   }
 
   memoryFlipTile = tile => {
     const { tiles } = this.props;
     let { memory_tiles, tiles_flipped } = this.state;
 
-    const len = tiles.length - this.levels["easy"];
+    const len = tiles.length - this.levels["medium"];
     
     if( memory_tiles.length < 2){
       this.setState({ tile });// causes a re-render
@@ -77,7 +77,7 @@ class Grid extends Component{
       this.setState({
          memory_tiles: [],
          tiles_flipped: 0 
-      }, () => this.props.fetchTiles("4x4", "easy"));
+      }, () => this.props.newGame("4x4", "medium"));
     }
   }
 
@@ -127,8 +127,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps, tileActions)(Grid);
-
-
-// Grid.propTypes = {
-//   children: PropTypes.array
-// };

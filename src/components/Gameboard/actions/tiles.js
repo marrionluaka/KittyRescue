@@ -1,11 +1,11 @@
 import { 
-    FETCH_TILES, 
+    NEW_GAME, 
     FLIP_TO_BACK, 
     TILES_MATCHED 
 } from "../types";
 
-export const fetchTiles = (gridSize, lvl) => ({
-    type: FETCH_TILES,
+export const newGame = (gridSize, lvl) => ({
+    type: NEW_GAME,
     gridSize,
     lvl
 });
