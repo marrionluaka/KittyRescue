@@ -25,7 +25,7 @@ export default (function(){
             )(grid[lvl][gridSize])
         ,
 
-        "TILES_MATCHED": (tiles, action) => { // TODO: To be refactored
+        [TILES_MATCHED]: (tiles, action) => { // TODO: To be refactored
             return tiles.reduce((acc, tile) => {
                 if(tile.src === action.src) tile.isMatched = true;
                 acc.push(tile);
@@ -33,7 +33,7 @@ export default (function(){
             }, []);
         },
 
-        "FLIP_TO_BACK": (tiles, { memoryTiles }) => {
+        [FLIP_TO_BACK]: (tiles, { memoryTiles }) => {
             const findIndex  = idx => R.findIndex(R.propEq('id', idx))(tiles),
                   firstIdx   = findIndex(memoryTiles[0].id),
                   secondIdx  = findIndex(memoryTiles[1].id);

@@ -7,7 +7,7 @@ import {
  } from 'react-native';
 import { connect } from 'react-redux';
 
-import * as orderActions from '../actions/order';
+import * as orderActions from '../../actions/order';
 import OrderTile from './OrderTile';
 
 class Order extends Component {

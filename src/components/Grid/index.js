@@ -10,7 +10,7 @@ import {
 import { connect } from 'react-redux';
 
 import Tile from '../Tile';
-import * as tileActions from '../actions/tiles'
+import * as tileActions from '../../actions/tiles'
 
 const styles = StyleSheet.create({
   container:{
@@ -39,14 +39,15 @@ class Grid extends Component{
   };
 
   componentWillMount(){
-   this.props.newGame("4x4", "medium");
+    const { newGame, gridSize, difficulty } = this.props;
+    newGame(gridSize, difficulty);
   }
 
   memoryFlipTile = tile => {
-    const { tiles } = this.props;
+    const { tiles, difficulty } = this.props;
     let { memory_tiles, tiles_flipped } = this.state;
 
-    const len = tiles.length - this.levels["medium"];
+    const len = tiles.length - this.levels[difficulty];
     
     if( memory_tiles.length < 2){
       this.setState({ tile });// causes a re-render
@@ -72,12 +73,14 @@ class Grid extends Component{
   }
 
   regenerateGrid = (predicate, message) => {
+    const { newGame, gridSize, difficulty } = this.props;
+
     if(predicate()){
       alert(message);
       this.setState({
          memory_tiles: [],
          tiles_flipped: 0 
-      }, () => this.props.newGame("4x4", "medium"));
+      }, () => newGame(gridSize, difficulty));
     }
   }
 
@@ -115,7 +118,7 @@ class Grid extends Component{
     return(
       <View style={styles.container}>
         {
-          this.gridBuilder("4x4")
+          this.gridBuilder(this.props.gridSize)
         }
       </View>
     );
