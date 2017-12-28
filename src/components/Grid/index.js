@@ -39,6 +39,7 @@ class Grid extends Component{
     memory_tiles: [],
     tiles_flipped: 0,
     isGameOver: false
+
   };
 
   componentWillMount(){
@@ -65,7 +66,7 @@ class Grid extends Component{
             this.setState({ memory_tiles: [], tiles_flipped: tiles_flipped += 2 });
            
             this.props.tilesMatched(memory_tiles[0].src);
-            
+
             this.regenerateGrid(() => tiles_flipped === len, "Board cleared... generating new board");
 
           } else {
@@ -82,6 +83,7 @@ class Grid extends Component{
       this.setState({ isGameOver: true })
       this.setState({
          tile: null,
+
          memory_tiles: [],
          tiles_flipped: 0 
       }, () => newGame(gridSize, difficulty));
@@ -146,6 +148,7 @@ class Grid extends Component{
               </TouchableOpacity>
             </View>
         </Popup>
+
         {
           this.gridBuilder(this.props.gridSize)
         }
