@@ -4,12 +4,14 @@ import {
   Text,
   Image,
   StyleSheet,
-  Dimensions
+  Dimensions,
+  TouchableOpacity
 } from 'react-native';
 
 import { connect } from 'react-redux';
 
 import Tile from '../Tile';
+import Popup from '../../components/Modal';
 import * as tileActions from '../../actions/tiles'
 
 const styles = StyleSheet.create({
@@ -35,7 +37,8 @@ class Grid extends Component{
   state = {
     tile: null,
     memory_tiles: [],
-    tiles_flipped: 0
+    tiles_flipped: 0,
+    isGameOver: false
   };
 
   componentWillMount(){
@@ -76,7 +79,7 @@ class Grid extends Component{
     const { newGame, gridSize, difficulty } = this.props;
 
     if(predicate()){
-      alert(message);
+      this.setState({ isGameOver: true })
       this.setState({
          tile: null,
          memory_tiles: [],
@@ -126,6 +129,23 @@ class Grid extends Component{
   render(){
     return(
       <View style={styles.container}>
+        <Popup
+            isVisible={this.state.isGameOver}
+          >
+            <View
+              style={{
+                  backgroundColor: "#fff",
+                  padding: 30
+              }}
+            >
+              <Text>Hello from Modal </Text>
+              <TouchableOpacity
+                onPress={() => this.setState({ isGameOver: false })}
+              >
+                <Text>Close</Text>
+              </TouchableOpacity>
+            </View>
+        </Popup>
         {
           this.gridBuilder(this.props.gridSize)
         }

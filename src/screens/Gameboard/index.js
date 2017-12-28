@@ -12,7 +12,6 @@ import React, {
   import store from '../../store';
   
   import Grid from '../../components/Grid';
-  import Modal from '../../components/Modal';
   import Timer from '../../components/Timer';
   import Score from '../../components/Score';
   import Order from '../../components/Order';
@@ -31,23 +30,13 @@ import React, {
     return render();
   };
 
-  const Gameboard = (props) => {
-    const { data } = props.navigation.state.params;
+  const Gameboard = ({ navigation }) => {
+    const { data } = navigation.state.params;
 
     return (
       <Provider store={store}>
         <View style={{ flex: 1}}>
-          <Modal>
-            <View>
-            <View style={{
-                    backgroundColor: "red",
-                    padding: 20,
-                    zIndex: 100
-                }}>
-              <Text>Hello from Modal </Text>
-              </View>
-            </View>
-          </Modal>
+          
           <Zen 
             zen={data.gameMode}
             render={() => {

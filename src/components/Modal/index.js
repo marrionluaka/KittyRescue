@@ -3,35 +3,33 @@ import {
     StyleSheet,
     View,
     Text,
-    Animated
+    Modal
 } from 'react-native';
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: "black",
-        opacity: 0.5,
+        backgroundColor: 'rgba(0,0,0,0.5)',
         zIndex: 99,
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: 0,
-        bottom: 0,
+        flex: 1,
         justifyContent: "center",
         alignItems: "center",
     }
 });
 
-class Modal extends Component {
-
-    render(){
-        return (
+const Popup = ({ isVisible, children }) => {
+    return (
+        <Modal 
+            transparent
+            animationType="slide"
+            visible={isVisible}
+            onRequestClose={() => {}}
+        >
             <View style={styles.container}>
-                
-                    {this.props.children}
-                
+                {children}
             </View>
-        );
-    }
-}
+            
+        </Modal>
+    );
+};
 
-export default Modal;
+export default Popup;

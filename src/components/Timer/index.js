@@ -46,7 +46,7 @@ class Timer extends Component{
                 <Text>Timer</Text>
                 <Text>
                     {
-                        this.isTimerNeeded() ? this.props.timer.time : <Icon name="500px" color={"black"} size={35} />
+                        this.isTimerNeeded() ? this.props.timer.time : <Icon name="500px" color={"black"} size={25} />
                     }
                 </Text>
             </View>
