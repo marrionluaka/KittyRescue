@@ -3,9 +3,10 @@ import {
     NEW_GAME
 } from '../types';
 
-import grid from '../dataTiles.json';
+import data from '../dataTiles.json';
 
 import { 
+   prepareGridData,
    shuffle,
    update
 } from '../lib';
@@ -13,7 +14,7 @@ import {
 export default (order = {}, action) => {
     if(action.type === NEW_GAME)
         return {
-            tiles: shuffle(grid[action.lvl][action.gridSize]),
+            tiles: shuffle( prepareGridData(action.lvl, action.gridSize, data["grid"]) ),
             pointer: 0,
             alreadyMatchedTiles: {}
         };

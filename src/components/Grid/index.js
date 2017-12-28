@@ -47,8 +47,8 @@ class Grid extends Component{
     const { tiles, difficulty } = this.props;
     let { memory_tiles, tiles_flipped } = this.state;
 
-    const len = tiles.length - this.levels[difficulty];
-    
+    const len = tiles.length - (this.levels[difficulty] || 0);
+
     if( memory_tiles.length < 2){
       this.setState({ tile });// causes a re-render
       if(memory_tiles.length == 0){
@@ -91,14 +91,21 @@ class Grid extends Component{
       this.setState({ memory_tiles:[] });
     }, 1);
   }
+
+  getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
+  
   
   gridBuilder = (size) => {
     const { tiles } = this.props;
-    let { numbOfTraps } = this.state;
+    const FOUR_BY_FOUR = 8, SIX_BY_SIX = 18;
+    const windowWidth = Dimensions.get('window').width;
 
-    const _dimensions = { // TODO: Come up with a mathematical formula
-      "4x4": { width: "23%", height: 4 },
-      "6x6": { width: "14.65%", height: 6 }
+    const gridSize = FOUR_BY_FOUR === size ? 
+      { size: "4x4", margin: FOUR_BY_FOUR / 4 } : { size: "6x6", margin: SIX_BY_SIX / 6 };
+
+    const _dimensions = {
+      "4x4": { width:  this.getPercentage(4, windowWidth)+ "%", height: 4 },
+      "6x6": { width:  this.getPercentage(6, windowWidth) + "%", height: 6 }
     };
 
     return tiles.map( el => {
@@ -106,8 +113,9 @@ class Grid extends Component{
         <Tile 
           key={el.id}
           tile={el}
-          width={_dimensions[size].width}
-          height={(Dimensions.get('window').width / _dimensions[size].height)}
+          margin={gridSize.margin}
+          width={_dimensions[gridSize.size].width}
+          height={(windowWidth / _dimensions[gridSize.size].height)}
           onTileFlipped={this.memoryFlipTile}
         />
       )

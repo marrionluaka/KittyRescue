@@ -8,12 +8,6 @@ import {
     StyleSheet
   } from 'react-native';
 
-  const styles = StyleSheet.create({
-    box:{
-      margin: '1%'
-    }
-  });
-
   export default class Tile extends Component{
     constructor(props){
         super(props);
@@ -25,16 +19,17 @@ import {
     }
 
     tileGenerator = () => {
-        const { tile, width, height } = this.props;
-        const _styles = [styles.box, {
-            width: width, 
-            height: height
-        }];
+        const { tile, width, height, margin } = this.props;
+        const _styles = {
+            width, 
+            height,
+            margin
+        };
 
         if(tile.isMatched){
             return (
                 <View style={
-                    [..._styles, { opacity: 0 }]
+                    Object.assign({}, _styles, { opacity: 0 })
                 }>
                 </View>
             )
@@ -42,7 +37,7 @@ import {
             return(
                 <TouchableOpacity 
                 style={
-                    [{ backgroundColor: 'powderblue'}, ..._styles]
+                    Object.assign({}, _styles, { backgroundColor: 'powderblue'})
                 }
                 onPress={this.tileFlipHandler}
                 >

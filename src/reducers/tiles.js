@@ -1,6 +1,6 @@
 import R from 'ramda';
 
-import grid from '../dataTiles.json';
+import data from '../dataTiles.json';
 
 import { 
     NEW_GAME, 
@@ -12,6 +12,7 @@ import {
     guid,
     shuffle,
     duplicateEl,
+    prepareGridData,
     addTrapBasedOnLevelChosen
 } from '../lib';
   
@@ -22,7 +23,7 @@ export default (function(){
                 shuffle,
                 duplicateEl(guid),
                 addTrapBasedOnLevelChosen(lvl)
-            )(grid[lvl][gridSize])
+            )( prepareGridData(lvl, gridSize, data["grid"]) )
         ,
 
         [TILES_MATCHED]: (tiles, action) => { // TODO: To be refactored

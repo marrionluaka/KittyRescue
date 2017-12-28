@@ -41,7 +41,9 @@ export default class GameMode extends Component {
                         padding: 10,
                         backgroundColor: "#03A9F4"
                     }}
-                    onPress={() => this.navigate("zen")}
+                    onPress={() => 
+                        this.props.navigation.navigate("GridSelector", { data: { gameMode: "zen" } })
+                    }
                 >
                     <Text>Zen/Classical</Text>
                 </TouchableOpacity>

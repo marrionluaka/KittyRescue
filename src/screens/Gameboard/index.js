@@ -16,20 +16,18 @@ import React, {
   import Score from '../../components/Score';
   import Order from '../../components/Order';
 
-  const isZenMode = gameMode => gameMode === "zen";
+  const Zen = ({ render, zen }) => {
+    const isZenMode = gameMode => gameMode === "zen";
 
-  const renderZenBanner = data => componentList => {
-    if(isZenMode(data.gameMode)){
-      return(
-        <View>
-          <Text>ZEN MODE </Text>
+    if(isZenMode(zen)){
+      return (
+        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+          <Text>ZEN MODE</Text>
         </View>
       );
     }
 
-    return componentList.map((EnhancedComponent, idx) => {
-      return <EnhancedComponent key={idx} {...data} />
-    });
+    return render();
   };
 
   const Gameboard = (props) => {
@@ -39,19 +37,38 @@ import React, {
       <Provider store={store}>
         <View style={{ flex: 1}}>
           
-          <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-            {
-              renderZenBanner(data)([Timer, Score])
-            }
-          </View>
+          <Zen 
+            zen={data.gameMode}
+            render={() => {
+              const { gameMode, difficulty } = data;
+
+              return (
+                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+                  <Timer 
+                    gameMode={gameMode}
+                    difficulty={difficulty}
+                  />
+                  <Score 
+                    gameMode={gameMode}
+                    difficulty={difficulty}
+                  />
+                </View>
+              );
+            }}
+          />
 
           <Grid {...data}/>
 
-          <View style={{ flex: 1 }}>
-            {
-              renderZenBanner(data)([Order])
-            }
-          </View>
+          <Zen 
+            zen={data.gameMode}
+            render={() => {
+              return (
+                <View style={{ flex: 1 }}>
+                  <Order />
+                </View>
+              );
+            }}
+          />
 
         </View>
       </Provider>

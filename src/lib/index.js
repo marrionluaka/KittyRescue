@@ -1,5 +1,11 @@
 import R from 'ramda';
 
+const levels = {
+    "easy": 1,
+    "medium": 2,
+    "hard": 3
+};
+
 export const guid = () => 
     `${s4() + s4()}-${s4()}-${s4()}-${s4()}-${s4() + s4() + s4()}`;
 
@@ -18,23 +24,17 @@ export const duplicateEl = R.curry((idGen, arr) => {
     ], []);
 });
 
-export const addTrapBasedOnLevelChosen = (function(){
-    const levels = {
-        "easy": 1,
-        "medium": 2,
-        "hard": 3
-    };
-
-    return lvl => arr => {
-        let array = new Array(levels[lvl]);
-        
-        let traps = levels[lvl] > 1 ? 
-            array.fill({ src: "TRAP", isFlipped: false, isTrap: true }) : [ { src: "TRAP", isFlipped: false, isTrap: true } ];
+export const addTrapBasedOnLevelChosen =  lvl => arr => {
+    const chosenLvl = levels[lvl];
+    let array = new Array(chosenLvl);
     
-        return arr.concat(traps);
-    };
-}());
+    let traps = chosenLvl > 1 ? 
+        array.fill({ src: "TRAP", isFlipped: false, isTrap: true }) :
+        !!chosenLvl ?
+        [ { src: "TRAP", isFlipped: false, isTrap: true } ] : [];
 
+    return arr.concat(traps);
+};
 
 export const shuffle = arr => {
     let m = arr.length, t, i;
@@ -50,9 +50,19 @@ export const shuffle = arr => {
     return arr;
 };
 
-export const update = (index, newValue, arr) => {
-    return R.update(
+export const update = (index, newValue, arr) => 
+     R.update(
         index, 
         Object.assign({}, arr[index], newValue)
-    )(arr)
-};
+    )(arr);
+
+
+export const prepareGridData = (lvl, gridSize, arr) => 
+    arr
+        .slice( 0, gridSize - (levels[lvl] || 0) )
+        .reduce((acc, el) => {
+            return [
+                ...acc,
+                { src: el, isFlipped: false  }
+            ];
+        }, []);

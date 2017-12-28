@@ -42,6 +42,7 @@ export default class SlideList extends Component {
                 horizontal
                 pagingEnabled
                 style={{ flex: 1}}
+                showsHorizontalScrollIndicator={false}
             >
                 { this.renderSlides() }
             </ScrollView>

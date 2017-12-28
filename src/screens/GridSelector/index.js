@@ -20,7 +20,7 @@ export default class GridSelector extends Component {
                     }}
                     onPress={() => navigation.navigate("Gameboard", { 
                         data: Object.assign({}, data, {
-                            gridSize: "4x4"
+                            gridSize: 8
                         })
                     })}
                 >
@@ -34,7 +34,7 @@ export default class GridSelector extends Component {
                     }}
                     onPress={() => navigation.navigate("Gameboard", { 
                         data: Object.assign({}, data, {
-                            gridSize: "6x6"
+                            gridSize: 18
                         })
                     })}
                 >
