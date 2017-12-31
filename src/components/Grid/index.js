@@ -11,8 +11,8 @@ import {
 import { connect } from 'react-redux';
 
 import Tile from '../Tile';
-import Popup from '../../components/Modal';
-import * as tileActions from '../../actions/tiles'
+import * as tileActions from '../../actions/tiles';
+import * as timerActions from '../../actions/timer';
 
 const styles = StyleSheet.create({
   container:{
@@ -23,23 +23,21 @@ const styles = StyleSheet.create({
   }
 });
 
+const levels = {
+  easy: 2,
+  medium: 4,
+  hard: 6
+};
+
 class Grid extends Component{
   constructor(props){
-    super(props);
-
-    this.levels = {
-      easy: 2,
-      medium: 4,
-      hard: 6
-    };
+    super(props); 
   }
 
   state = {
     tile: null,
     memory_tiles: [],
-    tiles_flipped: 0,
-    isGameOver: false
-
+    tiles_flipped: 0
   };
 
   componentWillMount(){
@@ -51,7 +49,7 @@ class Grid extends Component{
     const { tiles, difficulty } = this.props;
     let { memory_tiles, tiles_flipped } = this.state;
 
-    const len = tiles.length - (this.levels[difficulty] || 0);
+    const len = tiles.length - (levels[difficulty] || 0);
 
     if( memory_tiles.length < 2){
       this.setState({ tile });// causes a re-render
@@ -61,13 +59,13 @@ class Grid extends Component{
           memory_tiles.push(tile);
           if(memory_tiles[0].src == tile.src){
 
-            if(tile.isTrap) return this.regenerateGrid(() => true, "Game Over");
+            if(tile.isTrap) return this.showPopup("Game Over");
             
             this.setState({ memory_tiles: [], tiles_flipped: tiles_flipped += 2 });
            
             this.props.tilesMatched(memory_tiles[0].src);
 
-            this.regenerateGrid(() => tiles_flipped === len, "Board cleared... generating new board");
+            if(tiles_flipped === len) return this.showPopup("Board cleared... generating new board");
 
           } else {
             this.flip2Back(memory_tiles);
@@ -76,18 +74,15 @@ class Grid extends Component{
     }
   }
 
-  regenerateGrid = (predicate, message) => {
-    const { newGame, gridSize, difficulty } = this.props;
-
-    if(predicate()){
-      this.setState({ isGameOver: true })
-      this.setState({
-         tile: null,
-
-         memory_tiles: [],
-         tiles_flipped: 0 
-      }, () => newGame(gridSize, difficulty));
-    }
+  showPopup = msg => {
+    this.setState(
+      {
+        tile: null,
+        memory_tiles: [],
+        tiles_flipped: 0 
+      },
+      () => this.props.callback(msg, this.props.invalidateTimer)
+    );
   }
 
   flip2Back = memory_tiles => {
@@ -129,28 +124,12 @@ class Grid extends Component{
   }
 
   render(){
+    const { gridSize } = this.props;
+    
     return(
       <View style={styles.container}>
-        <Popup
-            isVisible={this.state.isGameOver}
-          >
-            <View
-              style={{
-                  backgroundColor: "#fff",
-                  padding: 30
-              }}
-            >
-              <Text>Hello from Modal </Text>
-              <TouchableOpacity
-                onPress={() => this.setState({ isGameOver: false })}
-              >
-                <Text>Close</Text>
-              </TouchableOpacity>
-            </View>
-        </Popup>
-
         {
-          this.gridBuilder(this.props.gridSize)
+          this.gridBuilder(gridSize)
         }
       </View>
     );
@@ -161,4 +140,9 @@ const mapStateToProps = state => ({
   tiles: state.tiles
 });
 
-export default connect(mapStateToProps, tileActions)(Grid);
+const mapDispatchToProps = {
+  ...tileActions,
+  ...timerActions
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Grid);

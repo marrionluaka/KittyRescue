@@ -18,7 +18,7 @@ export default class GridSelector extends Component {
                         padding: "4%",
                         backgroundColor: "red"
                     }}
-                    onPress={() => navigation.navigate("Gameboard", { 
+                    onPress={() => navigation.navigate("Game", { 
                         data: Object.assign({}, data, {
                             gridSize: 8
                         })
@@ -32,7 +32,7 @@ export default class GridSelector extends Component {
                         padding: "4%",
                         backgroundColor: "red"
                     }}
-                    onPress={() => navigation.navigate("Gameboard", { 
+                    onPress={() => navigation.navigate("Game", { 
                         data: Object.assign({}, data, {
                             gridSize: 18
                         })

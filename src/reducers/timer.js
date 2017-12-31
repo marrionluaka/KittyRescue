@@ -1,7 +1,8 @@
 import {
     NEW_GAME, 
     FLIP_TO_BACK,
-    DECREASE_TIME 
+    DECREASE_TIME,
+    INVALIDATE_TIMER
 } from "../types";
 
 export default (timerOptions={}, action) => {
@@ -15,6 +16,11 @@ export default (timerOptions={}, action) => {
     if(action.type === DECREASE_TIME)
         return Object.assign({}, timerOptions, {
             time: timerOptions.time - 1
+        });
+    
+    if(action.type === INVALIDATE_TIMER)
+        return Object.assign({}, timerOptions, {
+            invalidateTimer: action.msg
         });
     
     if(action.type === FLIP_TO_BACK){

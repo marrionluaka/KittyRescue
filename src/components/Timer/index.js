@@ -5,7 +5,6 @@ import {
     StyleSheet 
 } from 'react-native';
 import { connect } from 'react-redux';
-import Icon from 'react-native-vector-icons/Entypo';
 
 import * as countdown from '../../actions/timer';
 
@@ -19,35 +18,30 @@ class Timer extends Component{
     }
 
     componentWillReceiveProps(prev){
-        if(!this.isTimerNeeded()) return null;
-        
-        if(prev.timer.time === 30){
+        if(prev.timer.time === 30) 
             clearTimeout(this.state.timerID);
-        }
 
-        if(prev.timer.hasGameStarted && prev.timer.time === 30){
+        if(prev.timer.hasGameStarted && prev.timer.time === 30) 
             this.setState({ timerID: setInterval(this.props.countdown, 1000) });
-        }
     }
 
     componentDidUpdate(){
-        if(this.isTimerNeeded() && this.props.timer.time === 0) clearTimeout(this.state.timerID);
+        if(this.props.timer.time === 0 || this.props.timer.invalidateTimer){
+            this.props.hasTimeElasped(this.props.timer.invalidateTimer || "Times Up!");
+            clearTimeout(this.state.timerID);
+        } 
     }
 
     componentWillUnmount(){
         clearTimeout(this.state.timerID);
     }
 
-    isTimerNeeded = () => this.props.gameMode === "vsClock";
-
     render(){
         return(
             <View style={{ flex: 1, alignItems: 'center'}}>
                 <Text>Timer</Text>
                 <Text>
-                    {
-                        this.isTimerNeeded() ? this.props.timer.time : <Icon name="500px" color={"black"} size={25} />
-                    }
+                     {this.props.timer.time}
                 </Text>
             </View>
         );

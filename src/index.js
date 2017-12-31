@@ -6,7 +6,7 @@ import HowToPlay from './screens/HowToPlay';
 import GameMode from './screens/GameMode';
 import Difficulty from './screens/Difficulty';
 import GridSelector from './screens/GridSelector';
-import Gameboard from './screens/Gameboard';
+import Game from './screens/Gameboard';
   
 export default StackNavigator(
     {
@@ -18,9 +18,6 @@ export default StackNavigator(
         GameMode: { screen:  GameMode },
         Difficulty: { screen: Difficulty },
         GridSelector: { screen:  GridSelector },
-        Gameboard: { screen:  Gameboard }
-    },
-    {
-        transitionConfig: getSlideFromRightTransition
+        Game: { screen:  Game }
     }
 );

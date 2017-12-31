@@ -1,78 +1,15 @@
-import React, { 
-    Component, 
-    PropTypes 
-  } from 'react';
-  
-  import { 
-    View, 
-    Text 
-  } from 'react-native';
-  
-  import { Provider } from 'react-redux';
-  import store from '../../store';
-  
-  import Grid from '../../components/Grid';
-  import Timer from '../../components/Timer';
-  import Score from '../../components/Score';
-  import Order from '../../components/Order';
+import React from 'react';
+import { Provider } from 'react-redux';
 
-  const Zen = ({ render, zen }) => {
-    const isZenMode = gameMode => gameMode === "zen";
+import store from '../../store';
+import Board from '../../components/Board';
 
-    if(isZenMode(zen)){
-      return (
-        <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-          <Text>ZEN MODE</Text>
-        </View>
-      );
-    }
+const Game = ({ navigation }) => {
+  return (
+    <Provider store={store}>
+      <Board navigation={navigation} />
+    </Provider>
+  );
+};
 
-    return render();
-  };
-
-  const Gameboard = ({ navigation }) => {
-    const { data } = navigation.state.params;
-
-    return (
-      <Provider store={store}>
-        <View style={{ flex: 1}}>
-          
-          <Zen 
-            zen={data.gameMode}
-            render={() => {
-              const { gameMode, difficulty } = data;
-
-              return (
-                <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-                  <Timer 
-                    gameMode={gameMode}
-                    difficulty={difficulty}
-                  />
-                  <Score 
-                    gameMode={gameMode}
-                    difficulty={difficulty}
-                  />
-                </View>
-              );
-            }}
-          />
-
-          <Grid {...data}/>
-
-          <Zen 
-            zen={data.gameMode}
-            render={() => {
-              return (
-                <View style={{ flex: 1 }}>
-                  <Order />
-                </View>
-              );
-            }}
-          />
-
-        </View>
-      </Provider>
-    );
-  };
-
-  export default Gameboard;
+export default Game;

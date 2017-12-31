@@ -5,6 +5,7 @@ import {
     Text,
     Modal
 } from 'react-native';
+import score from '../../reducers/score';
 
 const styles = StyleSheet.create({
     container: {
@@ -20,7 +21,7 @@ const Popup = ({ isVisible, children }) => {
     return (
         <Modal 
             transparent
-            animationType="slide"
+            animationType="fade"
             visible={isVisible}
             onRequestClose={() => {}}
         >
