@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import tilesReducer from './tiles';
+import tilesStateReducer from './tiles';
 import orderReducer from './order';
 import scoreReducer from './score';
 import timerReducer from './timer';
 
 export default combineReducers({
-    tiles: tilesReducer,
+    tilesState: tilesStateReducer,
     order: orderReducer,
     score: scoreReducer,
     timer: timerReducer

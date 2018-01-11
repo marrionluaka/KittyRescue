@@ -44,6 +44,8 @@ class Board extends Component{
 
         const { score, timer, newGame } = this.props;  
 
+        const isZenMode = () => data.gameMode === "zen";
+
         return (
 
             <View style={{ flex: 1}}>
@@ -60,7 +62,7 @@ class Board extends Component{
                         <Text>Title: {this.state.gameEndMsg}</Text>
 
                         <Maybe 
-                            pred={() => data.gameMode === "zen"}
+                            pred={isZenMode}
                             render={() => <Text>No Score</Text>}
                             renderAlt={() => {
                                 return (
@@ -75,8 +77,7 @@ class Board extends Component{
                         />
                         
                         <TouchableOpacity onPress={() => {
-                            this.setState({ gameEndMsg: null });
-                            newGame(data.gridSize, data.difficulty);
+                            this.setState({ gameEndMsg: null }, () => newGame(data.gridSize, data.difficulty) );
                         }}>
                             <Text>Close</Text>
                         </TouchableOpacity>
@@ -84,7 +85,7 @@ class Board extends Component{
                 </Popup>
                 
                 <Maybe 
-                    pred={() => data.gameMode === "zen" }
+                    pred={isZenMode}
                     render={Zen}
                     renderAlt={() => {
                         const { gameMode, difficulty } = data;
@@ -109,7 +110,7 @@ class Board extends Component{
                 />
 
                 <Maybe 
-                    pred={() => data.gameMode === "zen" }
+                    pred={isZenMode}
                     render={Zen}
                     renderAlt={() => {
                         return (

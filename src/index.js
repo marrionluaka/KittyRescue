@@ -19,5 +19,8 @@ export default StackNavigator(
         Difficulty: { screen: Difficulty },
         GridSelector: { screen:  GridSelector },
         Game: { screen:  Game }
+    },
+    {
+        transitionConfig: getSlideFromRightTransition
     }
 );

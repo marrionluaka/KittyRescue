@@ -34,70 +34,61 @@ class Grid extends Component{
     super(props); 
   }
 
-  state = {
-    tile: null,
-    memory_tiles: [],
-    tiles_flipped: 0
-  };
-
   componentWillMount(){
     const { newGame, gridSize, difficulty } = this.props;
     newGame(gridSize, difficulty);
   }
 
+  componentWillReceiveProps(props){
+    const { 
+      tilesState, 
+      difficulty
+    } = props;
+
+    const len = tilesState.tiles.length - (levels[difficulty] || 0);
+
+    if(tilesState.tiles_flipped === len) 
+      this.showPopup("Board cleared... generating new board");
+  }
+
   memoryFlipTile = tile => {
-    const { tiles, difficulty } = this.props;
-    let { memory_tiles, tiles_flipped } = this.state;
+    const { 
+      tilesState,
+      addToMemory
+    } = this.props;
 
-    const len = tiles.length - (levels[difficulty] || 0);
+    if( tilesState.memory_tiles.length > 2) return null;
 
-    if( memory_tiles.length < 2){
-      this.setState({ tile });// causes a re-render
-      if(memory_tiles.length == 0){
-        memory_tiles.push(tile);
-      } else if(memory_tiles.length == 1 && memory_tiles[0].id !== tile.id){
-          memory_tiles.push(tile);
-          if(memory_tiles[0].src == tile.src){
+    if( tilesState.memory_tiles.length == 0){
+      addToMemory(tile);
+    } else if(tilesState.memory_tiles.length == 1 && tilesState.memory_tiles[0].id !== tile.id){
+        addToMemory(tile);
+        
+        if(tilesState.memory_tiles[0].src === tile.src){
 
-            if(tile.isTrap) return this.showPopup("Game Over");
-            
-            this.setState({ memory_tiles: [], tiles_flipped: tiles_flipped += 2 });
-           
-            this.props.tilesMatched(memory_tiles[0].src);
+          if(tile.isTrap) return this.showPopup("Game Over");
+         
+          this.props.tilesMatched(tilesState.memory_tiles[0].src);
 
-            if(tiles_flipped === len) return this.showPopup("Board cleared... generating new board");
-
-          } else {
-            this.flip2Back(memory_tiles);
-          }
-      }
+        } else {
+          this.flip2Back();
+        }
     }
   }
 
-  showPopup = msg => {
-    this.setState(
-      {
-        tile: null,
-        memory_tiles: [],
-        tiles_flipped: 0 
-      },
-      () => this.props.callback(msg, this.props.invalidateTimer)
-    );
-  }
+  showPopup = msg => this.props.callback(msg, this.props.invalidateTimer);
 
-  flip2Back = memory_tiles => {
+  flip2Back = () => {
     setTimeout(() => {
-      this.props.flipToBack(memory_tiles);
-      
-      this.setState({ memory_tiles:[] });
+      this.props.flipToBack(this.props.tilesState.memory_tiles);
     }, 1);
   }
 
   getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
   
   
-  gridBuilder = (size) => {
-    const { tiles } = this.props;
+  gridBuilder = size => {
+    const { tilesState } = this.props;
     const FOUR_BY_FOUR = 8, SIX_BY_SIX = 18;
     const windowWidth = Dimensions.get('window').width;
 
@@ -109,7 +100,7 @@ class Grid extends Component{
       "6x6": { width:  this.getPercentage(6, windowWidth) + "%", height: 6 }
     };
 
-    return tiles.map( el => {
+    return tilesState.tiles.map( el => {
       return (
         <Tile 
           key={el.id}
@@ -137,7 +128,7 @@ class Grid extends Component{
 }
 
 const mapStateToProps = state => ({
-  tiles: state.tiles
+  tilesState: state.tilesState
 });
 
 const mapDispatchToProps = {

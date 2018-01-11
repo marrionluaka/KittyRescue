@@ -4,3 +4,6 @@ export const TILES_MATCHED = "TILES_MATCHED";
 export const ADD_POINTS = "ADD_POINTS";
 export const DECREASE_TIME = "DECREASE_TIME";
 export const INVALIDATE_TIMER = "INVALIDATE_TIMER";
+export const INCREMENT_FLIPS = "INCREMENT_FLIPS";
+export const ADD_TO_MEMORY = "ADD_TO_MEMORY";
+export const EMPTY_MEMORY = "EMPTY_MEMORY";
