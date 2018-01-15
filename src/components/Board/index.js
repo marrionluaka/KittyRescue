@@ -45,7 +45,11 @@ class Board extends Component{
       );
     };
 
-    calcScore(score, time, accuracy){
+    getPercentage(accuracy){
+        return Math.floor(accuracy * 100);
+    }
+
+    calcScore(score, time=0, accuracy=0){
         let numTiles = (score + time) * accuracy;
         return Math.floor(score + time + numTiles);
     }
@@ -92,6 +96,17 @@ class Board extends Component{
                                                 /> : 
                                                 <Text>Time: {formatTime(timer.time)}</Text> :
                                                 null
+                                        }
+
+                                        {
+                                            this.state.gameEndMsg !== GAME_OVER_MSG ?
+                                                <AnimatedCounter 
+                                                    fn={ (val, counter) => val - counter }
+                                                    counter={this.getPercentage(accuracy)}
+                                                    firstAcc={this.getPercentage(accuracy)}
+                                                    render={accuracy => accuracy + "%"}
+                                                /> : 
+                                                <Text>Accuracy: {this.getPercentage(accuracy) + "%"}</Text>
                                         }
                                         
                                         {
