@@ -66,3 +66,36 @@ export const prepareGridData = (lvl, gridSize, arr) =>
                 { src: el, isFlipped: false  }
             ];
         }, []);
+
+
+export const formatTime = timeInSeconds => {
+    const _m = Math.floor( timeInSeconds / 60 ),
+          _s = timeInSeconds % 60;
+
+    return !_s ? `${_m}:00` : `${_m}:${_s}`;
+};
+
+export const animateCounter = options => {
+    const { 
+        fn,
+        reducer,
+        value,
+        firstAcc,
+        secondAcc 
+    } = options,
+    _pred = !!reducer && !!secondAcc ? reducer(firstAcc, secondAcc) : firstAcc; 
+
+    let _intervalId = null,
+        _counter    = 0;
+    
+    function _update(){
+        if(_counter < _pred) {
+            fn(value, ++_counter);
+        } else {
+            clearInterval(_intervalId);
+        }
+    }
+    
+    intervalId = setInterval(_update, 30);
+}
+    

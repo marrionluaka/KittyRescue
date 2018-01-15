@@ -6,6 +6,8 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
+import { formatTime } from '../../lib';
+import { timerLvls } from '../../globals';
 import * as countdown from '../../actions/timer';
 
 class Timer extends Component{
@@ -18,10 +20,12 @@ class Timer extends Component{
     }
 
     componentWillReceiveProps(prev){
-        if(prev.timer.time === 30) 
+        const _timer = timerLvls[this.props.gridSize][this.props.difficulty];
+
+        if(prev.timer.hasGameStarted === _timer) 
             clearTimeout(this.state.timerID);
 
-        if(prev.timer.hasGameStarted && prev.timer.time === 30) 
+        if(prev.timer.hasGameStarted && prev.timer.time === _timer) 
             this.setState({ timerID: setInterval(this.props.countdown, 1000) });
     }
 
@@ -41,7 +45,7 @@ class Timer extends Component{
             <View style={{ flex: 1, alignItems: 'center'}}>
                 <Text>Timer</Text>
                 <Text>
-                     {this.props.timer.time}
+                     { formatTime(this.props.timer.time) }
                 </Text>
             </View>
         );

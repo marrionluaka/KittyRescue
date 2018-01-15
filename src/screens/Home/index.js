@@ -35,6 +35,13 @@ export default class Home extends Component {
                         >
                             <Text>How To Play</Text>
                         </Button>
+
+                        <Button 
+                            bordered
+                            onPress={() => navigation.navigate("HighScores")}
+                        >
+                            <Text>High Scores</Text>
+                        </Button>
                     </Content>
                 </Body>
             </Container>

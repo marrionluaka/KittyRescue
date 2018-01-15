@@ -7,3 +7,5 @@ export const INVALIDATE_TIMER = "INVALIDATE_TIMER";
 export const INCREMENT_FLIPS = "INCREMENT_FLIPS";
 export const ADD_TO_MEMORY = "ADD_TO_MEMORY";
 export const EMPTY_MEMORY = "EMPTY_MEMORY";
+
+export const GAME_OVER_MSG = "Game Over";

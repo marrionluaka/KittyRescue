@@ -5,11 +5,13 @@ import {
     INVALIDATE_TIMER
 } from "../types";
 
+import { timerLvls } from '../globals';
+
 export default (timerOptions={}, action) => {
 
     if(action.type === NEW_GAME)
         return {
-            time: 30,
+            time: timerLvls[action.gridSize][action.lvl],
             hasGameStarted: false
         };
 

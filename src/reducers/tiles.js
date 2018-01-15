@@ -30,7 +30,7 @@ export default (function(){
         [NEW_GAME]: ({ gridSize, lvl }) => ({
             tiles: R.compose(
                     shuffle,
-                    duplicateEl(guid),//Guid.raw()
+                    duplicateEl(guid),
                     addTrapBasedOnLevelChosen(lvl)
                 )( prepareGridData(lvl, gridSize, data["grid"]) ),
             memory_tiles: [],
@@ -71,22 +71,9 @@ export default (function(){
             })
     };
 
-    return (state = initialState, action) => {
-
-        if(action.type === NEW_GAME)
-            return execute(NEW_GAME, action);
-        
-        if(action.type === TILES_MATCHED)
-            return execute(TILES_MATCHED, state, action);
-
-        if(action.type === FLIP_TO_BACK)
-            return execute(FLIP_TO_BACK, state, action);
-
-        if(action.type === ADD_TO_MEMORY)
-            return execute(ADD_TO_MEMORY, state, action);
-        
-        return state;
-    };
+    return (state = initialState, action) => 
+        !!_actions[action.type] ? action.type === NEW_GAME ?
+            execute(NEW_GAME, action) : execute(action.type, state, action) : state;
 
     function execute(actionType){
         const _slice = Array.prototype.slice;

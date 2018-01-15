@@ -11,6 +11,7 @@ import {
 import { connect } from 'react-redux';
 
 import Tile from '../Tile';
+import { GAME_OVER_MSG } from '../../types';
 import * as tileActions from '../../actions/tiles';
 import * as timerActions from '../../actions/timer';
 
@@ -66,7 +67,7 @@ class Grid extends Component{
         
         if(tilesState.memory_tiles[0].src === tile.src){
 
-          if(tile.isTrap) return this.showPopup("Game Over");
+          if(tile.isTrap) return this.showPopup(GAME_OVER_MSG);
          
           this.props.tilesMatched(tilesState.memory_tiles[0].src);
 

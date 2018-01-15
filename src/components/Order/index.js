@@ -20,7 +20,7 @@ class Order extends Component {
         let values = Object.values(alreadyMatchedTiles);
         
         if(!!values.length && this.isValidPointer()) 
-            this.props.addPoints(values[values.length - 1 || 0].isMatched ? 10 : 5)
+            this.props.addPoints(values[values.length - 1 || 0].isMatched ? 20 : 10)
     }
 
     tileMatched = src => {

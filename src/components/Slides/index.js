@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -7,20 +7,19 @@ import {
 } from 'react-native';
 import SlideItem from './SlideItem';
 
-export default class SlideList extends Component {
+const SlideList = ({ data, onComplete }) => {
 
-    renderSlides = () => {
-        return this.props.data.map((slide, idx) => {
+    const renderSlides = () => {
+        return data.map((slide, idx) => {
             return (
                 <SlideItem key={idx} {...slide}>
-                    { this.renderBtn(idx) }
+                    { renderBtn(idx) }
                 </SlideItem>
             );
         });
-    }
+    };
 
-    renderBtn = idx => {
-        const { data, onComplete } = this.props;
+    const renderBtn = idx => {
         if(idx === data.length - 1){
             return (
                 <TouchableOpacity 
@@ -34,18 +33,18 @@ export default class SlideList extends Component {
                 </TouchableOpacity>
             );
         }
-    }
+    };
 
-    render(){
-        return (
-            <ScrollView
-                horizontal
-                pagingEnabled
-                style={{ flex: 1}}
-                showsHorizontalScrollIndicator={false}
-            >
-                { this.renderSlides() }
-            </ScrollView>
-        );
-    }
+    return (
+        <ScrollView
+            horizontal
+            pagingEnabled
+            style={{ flex: 1}}
+            showsHorizontalScrollIndicator={false}
+        >
+            { renderSlides() }
+        </ScrollView>
+    );
 }
+
+export default SlideList;
