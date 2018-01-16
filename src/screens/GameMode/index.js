@@ -6,7 +6,7 @@ import {
 } from 'react-native';
 
 const GameMode = ({ navigation }) => {
-    navigate = gameMode => navigation.navigate("Difficulty", { data: { gameMode } });
+    const navigate = gameMode => navigation.navigate("Difficulty", { data: { gameMode } });
 
     return(
         <View>
