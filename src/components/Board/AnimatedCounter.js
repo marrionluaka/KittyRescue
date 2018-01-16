@@ -22,13 +22,15 @@ export default class AnimatedCounter extends Component {
             secondAcc
         } = this.props;
 
-        animateCounter({
-            fn: this.counterSetter,
-            reducer,
-            value: counter,
-            firstAcc,
-            secondAcc
-        });
+        setTimeout(() => {
+            animateCounter({
+                fn: this.counterSetter,
+                reducer,
+                value: counter,
+                firstAcc,
+                secondAcc
+            });
+        }, 700);   
     }
 
     render(){

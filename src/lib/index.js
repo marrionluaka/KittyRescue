@@ -72,7 +72,7 @@ export const formatTime = timeInSeconds => {
     const _m = Math.floor( timeInSeconds / 60 ),
           _s = timeInSeconds % 60;
 
-    return !_s ? `${_m}:00` : `${_m}:${_s}`;
+    return !_s ? `${_m}:00` : `${_m}:${_s < 10 ? "0"+ _s : _s}`;
 };
 
 export const animateCounter = options => {
@@ -90,12 +90,13 @@ export const animateCounter = options => {
     
     function _update(){
         if(_counter < _pred) {
-            fn(value, ++_counter);
+            _counter++;
+            fn(value, _counter);
         } else {
             clearInterval(_intervalId);
         }
     }
     
-    intervalId = setInterval(_update, 30);
+    intervalId = setInterval(_update, 10);
 }
     

@@ -22,7 +22,7 @@ class Timer extends Component{
     componentWillReceiveProps(prev){
         const _timer = timerLvls[this.props.gridSize][this.props.difficulty];
 
-        if(prev.timer.hasGameStarted === _timer) 
+        if(prev.timer.time === _timer) 
             clearTimeout(this.state.timerID);
 
         if(prev.timer.hasGameStarted && prev.timer.time === _timer) 

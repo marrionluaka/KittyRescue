@@ -50,8 +50,7 @@ class Board extends Component{
     }
 
     calcScore(score, time=0, accuracy=0){
-        let numTiles = (score + time) * accuracy;
-        return Math.floor(score + time + numTiles);
+        return Math.floor(score + time + accuracy);
     }
 
     render(){
@@ -81,7 +80,14 @@ class Board extends Component{
                                 const query        = new ScoreQueries(gameMode, difficulty, gridSize),
                                       matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.isMatched).length,
                                       totalTiles   = this.props.order.tiles.length,
-                                      accuracy     = matchedTiles / totalTiles;
+                                      accuracy     = this.getPercentage(matchedTiles / totalTiles),
+                                      renderScore  = <AnimatedCounter 
+                                                        fn={ (val, counter) => val + counter }
+                                                        reducer={scoreReducer}
+                                                        counter={score}
+                                                        firstAcc={timer.time}
+                                                        secondAcc={accuracy}
+                                                    />
 
                                 return (
                                     <View>
@@ -102,11 +108,11 @@ class Board extends Component{
                                             this.state.gameEndMsg !== GAME_OVER_MSG ?
                                                 <AnimatedCounter 
                                                     fn={ (val, counter) => val - counter }
-                                                    counter={this.getPercentage(accuracy)}
-                                                    firstAcc={this.getPercentage(accuracy)}
+                                                    counter={accuracy}
+                                                    firstAcc={accuracy}
                                                     render={accuracy => accuracy + "%"}
                                                 /> : 
-                                                <Text>Accuracy: {this.getPercentage(accuracy) + "%"}</Text>
+                                                <Text>Accuracy: {accuracy + "%"}</Text>
                                         }
                                         
                                         {
@@ -115,19 +121,15 @@ class Board extends Component{
                                                     <NewHighScore 
                                                         score={this.calcScore(score, timer.time, accuracy)}
                                                         method={query.insertScore}
+                                                        render={renderScore}
                                                     /> :
-                                                    query.isLowestScore(score) ?
+                                                    query.isLowestScore(this.calcScore(score, timer.time, accuracy)) ?
                                                     <NewHighScore 
                                                         score={this.calcScore(score, timer.time, accuracy)}
                                                         method={query.updateScore}
+                                                        render={renderScore}
                                                     /> :
-                                                    <AnimatedCounter 
-                                                        fn={ (val, counter) => val + counter }
-                                                        reducer={scoreReducer}
-                                                        counter={score}
-                                                        firstAcc={timer.time}
-                                                        secondAcc
-                                                    /> :
+                                                    renderScore :
                                                 <Text>Score: {score}</Text>
                                         }
                                     </View>

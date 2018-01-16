@@ -18,10 +18,11 @@ export default class NewHighScore extends Component {
     }
         
     render(){
-        const { score, method } = this.props;
+        const { score, method, render } = this.props;
         return (
             <View>
                 <Text>High Score!</Text>
+                {render}
                 <TextInput
                     style={{height: 40, borderColor: 'gray', borderWidth: 1}}
                     onChangeText={(text) => this.setState({ input: text })}
