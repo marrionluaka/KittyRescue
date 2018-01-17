@@ -102,4 +102,74 @@ export const animateCounter = options => {
     
     _intervalId = setInterval(_update, frequency || 10);
 }
-    
+
+/**
+ 
+    import { 
+    animateCounter,
+    formatTime 
+} from './lib';
+
+const MAX_LIVES = 25;
+
+var lifeComponent = (function(){
+    var _lives,
+        _time,
+		_timeThreshold = 300,
+		_decreaseLife,
+		_increaseLife;
+	
+	function _lifeComponent(lives, decreaseLife, increaseLife){
+		// gets amount of lives from redux
+		_lives = lives;	
+		_decreaseLife = decreaseLife;
+		_increaseLife = increaseLife;
+	}
+
+	_lifeComponent.prototype = (function(){
+		return {
+            state: {
+                time: null,
+                lives: this.props.lives,
+                hasTimerStarted: false
+            },
+
+			componentWillMount(){
+				//if(isNewGame) _decreaseLife();
+				
+				if(!hasTimerStarted && this.state.lives < MAX_LIVES) _startTimer();				
+            },
+            
+            render(){
+                return (
+                    <View>
+                        <Text>{this.state.time}</Text>
+                        <Heart 
+                            live={this.state.live}
+                        />
+                    </View>
+                );
+            }
+		};
+
+		function _startTimer(){
+            this.setState({ hasTimerStarted: true });
+            
+            animateCounter({
+                fn: (val, counter) => this.setState({ time: formatTime(val - counter) }),
+                onComplete: () => {
+                    this.props.increaseLife();
+                    this.setState({ hasTimerStarted: false });
+                },
+                value: _timeThreshold,
+                firstAcc: _timeThreshold,
+                frequency: 1000
+            });
+		}
+
+	}());
+	
+	return _lifeComponent;
+}());
+ 
+*/
