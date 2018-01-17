@@ -81,7 +81,9 @@ export const animateCounter = options => {
         reducer,
         value,
         firstAcc,
-        secondAcc 
+        secondAcc,
+        frequency,
+        onComplete = () => {}
     } = options,
     _pred = !!reducer && !!secondAcc ? reducer(firstAcc, secondAcc) : firstAcc; 
 
@@ -93,10 +95,11 @@ export const animateCounter = options => {
             _counter++;
             fn(value, _counter);
         } else {
+            onComplete();
             clearInterval(_intervalId);
         }
     }
     
-    intervalId = setInterval(_update, 10);
+    _intervalId = setInterval(_update, frequency || 10);
 }
     
