@@ -19,7 +19,9 @@ export default class AnimatedCounter extends Component {
             reducer,
             counter,
             firstAcc,
-            secondAcc
+            secondAcc,
+            frequency = 10,
+            onComplete = () => {}
         } = this.props;
 
         setTimeout(() => {
@@ -28,9 +30,11 @@ export default class AnimatedCounter extends Component {
                 reducer,
                 value: counter,
                 firstAcc,
-                secondAcc
+                secondAcc,
+                frequency,
+                onComplete
             });
-        }, 700);   
+        }, 700);
     }
 
     render(){
