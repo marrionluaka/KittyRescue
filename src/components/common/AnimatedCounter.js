@@ -3,7 +3,7 @@ import { Text } from 'react-native';
 
 import { animateCounter } from '../../lib';
 
-export default class AnimatedCounter extends Component {
+class AnimatedCounter extends Component {
     constructor(props){
         super(props);
     }
@@ -28,7 +28,7 @@ export default class AnimatedCounter extends Component {
             animateCounter({
                 fn: this.counterSetter,
                 reducer,
-                value: counter,
+                counter,
                 firstAcc,
                 secondAcc,
                 frequency,
@@ -42,3 +42,5 @@ export default class AnimatedCounter extends Component {
         return <Text>{_counter}</Text>
     }
 }
+
+export { AnimatedCounter };

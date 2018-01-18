@@ -7,15 +7,17 @@ import {
 } from 'react-native';
 import { connect } from 'react-redux';
 
-import Zen from './Zen';
+import Zen from '../Zen';
 import Grid from '../Grid';
 import Timer from '../Timer';
 import Score from '../Score';
 import Order from '../Order';
 import Popup from '../Modal';
-import NewHighScore from './NewHighScore';
-import AnimatedCounter from './AnimatedCounter';
-import { Maybe } from '../common/Maybe';
+import NewHighScore from '../NewHighScore';
+import { 
+    Maybe,
+    AnimatedCounter 
+} from '../common';
 
 import { formatTime } from '../../lib';
 import { GAME_OVER_MSG } from '../../types';

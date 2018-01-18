@@ -79,7 +79,7 @@ export const animateCounter = options => {
     const { 
         fn,
         reducer,
-        value,
+        counter,
         firstAcc,
         secondAcc,
         frequency,
@@ -93,7 +93,7 @@ export const animateCounter = options => {
     function _update(){
         if(_counter < _pred) {
             _counter++;
-            fn(value, _counter);
+            fn(counter, _counter);
         } else {
             onComplete();
             clearInterval(_intervalId);
