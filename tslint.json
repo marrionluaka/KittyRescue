@@ -4,6 +4,9 @@
         "tslint:recommended"
     ],
     "jsRules": {},
-    "rules": {},
+    "rules": {
+        "newline-before-return": false,
+        "curly": false,
+    },
     "rulesDirectory": []
 }

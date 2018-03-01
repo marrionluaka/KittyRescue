@@ -1,6 +1,6 @@
 import 'react-native';
 import React from 'react';
-import R from 'ramda';
+import * as R from 'ramda';
 
 import tiles from '../Gameboard/reducers/tiles';
 
