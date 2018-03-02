@@ -30,7 +30,7 @@ export default class Home extends React.Component<IProps, {}> {
                     <Content>
                         <Button
                             bordered
-                            onPress={() => navigation.navigate("GameMode")}
+                            onPress={() => navigation.navigate("GameConfigurator")}
                         >
                             <Text>Play</Text>
                         </Button>

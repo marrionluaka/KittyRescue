@@ -7,7 +7,7 @@ import {
 import MultiStepValidator from '../../components/MultiStepValidator';
 import Panel from '../../components/MultiStepValidator/Panel';
 
-const GameMode = ({ navigation }) => {
+const GameConfigurator = ({ navigation }) => {
     const navigate = (data: any) => navigation.navigate("Game", { data });
 
     return(
@@ -131,9 +131,8 @@ const GameMode = ({ navigation }) => {
                     );
                 }}
             />
-
         </MultiStepValidator>
     );
 };
 
-export default  GameMode;
+export default GameConfigurator;

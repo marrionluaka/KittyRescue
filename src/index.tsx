@@ -4,10 +4,9 @@ import getSlideFromRightTransition from "react-navigation-slide-from-right-trans
 import { Provider } from "react-redux";
 import store from "./store";
 
-import Difficulty from "./screens/Difficulty";
+
 import Game from "./screens/Gameboard";
-import GameMode from "./screens/GameMode";
-import GridSelector from "./screens/GridSelector";
+import GameConfigurator from "./screens/GameConfigurator";
 import HighScores from "./screens/HighScores";
 import HighScoresDetail from "./screens/HighScores/HighScoresDetail";
 import Home from "./screens/Home";
@@ -21,9 +20,7 @@ const App = StackNavigator(
         HighScores: { screen: HighScores },
 
         // Game Screens
-        GameMode: { screen:  GameMode },
-        Difficulty: { screen: Difficulty },
-        GridSelector: { screen:  GridSelector },
+        GameConfigurator: { screen: GameConfigurator },
         Game: { screen:  Game },
 
         // High Scores Screens
