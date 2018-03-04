@@ -11,11 +11,45 @@ const GameConfigurator = ({ navigation }) => {
     const navigate = (data: any) => navigation.navigate("Game", { data });
 
     return(
-        <MultiStepValidator>
+        <MultiStepValidator
+            activeBtn={({ pos, name }, showCurrent, selected) => {
+                const _style = {
+                    margin: "4%",
+                    padding: 10,
+                    backgroundColor: "#03A9F4",
+                };
+
+                const _ucfirst = (item: string) => item.charAt(0).toUpperCase() + item.slice(1);
+                const _converToGrid = (item: number) => item === 8 ? "4x4" : "6x6";
+                const _sanitize = (item) => !item ? null : isNaN(+item) ? _ucfirst(item) : _converToGrid(item);
+                return (
+                    <TouchableOpacity
+                        style={_style}
+                        onPress={showCurrent}
+                    >
+                        <Text>{ name }</Text>
+                        <Text>{ _sanitize(selected) }</Text>
+                    </TouchableOpacity>
+                );
+            }}
+            inactiveBtn={({ name }) => {
+                const _style = {
+                    margin: "4%",
+                    padding: 10,
+                    backgroundColor: "#d3d3d3",
+                };
+                
+                return (
+                    <View style={_style}>
+                        <Text>{ name }</Text>
+                    </View>
+                );
+            }}
+        >
             <Panel
                 name="Game Mode"
                 propKey="gameMode"
-                render={(push, showNext) => {
+                render={(push, showNext, _, skip) => {
                     return (
                         <View>
                             <TouchableOpacity
@@ -24,7 +58,7 @@ const GameConfigurator = ({ navigation }) => {
                                     padding: 10,
                                     backgroundColor: "#03A9F4",
                                 }}
-                                onPress={push.bind(null, "Vs Clock", showNext)}
+                                onPress={push.bind(null, "vsClock", showNext)}
                             >
                                 <Text>Vs Clock</Text>
                             </TouchableOpacity>
@@ -35,7 +69,7 @@ const GameConfigurator = ({ navigation }) => {
                                     padding: 10,
                                     backgroundColor: "#03A9F4",
                                 }}
-                                onPress={push.bind(null, "Accuracy", showNext)}
+                                onPress={push.bind(null, "accuracy", showNext)}
                             >
                                 <Text>Accuracy</Text>
                             </TouchableOpacity>
@@ -46,7 +80,7 @@ const GameConfigurator = ({ navigation }) => {
                                     padding: 10,
                                     backgroundColor: "#03A9F4",
                                 }}
-                                onPress={push.bind(null, "Zen", showNext)}
+                                onPress={push.bind(null, "zen", skip.bind(null, 2))}
                             >
                                 <Text>Zen/Classical</Text>
                             </TouchableOpacity>

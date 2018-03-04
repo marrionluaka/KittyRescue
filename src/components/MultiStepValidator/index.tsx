@@ -1,11 +1,13 @@
 import * as React from "react";
 import { 
     View, 
-    Text,
-    TouchableOpacity
+    Text
  } from 'react-native';
 
-export default class MultiStepValidator extends React.Component<{}, { 
+export default class MultiStepValidator extends React.Component<{
+    activeBtn: any;
+    inactiveBtn: any;
+}, { 
     item: string, 
     panel: number, 
     data: any 
@@ -17,13 +19,11 @@ export default class MultiStepValidator extends React.Component<{}, {
   state = {
       item: "None",
       panel: 0,
-      data: null
+      data: {}
   }
 
   private _order: any[] = [];
-  private panels: any = React.Children.toArray(this.props.children);
-
-  private selectedItem = item => this.setState({ item });
+  private panels: React.ReactChild[] = React.Children.toArray(this.props.children);
 
   private push = (key: string, value: any, callback = () => {}) => {
     this.setState({
@@ -38,43 +38,67 @@ export default class MultiStepValidator extends React.Component<{}, {
         this.setState({ panel: panel + 1 });
   };
 
+  private disable = (data: any, current: number) => {
+	const values = Object.keys(data)
+						 .slice(current)
+						 .reduce((acc, val) =>{
+                            acc[val] = null;
+                            return acc;
+                          }, {});
+	
+	return {
+		...data,
+		...values
+	};
+  };
+
   private showCurrent = panel => {
-    return this.setState({ panel: panel });
+    const _currentPanel = Object.keys(this.state.data)[panel];
+
+    return this.setState({ 
+        panel: panel,
+        data: this.disable(this.state.data, panel)
+    });
   };
 
   private onComplete = callback => {
     callback(this.state.data);
   };
 
-  private _renderSteps = (step, idx) => {
+  private _renderSteps = (step: any): JSX.Element => {
+    const current = !this.state.data[step.key] ?
+        this.props.inactiveBtn(step) : step.pos <= this.state.panel ? 
+        this.props.activeBtn(
+            step, 
+            this.showCurrent.bind(this, step.pos), 
+            this.state.data[step.key]) : null;
+
     return (
-        <View key={idx}>
-            <TouchableOpacity
-                style={{
-                    margin: "4%",
-                    padding: 10,
-                    backgroundColor: "#03A9F4",
-                }}
-                onPress={this.showCurrent.bind(this, idx)}
-            >
-                <Text>{ step }</Text>
-            </TouchableOpacity>
+        <View key={step.pos}> 
+            { current } 
         </View>
     );
   };
 
-  private fn = (child, idx) => {
-    this._order.length < 3 && this._order.push(child.props.name);
+  private skip = panel => this.setState({ panel });
+
+  private _prepareChildrenData = (child: any, idx: number) => {
+    this._order.length < this.panels.length && this._order.push({
+        name: child.props.name,
+        key: child.props.propKey,
+        pos: idx
+    });
 
     return React.cloneElement(child, { 
         showNext: this.showNext.bind(this, idx),
         push: this.push.bind(this, child.props.propKey),
-        onComplete: this.onComplete
+        onComplete: this.onComplete,
+        skip: this.skip
       });
   };
 
   public render() {
-    let items = React.Children.map(this.props.children, this.fn);
+    let items = React.Children.map(this.props.children, this._prepareChildrenData);
 
     return (
       <View style={{ flex: 1 }}>
@@ -87,6 +111,7 @@ export default class MultiStepValidator extends React.Component<{}, {
                 alignItems: 'flex-end'
             }}>
                 { this._order.map(this._renderSteps) }
+                
             </View>
         </View>
         
