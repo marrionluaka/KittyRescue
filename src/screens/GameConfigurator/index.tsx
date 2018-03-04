@@ -32,11 +32,11 @@ const GameConfigurator = ({ navigation }) => {
                     </TouchableOpacity>
                 );
             }}
-            inactiveBtn={({ name }) => {
+            inactiveBtn={({ name, pos }, currentPos) => {
                 const _style = {
                     margin: "4%",
                     padding: 10,
-                    backgroundColor: "#d3d3d3",
+                    backgroundColor: currentPos === pos ? "#03A9F4" : "#d3d3d3",
                 };
                 
                 return (
@@ -49,7 +49,7 @@ const GameConfigurator = ({ navigation }) => {
             <Panel
                 name="Game Mode"
                 propKey="gameMode"
-                render={(push, showNext, _, skip) => {
+                render={(push, showNext, _, skipTo) => {
                     return (
                         <View>
                             <TouchableOpacity
@@ -80,7 +80,7 @@ const GameConfigurator = ({ navigation }) => {
                                     padding: 10,
                                     backgroundColor: "#03A9F4",
                                 }}
-                                onPress={push.bind(null, "zen", skip.bind(null, 2))}
+                                onPress={push.bind(null, "zen", skipTo.bind(null, 2))}
                             >
                                 <Text>Zen/Classical</Text>
                             </TouchableOpacity>
@@ -136,6 +136,9 @@ const GameConfigurator = ({ navigation }) => {
                 name="Grid Size"
                 propKey="gridSize"
                 render={ (push, showNext, onComplete) =>{
+                    const FOUR_BY_FOUR = 8,
+                          SIX_BY_SIX   = 18;
+
                     return (
                         <View>
                             <TouchableOpacity
@@ -145,7 +148,7 @@ const GameConfigurator = ({ navigation }) => {
                                     backgroundColor: "#03A3F4",
                                 }}
                                 onPress={() => {
-                                    push(8, onComplete.bind(null, data => navigate(data)));
+                                    push(FOUR_BY_FOUR, onComplete.bind(null, data => navigate(data)));
                                 }}
                             >
                                 <Text>4X4</Text>
@@ -157,7 +160,7 @@ const GameConfigurator = ({ navigation }) => {
                                     padding: 10,
                                     backgroundColor: "#03A3F4",
                                 }}
-                                onPress={() => push(18, onComplete.bind(null, data => navigate(data)))}
+                                onPress={() => push(SIX_BY_SIX, onComplete.bind(null, data => navigate(data)))}
                             >
                                 <Text>6X6</Text>
                             </TouchableOpacity>

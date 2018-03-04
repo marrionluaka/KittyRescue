@@ -8,7 +8,7 @@ export default class Panel extends React.Component<{
     showNext?: any;
     onComplete?: any;
     push?: any;
-    skip?: any;
+    skipTo?: any;
 }, {}> {
   render() {
     return (
@@ -17,7 +17,7 @@ export default class Panel extends React.Component<{
                 this.props.push,
                 this.props.showNext,
                 this.props.onComplete,
-                this.props.skip
+                this.props.skipTo
             )}
         </View>
     );

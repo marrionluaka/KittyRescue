@@ -33,7 +33,7 @@ export default class MultiStepValidator extends React.Component<{
     }, callback);
   };
 
-  private showNext = panel => {
+  private showNext = (panel: number) => {
     if(panel < this.panels.length - 1)
         this.setState({ panel: panel + 1 });
   };
@@ -52,7 +52,7 @@ export default class MultiStepValidator extends React.Component<{
 	};
   };
 
-  private showCurrent = panel => {
+  private showCurrent = (panel: number) => {
     const _currentPanel = Object.keys(this.state.data)[panel];
 
     return this.setState({ 
@@ -67,7 +67,7 @@ export default class MultiStepValidator extends React.Component<{
 
   private _renderSteps = (step: any): JSX.Element => {
     const current = !this.state.data[step.key] ?
-        this.props.inactiveBtn(step) : step.pos <= this.state.panel ? 
+        this.props.inactiveBtn(step, this.state.panel) : step.pos <= this.state.panel ? 
         this.props.activeBtn(
             step, 
             this.showCurrent.bind(this, step.pos), 
@@ -80,7 +80,7 @@ export default class MultiStepValidator extends React.Component<{
     );
   };
 
-  private skip = panel => this.setState({ panel });
+  private skipTo = (panel: number) => this.setState({ panel });
 
   private _prepareChildrenData = (child: any, idx: number) => {
     this._order.length < this.panels.length && this._order.push({
@@ -93,7 +93,7 @@ export default class MultiStepValidator extends React.Component<{
         showNext: this.showNext.bind(this, idx),
         push: this.push.bind(this, child.props.propKey),
         onComplete: this.onComplete,
-        skip: this.skip
+        skipTo: this.skipTo
       });
   };
 
