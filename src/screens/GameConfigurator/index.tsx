@@ -27,8 +27,8 @@ const GameConfigurator = ({ navigation }) => {
                         style={_style}
                         onPress={showCurrent}
                     >
-                        <Text>{ name }</Text>
-                        <Text>{ _sanitize(selected) }</Text>
+                        <Text style={{ textAlign: 'center'}}>{ name }</Text>
+                        <Text style={{ textAlign: 'center'}}>{ _sanitize(selected) }</Text>
                     </TouchableOpacity>
                 );
             }}

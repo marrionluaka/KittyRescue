@@ -116,7 +116,6 @@ export default class MultiStepValidator extends React.Component<{
         </View>
         
         <View style={{ flex: 3 }}>
-            <Text>Current Panel: {JSON.stringify(this.state.data)}</Text>
             {items[this.state.panel]}
         </View>
       </View>
