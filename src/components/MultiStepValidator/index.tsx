@@ -3,14 +3,16 @@ import {
     View, 
     Text
  } from 'react-native';
+ import { ProgressBar } from '../common/ProgressBar';
 
 export default class MultiStepValidator extends React.Component<{
     activeBtn: any;
     inactiveBtn: any;
 }, { 
-    item: string, 
-    panel: number, 
-    data: any 
+    item: string;
+    panel: number;
+    data: any;
+    progress: number;
 }> {
   constructor(props) {
     super(props);
@@ -19,7 +21,8 @@ export default class MultiStepValidator extends React.Component<{
   state = {
       item: "None",
       panel: 0,
-      data: {}
+      data: {},
+      progress: 0
   }
 
   private _order: any[] = [];
@@ -27,6 +30,7 @@ export default class MultiStepValidator extends React.Component<{
 
   private push = (key: string, value: any, callback = () => {}) => {
     this.setState({
+        progress: this.state.progress + (100/this.panels.length),
         data: Object.assign({}, this.state.data, {
             [key]: value
         })
@@ -102,18 +106,26 @@ export default class MultiStepValidator extends React.Component<{
 
     return (
       <View style={{ flex: 1 }}>
-        <View style={{ flex: 2, justifyContent: 'center',
-                alignItems: 'center' }}>
+        <View style={{ 
+                flex: 2, 
+                justifyContent: 'center',
+                alignItems: 'center' 
+        }}>
             <Text>Image</Text>
-
-            <View style={{
-                flexDirection: 'row',
-                alignItems: 'flex-end'
-            }}>
-                { this._order.map(this._renderSteps) }
-                
-            </View>
         </View>
+
+        <View style={{
+                flex:1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'flex-end'
+        }}>
+            { this._order.map(this._renderSteps) }
+        </View>
+       
+        <ProgressBar
+            progress={this.state.progress}
+        />
         
         <View style={{ flex: 3 }}>
             {items[this.state.panel]}

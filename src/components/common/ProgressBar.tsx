@@ -6,34 +6,31 @@ import {
     View
  } from "react-native";
 
-class ProgressBar extends React.Component<{}, {}> {
+class ProgressBar extends React.Component<{ progress: number; }, {}> {
     constructor(props){
         super(props);
     }
 
-    /**
-     * 
-     * function move() {
-            var elem = document.getElementById("myBar"); 
-            var width = 10;
-            var id = setInterval(frame, 10);
-            function frame() {
-                if (width >= 100) {
-                    clearInterval(id);
-                } else {
-                    width++; 
-                    elem.style.width = width + '%'; 
-                    elem.innerHTML = width * 1 + '%';
-                }
-            }
-        }
-     */
-
-    
+    state = {
+        percentage: 0,
+        width: 0
+    };
 
     render(){
         return (
-            <View>
+            <View
+                style={{
+                    width: '100%',
+                    backgroundColor: '#ddd'
+                }}
+            >
+                <Animated.View
+                    style={{
+                        width: this.props.progress + "%",
+                        height: 5,
+                        backgroundColor: '#4CAF50'
+                    }}
+                />
             </View>
         );
     }

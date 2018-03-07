@@ -8,7 +8,11 @@ import MultiStepValidator from '../../components/MultiStepValidator';
 import Panel from '../../components/MultiStepValidator/Panel';
 
 const GameConfigurator = ({ navigation }) => {
-    const navigate = (data: any) => navigation.navigate("Game", { data });
+    const navigate = (data: any) => {
+        setTimeout(() =>{
+            navigation.navigate("Game", { data });
+        }, 0);
+    };
 
     return(
         <MultiStepValidator
