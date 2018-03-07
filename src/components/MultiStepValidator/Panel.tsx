@@ -15,35 +15,63 @@ interface IPanel {
     skipTo?: any;
 }
 
+interface IAnimateOptions{
+    animatedProp: Animated.Value;
+    initialValue: number; 
+    toValue: number;
+    duration: number;
+}
+
 export default class Panel extends React.Component<IPanel, {}> {
-    private animatedValue: Animated.Value
+    private _offSetRightAnimated: Animated.Value
+    private _opacityAnimated: Animated.Value
 
     constructor(props){
         super(props);
 
-        this.animatedValue = new Animated.Value(0);
+        this._offSetRightAnimated = new Animated.Value(0);
+        this._opacityAnimated     = new Animated.Value(0);
     }
 
     componentDidMount () {
-        this.animate();
+        this.animate({
+            animatedProp: this._offSetRightAnimated,
+            initialValue: -100,
+            toValue: 0,
+            duration: 400
+        });
+        this.animate({
+            animatedProp: this._opacityAnimated,
+            initialValue: 0,
+            toValue: 1,
+            duration: 700
+        });
     }
 
-    animate () {
-        this.animatedValue.setValue(-100);
+    private animate ({
+        animatedProp,
+        initialValue,
+        toValue,
+        duration
+    }: IAnimateOptions) {
+        animatedProp.setValue(initialValue);
 
         Animated.timing(
-          this.animatedValue,
+            animatedProp,
           {
-            toValue: 0,
-            duration: 400,
+            toValue,
+            duration,
             easing: Easing.linear
           }
         ).start()
     }
 
-    render() {
+    public render() {
         return (
-            <Animated.View style={{ right: this.animatedValue }}>
+            <Animated.View style={{
+                right: this._offSetRightAnimated,
+                opacity: this._opacityAnimated 
+            }}>
                 {this.props.render( 
                     this.props.push,
                     this.props.showNext,
