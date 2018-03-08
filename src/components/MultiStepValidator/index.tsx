@@ -89,10 +89,12 @@ export default class MultiStepValidator extends React.Component<{
     );
   };
 
-  private skipTo = (panel: number) => this.setState({
-       panel,
-       progress: this.state.progress + this._loadingPercentage
-    });
+  private skipTo = (panel: number) => {
+      return this.setState({
+        panel,
+        progress: this.state.progress + this._loadingPercentage
+     });
+  };
 
   private _prepareChildrenData = (child: any, idx: number) => {
     this._order.length < this.panels.length && this._order.push({

@@ -5,6 +5,8 @@ import {
     Easing
  } from 'react-native';
 
+ import { Animator } from '../common/AbstractAnimator'
+
 interface IPanel {
     name: string;
     propKey: string;
@@ -22,7 +24,7 @@ interface IAnimateOptions{
     duration: number;
 }
 
-export default class Panel extends React.Component<IPanel, {}> {
+export default class Panel extends Animator<IPanel> {
     private _offSetRightAnimated: Animated.Value
     private _opacityAnimated: Animated.Value
 
@@ -46,24 +48,6 @@ export default class Panel extends React.Component<IPanel, {}> {
             toValue: 1,
             duration: 700
         });
-    }
-
-    private animate ({
-        animatedProp,
-        initialValue,
-        toValue,
-        duration
-    }: IAnimateOptions) {
-        animatedProp.setValue(initialValue);
-
-        Animated.timing(
-            animatedProp,
-          {
-            toValue,
-            duration,
-            easing: Easing.linear
-          }
-        ).start()
     }
 
     public render() {

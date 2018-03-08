@@ -6,9 +6,24 @@ import {
     View
  } from "react-native";
 
-class ProgressBar extends React.Component<{ progress: number; }, {}> {
+ import { Animator } from '../common/AbstractAnimator';
+
+class ProgressBar extends Animator<{ progress: number; }> {
+    private _widthAnimated: Animated.Value
+
     constructor(props){
         super(props);
+
+        this._widthAnimated = new Animated.Value(0);
+    }
+
+    componentDidMount () {
+        this.animate({
+            animatedProp: this._widthAnimated,
+            initialValue: 0,
+            toValue: this.props.progress,
+            duration: 400
+        });
     }
 
     render(){
@@ -21,7 +36,7 @@ class ProgressBar extends React.Component<{ progress: number; }, {}> {
             >
                 <Animated.View
                     style={{
-                        width: this.props.progress + "%",
+                        width: this._widthAnimated,
                         height: 5,
                         backgroundColor: '#4CAF50'
                     }}
