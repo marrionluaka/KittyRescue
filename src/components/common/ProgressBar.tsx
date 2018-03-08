@@ -11,11 +11,6 @@ class ProgressBar extends React.Component<{ progress: number; }, {}> {
         super(props);
     }
 
-    state = {
-        percentage: 0,
-        width: 0
-    };
-
     render(){
         return (
             <View

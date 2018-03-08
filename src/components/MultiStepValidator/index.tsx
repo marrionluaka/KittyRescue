@@ -17,24 +17,28 @@ export default class MultiStepValidator extends React.Component<{
   constructor(props) {
     super(props);
   }
-
-  state = {
-      item: "None",
-      panel: 0,
-      data: {},
-      progress: 0
-  }
-
+  
   private _order: any[] = [];
   private panels: React.ReactChild[] = React.Children.toArray(this.props.children);
+  private ONE_HUNDRED_PERCENT: number = 100;
+  private _loadingPercentage: number = this.ONE_HUNDRED_PERCENT/this.panels.length;
+
+    state = {
+        item: "None",
+        panel: 0,
+        data: {},
+        progress: this._loadingPercentage
+    }
 
   private push = (key: string, value: any, callback = () => {}) => {
-    this.setState({
-        progress: this.state.progress + (100/this.panels.length),
-        data: Object.assign({}, this.state.data, {
-            [key]: value
-        })
-    }, callback);
+        this.setState({
+            progress: this.state.progress === this.ONE_HUNDRED_PERCENT 
+                ? this.state.progress 
+                : this.state.progress + this._loadingPercentage,
+            data: Object.assign({}, this.state.data, {
+                [key]: value
+            })
+        }, callback);
   };
 
   private showNext = (panel: number) => {
@@ -57,9 +61,10 @@ export default class MultiStepValidator extends React.Component<{
   };
 
   private showCurrent = (panel: number) => {
-    const _currentPanel = Object.keys(this.state.data)[panel];
+    const _currentPanel = this.state.panel - panel;
 
     return this.setState({ 
+        progress: this.state.progress - (this._loadingPercentage * _currentPanel),
         panel: panel,
         data: this.disable(this.state.data, panel)
     });
@@ -84,7 +89,10 @@ export default class MultiStepValidator extends React.Component<{
     );
   };
 
-  private skipTo = (panel: number) => this.setState({ panel });
+  private skipTo = (panel: number) => this.setState({
+       panel,
+       progress: this.state.progress + this._loadingPercentage
+    });
 
   private _prepareChildrenData = (child: any, idx: number) => {
     this._order.length < this.panels.length && this._order.push({
