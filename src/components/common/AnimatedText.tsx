@@ -5,37 +5,33 @@ import {
     Easing,
     Text
 } from 'react-native';
+import { Animator } from './AbstractAnimator';
 
-export default class AnimatedText extends React.Component<{},{}>{
+class AnimatedText extends Animator<{ styles: any;}>{
     private springValue: Animated.Value
 
     constructor(props){
         super(props);
 
-        this.springValue = new Animated.Value(0.3);
+        this.springValue = new Animated.Value(0);
     }
 
     componentDidMount(){
-        this.spring();
-    }
-
-    spring () {
-        this.springValue.setValue(0.3);
-
-        Animated.spring(
-          this.springValue,
-          {
-            toValue: 1,
-            friction: 1
-          }
-        ).start()
+        this.animate({
+            animatedProp: this.springValue,
+            initialValue: 0,
+            toValue: 25,
+            duration: 300
+        });
     }
 
     render(){
         return (
-            <Animated.Text style={{}}>
+            <Animated.Text style={[{ height: this.springValue }, this.props.styles]}>
                 {this.props.children}
             </Animated.Text>
         );
     }
 }
+
+export { AnimatedText };

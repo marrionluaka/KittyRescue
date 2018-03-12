@@ -9,6 +9,7 @@ import {
     initialValue: number; 
     toValue: number;
     duration: number;
+    easing?: string;
 }
 
  abstract class Animator<T> extends React.Component<T>{
@@ -17,7 +18,8 @@ import {
         animatedProp,
         initialValue,
         toValue,
-        duration
+        duration,
+        easing = 'linear'
     }: IAnimateOptions) {
         animatedProp.setValue(initialValue);
 
@@ -26,7 +28,7 @@ import {
           {
             toValue,
             duration,
-            easing: Easing.linear
+            easing: Easing[easing]
           }
         ).start()
     }

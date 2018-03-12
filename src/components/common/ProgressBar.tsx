@@ -8,25 +8,48 @@ import {
 
  import { Animator } from '../common/AbstractAnimator';
 
-class ProgressBar extends Animator<{ progress: number; }> {
+
+ interface Props{
+     color?: string;
+     progress: number; 
+     seed: () => number;
+     update?: () => boolean;
+ }
+
+class ProgressBar extends Animator<Props> {
     private _widthAnimated: Animated.Value
 
     constructor(props){
         super(props);
 
-        this._widthAnimated = new Animated.Value(0);
+        this._widthAnimated = new Animated.Value(this.props.progress);
     }
 
     componentDidMount () {
         this.animate({
             animatedProp: this._widthAnimated,
-            initialValue: 0,
-            toValue: this.props.progress,
-            duration: 400
+            initialValue: this.props.progress,
+            toValue: 100,
+            duration: 500
+        });
+    }
+
+    componentDidUpdate(){
+        this.animate({
+            animatedProp: this._widthAnimated,
+            initialValue: this.props.seed(),
+            toValue: 100,
+            duration: 500
         });
     }
 
     render(){
+        /** .interpolate() function helps us transpile our animation values into real style values */
+        const width = this._widthAnimated.interpolate({
+            inputRange: [0, 100],
+            outputRange: ['0%', `${this.props.progress}%`]
+        });
+
         return (
             <View
                 style={{
@@ -36,9 +59,9 @@ class ProgressBar extends Animator<{ progress: number; }> {
             >
                 <Animated.View
                     style={{
-                        width: this._widthAnimated,
+                        width,
                         height: 5,
-                        backgroundColor: '#4CAF50'
+                        backgroundColor: this.props.color || "#03A9F4"
                     }}
                 />
             </View>

@@ -46,7 +46,7 @@ export default class Panel extends Animator<IPanel> {
             animatedProp: this._opacityAnimated,
             initialValue: 0,
             toValue: 1,
-            duration: 700
+            duration: 500
         });
     }
 
