@@ -2,11 +2,13 @@ import * as React from "react";
 import {
     Text,
     TouchableOpacity,
-    View
+    View,
+    Dimensions
 } from "react-native";
 import MultiStepValidator from '../../components/MultiStepValidator';
 import Panel from '../../components/MultiStepValidator/Panel';
 import PanelTile from '../../components/MultiStepValidator/PanelTile';
+import GridSelector from '../../components/MultiStepValidator/GridSelector';
 import { AnimatedText } from '../../components/common/AnimatedText';
 
 const GameConfigurator = ({ navigation }) => {
@@ -18,7 +20,9 @@ const GameConfigurator = ({ navigation }) => {
     };
 
     const _commonBtnStyles= { // move to stylesheet
-        padding: 10
+        padding: 10,
+        borderRightWidth: 1,
+        borderRightColor: "#ddd"
     };
 
     return(
@@ -134,32 +138,26 @@ const GameConfigurator = ({ navigation }) => {
                 render={ (push, showNext, onComplete) =>{
                     const FOUR_BY_FOUR = 8,
                             SIX_BY_SIX   = 18;
-
+                    
+                    const { height } = Dimensions.get('window');
+                    const ratio = 2.5;
+                    
                     return (
-                        <View>
-                            <TouchableOpacity
-                                style={{
-                                    margin: "4%",
-                                    padding: 10,
-                                    backgroundColor: "#03A3F4",
-                                }}
-                                onPress={() => {
-                                    push(FOUR_BY_FOUR, onComplete.bind(null, data => navigate(data)));
-                                }}
-                            >
-                                <Text>4X4</Text>
-                            </TouchableOpacity>
-                            
-                            <TouchableOpacity
-                                style={{
-                                    margin: "4%",
-                                    padding: 10,
-                                    backgroundColor: "#03A3F4",
-                                }}
-                                onPress={() => push(SIX_BY_SIX, onComplete.bind(null, data => navigate(data)))}
-                            >
-                                <Text>6X6</Text>
-                            </TouchableOpacity>
+                        <View style={{ flexDirection: 'row' }}>
+                            <GridSelector 
+                                push={() => push(FOUR_BY_FOUR, onComplete.bind(null, data => navigate(data)))}
+                                thumbnail="[   ]"
+                                title="4x4"
+                                marginRight
+                                size="Normal"
+                            />
+
+                            <GridSelector 
+                                push={() => push(SIX_BY_SIX, onComplete.bind(null, data => navigate(data)))}
+                                thumbnail="[   ]"
+                                title="6x6"
+                                size="Large"
+                            />
                         </View>
                     );
                 }}

@@ -13,6 +13,7 @@ const styles = StyleSheet.create({
 
 const _createTiles = (list: any[]): any[] => {
     const { height } = Dimensions.get('window');
+    const ratio = 6.58;
 
     return list.map(el => {
         return ( 
@@ -25,7 +26,7 @@ const _createTiles = (list: any[]): any[] => {
             >
                 <View style={{ 
                         flex: 1 , 
-                        height: height/6.9,
+                        height: height/ratio,
                         backgroundColor: el.backgroundColor || "#03A9F4",
                         justifyContent: 'center',
                         alignContent: 'center'
@@ -40,7 +41,7 @@ const _createTiles = (list: any[]): any[] => {
 
                 <View style={{ 
                         flex: 3,  
-                        height: height/6.9,
+                        height: height/ratio,
                         borderBottomWidth: 1,
                         borderBottomColor: "#ddd",
                         justifyContent: 'center',

@@ -129,13 +129,14 @@ export default class MultiStepValidator extends React.Component<Props, State> {
             <View style={{ 
                     flex: 2, 
                     justifyContent: 'center',
-                    alignItems: 'center' 
+                    alignItems: 'center',
+                    backgroundColor: "powderblue" 
             }}>
                 <Text>{this.props.bannersSrc[this.state.panel] || "No Image"}</Text>
             </View>
 
             <View style={{
-                    flex:1,
+                    flex:0.7,
                     flexDirection: 'row',
                     justifyContent: 'center',
                     alignItems: 'flex-end'
