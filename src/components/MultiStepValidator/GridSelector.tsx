@@ -13,22 +13,19 @@ const GridSelector = ({ size = "Normal" , push, thumbnail, title, marginRight = 
     return (
         <View style={{ 
             flex: 1,
-            marginTop: 17,
+            marginTop: 15,
             margin: 5,
             marginRight: marginRight ? 0 : 5,
         }}>
             <TouchableOpacity
                 style={{
                     padding: 10,
-                    borderWidth: 1,
-                    borderRadius: 2,
-                    borderColor: '#ddd',
-                    borderBottomWidth: 0,
+                    borderRadius: 5,
                     shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 2 },
-                    shadowOpacity: 0.8,
-                    shadowRadius: 2,
-                    elevation: 1,
+                    shadowOffset: { width: 0, height: 3 },
+                    shadowOpacity: 1.0,
+                    shadowRadius: 5,
+                    elevation: 2,
                     height: height/ratio
                 }}
                 onPress={push}

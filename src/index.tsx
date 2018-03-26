@@ -11,6 +11,7 @@ import HighScores from "./screens/HighScores";
 import HighScoresDetail from "./screens/HighScores/HighScoresDetail";
 import Home from "./screens/Home";
 import HowToPlay from "./screens/HowToPlay";
+//import Test from './screens/Test';
 
 const App = StackNavigator(
     {
@@ -22,6 +23,7 @@ const App = StackNavigator(
         // Game Screens
         GameConfigurator: { screen: GameConfigurator },
         Game: { screen:  Game },
+        //Test: { screen: Test },
 
         // High Scores Screens
         HighScoresDetail: { screen: HighScoresDetail },

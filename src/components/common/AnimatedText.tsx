@@ -20,7 +20,7 @@ class AnimatedText extends Animator<{ styles: any;}>{
         this.animate({
             animatedProp: this.springValue,
             initialValue: 0,
-            toValue: 25,
+            toValue: 20,
             duration: 300
         });
     }

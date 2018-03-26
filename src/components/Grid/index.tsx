@@ -4,8 +4,7 @@ import {
   Text,
   Image,
   StyleSheet,
-  Dimensions,
-  TouchableOpacity
+  Dimensions 
 } from "react-native";
 
 import { connect } from "react-redux";
@@ -46,6 +45,10 @@ class Grid extends React.Component<{
     super(props); 
   }
 
+  state = {
+    tiles: []
+  }
+
   componentWillMount(){
     const { newGame, gridSize, difficulty } = this.props;
     newGame(gridSize, difficulty);
@@ -63,13 +66,17 @@ class Grid extends React.Component<{
       this.showPopup("Board cleared... generating new board");
   }
 
-  memoryFlipTile = tile => {
+  memoryFlipTile = (tile, tileCtx) => {
     const { 
       tilesState,
       addToMemory
     } = this.props;
+    let { tiles } = this.state;
 
-    if( tilesState.memory_tiles.length > 2) return null;
+    if(tilesState.memory_tiles.length >= 2 ) return null;
+
+    tileCtx.flipToFront();
+    tiles.push(tileCtx);
 
     if( tilesState.memory_tiles.length == 0){
       addToMemory(tile);
@@ -80,24 +87,27 @@ class Grid extends React.Component<{
 
           if(tile.isTrap) return this.showPopup(GAME_OVER_MSG);
          
-          this.props.tilesMatched(tilesState.memory_tiles[0].src);
-
+          setTimeout(() => {
+            this.props.tilesMatched(tilesState.memory_tiles[0].src);
+          }, 500);
+          
         } else {
-          this.flip2Back();
+          this.flip2Back(tiles);
         }
     }
   }
 
   showPopup = msg => this.props.callback(msg, this.props.invalidateTimer);
 
-  flip2Back = () => {
+  flip2Back = (tiles: any[]) => {
     setTimeout(() => {
       this.props.flipToBack(this.props.tilesState.memory_tiles);
-    }, 1);
+      tiles.forEach(tile => tile.flipToBack());
+      this.setState({ tiles: [] });
+    }, 500);
   }
 
   getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
-  
   
   gridBuilder = size => {
     const { tilesState } = this.props;
@@ -108,7 +118,7 @@ class Grid extends React.Component<{
       { size: "4x4", margin: FOUR_BY_FOUR / 4 } : { size: "6x6", margin: SIX_BY_SIX / 6 };
 
     const _dimensions = {
-      "4x4": { width:  this.getPercentage(4, windowWidth)+ "%", height: 4 },
+      "4x4": { width:  this.getPercentage(4, windowWidth) + "%", height: 4 },
       "6x6": { width:  this.getPercentage(6, windowWidth) + "%", height: 6 }
     };
 

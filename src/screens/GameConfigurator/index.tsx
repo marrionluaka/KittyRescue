@@ -20,9 +20,7 @@ const GameConfigurator = ({ navigation }) => {
     };
 
     const _commonBtnStyles= { // move to stylesheet
-        padding: 10,
-        borderRightWidth: 1,
-        borderRightColor: "#ddd"
+        padding: 10
     };
 
     return(

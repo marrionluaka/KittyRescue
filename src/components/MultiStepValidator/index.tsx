@@ -127,29 +127,30 @@ export default class MultiStepValidator extends React.Component<Props, State> {
         return (
         <View style={{ flex: 1 }}>
             <View style={{ 
-                    flex: 2, 
+                    flex: 1.8, 
                     justifyContent: 'center',
                     alignItems: 'center',
                     backgroundColor: "powderblue" 
             }}>
-                <Text>{this.props.bannersSrc[this.state.panel] || "No Image"}</Text>
+                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
+                    <Text>{this.props.bannersSrc[this.state.panel] || "No Image"}</Text>
+                </View>
+
+                <View style={{
+                    flex: 1,
+                    flexDirection: 'row',
+                    alignItems: 'flex-end'
+                }}>
+                    { this._order.map(this._renderSteps) }
+                </View>
             </View>
 
-            <View style={{
-                    flex:0.7,
-                    flexDirection: 'row',
-                    justifyContent: 'center',
-                    alignItems: 'flex-end'
-            }}>
-                { this._order.map(this._renderSteps) }
-            </View>
-        
             <ProgressBar
                 progress={this.state.progress}
                 seed={() => this.state.panel * this._loadingPercentage}
             />
             
-            <View style={{ flex: 3 }}>
+            <View style={{ flex: 2 }}>
                 {items[this.state.panel]}
             </View>
         </View>

@@ -2,7 +2,6 @@ import * as React from "react";
 import { 
     Text,
     Animated,
-    Easing,
     View
  } from "react-native";
 
