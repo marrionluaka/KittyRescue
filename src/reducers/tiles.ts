@@ -15,13 +15,14 @@ import {
     guid,
     shuffle,
     duplicateEl,
+    convertToObj,
     prepareGridData,
     addTrapBasedOnLevelChosen
 } from "../lib";
   
 export default (function(){
     const initialState = {
-        tiles:[],
+        tiles:{},
         memory_tiles: [],
         tiles_flipped: 0
     };
@@ -29,46 +30,33 @@ export default (function(){
     const _actions = {
         [NEW_GAME]: ({ gridSize, lvl }) => ({
             tiles: R.compose(
+                    convertToObj,
                     shuffle,
                     duplicateEl(guid),
                     addTrapBasedOnLevelChosen(lvl)
                 )( prepareGridData(lvl, gridSize, data["grid"]) ),
-            memory_tiles: [],
             tiles_flipped: 0
         }),
 
-        [TILES_MATCHED]: (state, { src }) =>  
-            Object.assign({}, state, {
-                tiles: state.tiles.reduce((acc, tile) => {
-                    if(tile.src === src) tile.isMatched = true;
-                    acc.push(tile);
-                    return acc;
-                }, []),
+        [TILES_MATCHED]: (state, { tiles }) =>  
+            {   
+                const idx1 = tiles[0].id,
+                      idx2 = tiles[1].id;
 
-                memory_tiles: [],
-                tiles_flipped: state.tiles_flipped + 2
-            })
-        ,
-
-        [FLIP_TO_BACK]: (state, { memoryTiles }) => {
-            const findIndex  = idx => R.findIndex(R.propEq('id', idx))(state.tiles),
-                  firstIdx   = findIndex(memoryTiles[0].id),
-                  secondIdx  = findIndex(memoryTiles[1].id);
-
-            return Object.assign({}, state, {
-                tiles: R.compose(
-                        R.update(secondIdx, Object.assign({}, state.tiles[secondIdx], { isFlipped: false })),
-                        R.update
-                    )(firstIdx, Object.assign({}, state.tiles[firstIdx], { isFlipped: false }), state.tiles),
-
-                memory_tiles: []
-            });
-        },
-
-        [ADD_TO_MEMORY]: (state, { tile }) => 
-            Object.assign({}, state, {
-                memory_tiles: [...state.memory_tiles, tile]
-            })
+                return Object.assign({}, state, {
+                    tiles: Object.assign({}, state.tiles, {
+                        [idx1]: {
+                            ...state.tiles[idx1],
+                            isMatched: true
+                        },
+                        [idx2]: {
+                            ...state.tiles[idx2],
+                            isMatched: true
+                        },
+                    }),
+                    tiles_flipped: state.tiles_flipped + 2
+                });
+            }
     };
 
     return (state = initialState, action) => 

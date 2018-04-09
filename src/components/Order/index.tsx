@@ -23,7 +23,7 @@ class Order extends React.Component<IProps, {}> {
     componentWillReceiveProps(prev, next){
         const { alreadyMatchedTiles } = prev.order;
         // @ts-ignore: compile error
-        let values = Object.values(alreadyMatchedTiles);
+        let values: any = Object.values(alreadyMatchedTiles);
         
         if(!!values.length && this.isValidPointer()) 
             this.props.addPoints(values[values.length - 1 || 0].isMatched ? 20 : 10)
@@ -41,7 +41,7 @@ class Order extends React.Component<IProps, {}> {
 
     isValidPointer = () => {
         const { tiles, pointer } = this.props.order;
-        return pointer < tiles.length;
+        return pointer < Object.values(tiles).length;
     }
 
     render(){
@@ -55,7 +55,7 @@ class Order extends React.Component<IProps, {}> {
                     justifyContent: 'center'
                 }}>
                 {
-                    tiles.map((val, idx) => {
+                    Object.values(tiles).map((val, idx) => {
                         return (
                             <OrderTile 
                                 key={idx}

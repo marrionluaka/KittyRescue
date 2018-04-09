@@ -13,9 +13,9 @@ export const newGame = (gridSize, lvl) => ({
     lvl
 });
 
-export const tilesMatched = src => ({
+export const tilesMatched = tiles => ({
     type: TILES_MATCHED,
-    src
+    tiles
 });
 
 export const flipToBack = memoryTiles => ({

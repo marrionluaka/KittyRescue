@@ -5,6 +5,7 @@
 	"scripts": {
 		"start": "node node_modules/react-native/local-cli/cli.js start",
 		"test": "jest",
+		"test:watch": "jest --watch",
 		"compile": "tsc -w"
 	},
 	"dependencies": {
@@ -21,16 +22,31 @@
 		"redux": "^3.7.2"
 	},
 	"devDependencies": {
+		"@types/jest": "^22.2.2",
 		"@types/ramda": "^0.25.18",
 		"@types/react": "^16.0.38",
 		"@types/react-native": "^0.52.12",
 		"babel-jest": "21.2.0",
 		"babel-preset-react-native": "4.0.0",
 		"jest": "21.2.1",
-		"react-test-renderer": "16.0.0"
+		"react-test-renderer": "16.0.0",
+		"ts-jest": "^22.4.2",
+		"typescript": "^2.8.1"
 	},
 	"jest": {
 		"preset": "react-native",
+		"transform": {
+			"^.+\\.tsx?$": "ts-jest"
+		},
+		"testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+		"moduleFileExtensions": [
+			"ts",
+			"tsx",
+			"js",
+			"jsx",
+			"json",
+			"node"
+		],
 		"transformIgnorePatterns": [
 			"node_modules/(?!react-native|native-base-shoutem-theme|@shoutem/animation|@shoutem/ui|tcomb-form-native)"
 		]

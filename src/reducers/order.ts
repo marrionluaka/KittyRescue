@@ -19,9 +19,9 @@ interface IOrder {
 
 interface IAction {
     type: string;
-    lvl: string;
-    gridSize: number;
-    src: string;
+    lvl?: string;
+    gridSize?: number;
+    tiles?: any[];
 }
 
 const initialOrder = {
@@ -39,16 +39,21 @@ export default (order: IOrder = initialOrder, action: IAction) => {
         };
 
     if(action.type === TILES_MATCHED){
-        let _updated = update(order.tiles.findIndex(o => o.src === action.src), { matched: action.src }, order.tiles);
+        let _matchedTile = action.tiles[0];
+        let _updated = update(
+            order.tiles.findIndex(o => o.src === _matchedTile.src), 
+            { matched: _matchedTile.src }, 
+            order.tiles
+        );
         let pointer =  _updated.filter( tile => tile.matched).length;
 
         return {
             tiles: _updated,
             pointer,
             alreadyMatchedTiles: Object.assign({}, order.alreadyMatchedTiles, {
-                [action.src]: {
-                    [action.src]: action.src,
-                    isMatched: action.src === order.tiles[order.pointer].src
+                [_matchedTile.src]: {
+                    [_matchedTile.src]: _matchedTile.src,
+                    isMatched: _matchedTile.src === order.tiles[order.pointer].src
                 }
             })
         };

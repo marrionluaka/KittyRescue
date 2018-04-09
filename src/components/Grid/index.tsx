@@ -40,13 +40,14 @@ class Grid extends React.Component<{
   tilesMatched: any;
   flipToBack: any;
 }, {}> {
-  
+  private memory_tiles: any[]
+  private tiles: any[]
+
   constructor(props){
     super(props); 
-  }
-
-  state = {
-    tiles: []
+    
+    this.memory_tiles = [];
+    this.tiles = [];
   }
 
   componentWillMount(){
@@ -60,35 +61,36 @@ class Grid extends React.Component<{
       difficulty
     } = props;
 
-    const len = tilesState.tiles.length - (levels[difficulty] || 0);
+    const len = Object.values(tilesState.tiles).length - (levels[difficulty] || 0);
 
     if(tilesState.tiles_flipped === len) 
       this.showPopup("Board cleared... generating new board");
   }
 
-  memoryFlipTile = (tile, tileCtx) => {
-    const { 
-      tilesState,
-      addToMemory
-    } = this.props;
-    let { tiles } = this.state;
-
-    if(tilesState.memory_tiles.length >= 2 ) return null;
+  private memoryFlipTile = (tile, tileCtx) => {
+    const { tilesMatched } = this.props;
+    let { tiles, memory_tiles } = this;
+    
+    if(memory_tiles.length >= 2) return null;
 
     tileCtx.flipToFront();
     tiles.push(tileCtx);
 
-    if( tilesState.memory_tiles.length == 0){
-      addToMemory(tile);
-    } else if(tilesState.memory_tiles.length == 1 && tilesState.memory_tiles[0].id !== tile.id){
-        addToMemory(tile);
-        
-        if(tilesState.memory_tiles[0].src === tile.src){
+    if(memory_tiles.length == 0){
+      memory_tiles.push(tile)
+    } else if(memory_tiles.length == 1 && memory_tiles[0].id !== tile.id){
+      memory_tiles.push(tile);
 
-          if(tile.isTrap) return this.showPopup(GAME_OVER_MSG);
+        if(memory_tiles[0].src === tile.src){
+
+          if(tile.isTrap){
+            this.emptyTilesContainer();
+            return this.showPopup(GAME_OVER_MSG);
+          } 
          
           setTimeout(() => {
-            this.props.tilesMatched(tilesState.memory_tiles[0].src);
+            tilesMatched(memory_tiles);
+            this.emptyTilesContainer();
           }, 500);
           
         } else {
@@ -97,19 +99,24 @@ class Grid extends React.Component<{
     }
   }
 
-  showPopup = msg => this.props.callback(msg, this.props.invalidateTimer);
+  private emptyTilesContainer = () => {
+    this.tiles.length = 0;
+    this.memory_tiles.length = 0;
+  }
 
-  flip2Back = (tiles: any[]) => {
+  private flip2Back = (tiles: any[]) => {
     setTimeout(() => {
-      this.props.flipToBack(this.props.tilesState.memory_tiles);
       tiles.forEach(tile => tile.flipToBack());
-      this.setState({ tiles: [] });
+      this.props.flipToBack(this.memory_tiles);
+      this.emptyTilesContainer();
     }, 500);
   }
 
-  getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
+  private showPopup = msg => this.props.callback(msg, this.props.invalidateTimer);
+
+  private getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
   
-  gridBuilder = size => {
+  private gridBuilder = size => {
     const { tilesState } = this.props;
     const FOUR_BY_FOUR = 8, SIX_BY_SIX = 18;
     const windowWidth = Dimensions.get("window").width;
@@ -122,7 +129,7 @@ class Grid extends React.Component<{
       "6x6": { width:  this.getPercentage(6, windowWidth) + "%", height: 6 }
     };
 
-    return tilesState.tiles.map( el => {
+    return Object.values(tilesState.tiles).map( el => {
       return (
         <Tile 
           key={el.id}
@@ -136,7 +143,7 @@ class Grid extends React.Component<{
     });
   }
 
-  render(){
+  public render(){
     const { gridSize } = this.props;
     
     return(

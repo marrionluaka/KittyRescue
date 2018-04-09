@@ -29,11 +29,18 @@ export const addTrapBasedOnLevelChosen =  lvl => arr => {
     let array = new Array(chosenLvl);
     
     let traps = chosenLvl > 1 ? 
-        array.fill({ src: "TRAP", isFlipped: false, isTrap: true }) :
+        array.fill({ src: "TRAP", isTrap: true }) :
         !!chosenLvl ?
-        [ { src: "TRAP", isFlipped: false, isTrap: true } ] : [];
+        [ { src: "TRAP", isTrap: true } ] : [];
 
     return arr.concat(traps);
+};
+
+export const convertToObj = (arr) => {
+    return arr.reduce((acc, val) => {
+        acc[val.id] = val;
+        return acc;
+    }, {});
 };
 
 export const shuffle = arr => {
@@ -63,7 +70,7 @@ export const prepareGridData = (lvl, gridSize, arr) =>
         .reduce((acc, el) => {
             return [
                 ...acc,
-                { src: el, isFlipped: false  }
+                { src: el }
             ];
         }, []);
 
