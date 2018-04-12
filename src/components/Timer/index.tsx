@@ -5,6 +5,7 @@ import {
     StyleSheet 
 } from "react-native";
 import { connect } from "react-redux";
+import Bar from './Bar';
 
 import { formatTime } from "../../lib";
 import { timerLvls } from "../../globals";
@@ -51,11 +52,12 @@ class Timer extends React.Component<IProps, { timerID: any }>{
 
     render(){
         return(
-            <View style={{ flex: 1, alignItems: 'center'}}>
-                <Text>Timer</Text>
-                <Text>
-                     { formatTime(this.props.timer.time) }
-                </Text>
+            <View style={{ flex: 1 , justifyContent: 'flex-end' }}>
+                <Bar
+                    time={this.props.timer.time}
+                >
+                    { formatTime(this.props.timer.time) }
+                </Bar>
             </View>
         );
     }

@@ -161,14 +161,14 @@ class Board extends React.Component<{
                         const { gameMode, difficulty, gridSize } = data;
 
                         return (
-                            <View style={{ flex: 1, flexDirection: "row", alignItems: "center"}}>
-                                {
-                                    gameMode === "vsClock" ? this.renderTimer(gridSize, difficulty) : null
-                                }
+                            <View style={{ flex: 1 }}>
                                 <Score 
                                     gameMode={gameMode}
                                     difficulty={difficulty}
                                 />
+                                {
+                                    gameMode === "vsClock" ? this.renderTimer(gridSize, difficulty) : null
+                                }
                             </View>
                         );
                     }}
