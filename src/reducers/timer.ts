@@ -62,12 +62,13 @@ export default (timerOptions: ITimerOptions = initialTimerOptions, action: IActi
     if(action.type === FLIP_TO_BACK){
         if(action.isThereATrap 
             && timerOptions.time > 0 
-            && timerOptions.hasGameStarted) {
+            && timerOptions.hasGameStarted
+            && timerOptions.time - 3 >= 0) {
             return Object.assign({}, timerOptions, {
-                time: timerOptions.time - 3 >= 0 ? timerOptions.time -=3 : 0
+                time: timerOptions.time - 3 
             });
         }
-        
+
         if(!timerOptions.hasGameStarted)
             return Object.assign({}, timerOptions, {
                 hasGameStarted: true
