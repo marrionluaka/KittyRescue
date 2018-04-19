@@ -2,10 +2,11 @@ import {
     NEW_GAME, 
     FLIP_TO_BACK,
     DECREASE_TIME,
-    INVALIDATE_TIMER
+    INVALIDATE_TIMER,
+    ADD_POINTS
 } from "../types";
 
-import { timerLvls } from "../globals";
+import { timerLvls, MIN_SCORE } from "../globals";
 
 interface ITimerOptions {
     time: number;
@@ -18,7 +19,8 @@ interface IAction {
     gridSize: number;
     lvl: string;
     msg: string;
-    memoryTiles: any[];
+    isThereATrap: boolean;
+    amount: number;
 }
 
 const initialTimerOptions = {
@@ -45,18 +47,33 @@ export default (timerOptions: ITimerOptions = initialTimerOptions, action: IActi
             invalidateTimer: action.msg
         });
     
-    if(action.type === FLIP_TO_BACK){
-        const traps = action.memoryTiles.find( tile => tile.isTrap );
+    if(action.type === ADD_POINTS){
+        if(timerOptions.time !== 0 
+            && timerOptions.hasGameStarted 
+            && action.amount > MIN_SCORE)
+            return Object.assign({}, timerOptions, {
+                time: timerOptions.time + 3
+            });
 
-        if(!!traps && timerOptions.time > 0 && timerOptions.hasGameStarted) {
+        return timerOptions;
+    }
+        
+
+    if(action.type === FLIP_TO_BACK){
+        if(action.isThereATrap 
+            && timerOptions.time > 0 
+            && timerOptions.hasGameStarted) {
             return Object.assign({}, timerOptions, {
                 time: timerOptions.time - 3 >= 0 ? timerOptions.time -=3 : 0
             });
         }
+        
+        if(!timerOptions.hasGameStarted)
+            return Object.assign({}, timerOptions, {
+                hasGameStarted: true
+            });
 
-        return Object.assign({}, timerOptions, {
-            hasGameStarted: true
-        });
+        return timerOptions;
     }
 
     return timerOptions;

@@ -8,10 +8,11 @@ import {
   Dimensions
 } from 'react-native';
 import { Animator } from '../common/AbstractAnimator';
+import { getPercentage } from '../../lib'
 
 const styles = StyleSheet.create({
     progress_container: {
-      borderWidth: 1,
+     
       borderColor: '#333',
       backgroundColor: '#ccc',
       position: 'relative'
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
       alignSelf: 'center',
       position: 'absolute',
-      top: -2
+      top: -4
     }
 });
 
@@ -30,27 +31,29 @@ export default class Bar extends Animator<{ time: number; }> {
     private progress: Animated.Value
     private initialVal: number
     public state: any
-    private initialState: any = { progress: 0 }
+    private initialState: any = { progress: null }
 
     constructor(props) {
       super(props);
-
       this.state = this.initialState;
     }
 
     componentWillMount(){
-        alert(this.props.time)
         this.progress = new Animated.Value(0);
         this.getProgressStyles = this.getProgressStyles.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
-        
         // will happen only once 
-        if(newProps.time > this.props.time) this.initialVal = newProps.time;
+        if(this.state.progress === null) this.initialVal = newProps.time;
 
-        const prevVal = !this.props.time ? 100 : this.getPercentage(this.state.progress,this.initialVal);
-        const nextVal = !this.props.time ? 100 : this.getPercentage(newProps.time,this.initialVal);
+        const prevVal = this.state.progress === null 
+        ? 100 
+        : getPercentage(this.state.progress, this.initialVal);
+
+        const nextVal = this.state.progress === null 
+        ? 100 
+        : getPercentage(newProps.time, this.initialVal);
         
         this.animate({
             animatedProp: this.progress,
@@ -64,10 +67,6 @@ export default class Bar extends Animator<{ time: number; }> {
 
     componentWillUnmount(){
         this.setState(this.initialState);
-    }
-
-    private getPercentage(valA: number, valB: number){
-        return Math.floor((valA/valB) * 100);
     }
 
     private getProgressStyles() {
@@ -85,29 +84,26 @@ export default class Bar extends Animator<{ time: number; }> {
         });
         
         return {
-          width: this.getPercentage(this.props.time, this.initialVal) === 100 ? "100%" : animated_width,
-          height: 25,
-          backgroundColor: animated_color
+            height: 20,
+            width: animated_width,
+            backgroundColor: animated_color
         }
     }
     
     public render() {
-        
-        let _style = true ? {
+        const _style = this.state.progress === this.initialVal ? {
+            height: 20,
             width: "100%",
-            height: 25,
-            backgroundColor: "rgb(101, 203, 25)"
+            backgroundColor: 'rgb(101, 203, 25)'
         } : this.getProgressStyles();
 
         return (
             <View style={{ paddingLeft: 2, paddingRight: 2 }}>
               <View style={styles.progress_container}>
-                <Animated.View
-                  style={[_style]}
-                ></Animated.View>
-                    <Text style={styles.progress_status}>
-                        { this.props.children }
-                    </Text>
+                <Animated.View style={_style} />
+                <Text style={styles.progress_status}>
+                    { this.props.children }
+                </Text>
               </View>
             </View>
         );

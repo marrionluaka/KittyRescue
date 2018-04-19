@@ -61,6 +61,9 @@ class Grid extends React.Component<{
       difficulty
     } = props;
 
+    if(tilesState.tiles_flipped === 0 && this.tiles.length)
+      this.emptyTilesContainer();
+
     const len = Object.values(tilesState.tiles).length - (levels[difficulty] || 0);
 
     if(tilesState.tiles_flipped === len) 
@@ -107,7 +110,7 @@ class Grid extends React.Component<{
   private flip2Back = (tiles: any[]) => {
     setTimeout(() => {
       tiles.forEach(tile => tile.flipToBack());
-      this.props.flipToBack(this.memory_tiles);
+      this.props.flipToBack(!!this.memory_tiles.find( tile => tile.isTrap ));
       this.emptyTilesContainer();
     }, 500);
   }

@@ -19,7 +19,7 @@ import {
     AnimatedCounter 
 } from "../common";
 
-import { formatTime } from "../../lib";
+import { formatTime, getPercentage } from "../../lib";
 import { GAME_OVER_MSG } from "../../types";
 import ScoreQueries from "../../queries/scores";
 import * as tileActions from "../../actions/tiles";
@@ -38,12 +38,12 @@ class Board extends React.Component<{
       gameEndMsg: null
     }
 
-    hasTimeElasped = (gameEndMsg, fn) => {
+    private hasTimeElasped = (gameEndMsg, fn) => {
         this.setState({ gameEndMsg });
         if(fn) return fn(gameEndMsg);
     };
 
-    renderTimer = (gridSize, difficulty) => {
+    private renderTimer = (gridSize, difficulty) => {
       return (
         <Timer
           hasTimeElasped={this.hasTimeElasped} 
@@ -53,11 +53,7 @@ class Board extends React.Component<{
       );
     };
 
-    getPercentage(accuracy){
-        return Math.floor(accuracy * 100);
-    }
-
-    calcScore(score, time=0, accuracy=0){
+    private calcScore(score, time=0, accuracy=0){
         return Math.floor(score + time + accuracy);
     }
 
@@ -89,7 +85,7 @@ class Board extends React.Component<{
                                       // @ts-ignore: compile error
                                       matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.isMatched).length,
                                       totalTiles   = this.props.order.tiles.length,
-                                      accuracy     = this.getPercentage(matchedTiles / totalTiles),
+                                      accuracy     = getPercentage(matchedTiles, totalTiles),
                                       renderScore  = <AnimatedCounter 
                                                         fn={ (val, counter) => val + counter }
                                                         reducer={scoreReducer}

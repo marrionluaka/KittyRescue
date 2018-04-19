@@ -13,3 +13,5 @@ export const timerLvls = {
 };
 
 export const MAX_LIVES = 25;
+export const MIN_SCORE = 10;
+export const MAX_SCORE = 20;

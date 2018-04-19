@@ -18,9 +18,9 @@ export const tilesMatched = tiles => ({
     tiles
 });
 
-export const flipToBack = memoryTiles => ({
+export const flipToBack = (isThereATrap: boolean) => ({
     type: FLIP_TO_BACK,
-    memoryTiles
+    isThereATrap
 });
 
 export const addToMemory = tile => ({

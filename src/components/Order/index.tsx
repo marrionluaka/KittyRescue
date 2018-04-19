@@ -9,6 +9,10 @@ import { connect } from 'react-redux';
 
 import * as orderActions from '../../actions/order';
 import OrderTile from './OrderTile';
+import {
+    MIN_SCORE,
+    MAX_SCORE
+} from '../../globals';
 
 interface IProps {
     addPoints: any;
@@ -26,7 +30,7 @@ class Order extends React.Component<IProps, {}> {
         let values: any = Object.values(alreadyMatchedTiles);
         
         if(!!values.length && this.isValidPointer()) 
-            this.props.addPoints(values[values.length - 1 || 0].isMatched ? 20 : 10)
+            this.props.addPoints(values[values.length - 1 || 0].isMatched ? MAX_SCORE : MIN_SCORE)
     }
 
     tileMatched = src => {

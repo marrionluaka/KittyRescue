@@ -75,12 +75,23 @@ export const prepareGridData = (lvl, gridSize, arr) =>
         }, []);
 
 
-export const formatTime = timeInSeconds => {
-    const _m = Math.floor( timeInSeconds / 60 ),
-          _s = timeInSeconds % 60;
+export const formatTime = (timeInSeconds: number, ms: number = null) => {
+    const _isLessThanTen = val => val < 10,
+		  _m = Math.floor( timeInSeconds / 60 ),
+          _s = timeInSeconds % 60,
+		  _ms = ms === null ? null : ms >= 99
+				? "00" 
+				: _isLessThanTen(ms) ? "0"+ms : ms;
 
-    return !_s ? `${_m}:00` : `${_m}:${_s < 10 ? "0"+ _s : _s}`;
+    if(ms === null) return !_s ? `${_m}:00` : `${_m}:${_s < 10 ? "0"+ _s : _s}`;
+
+    return !_s ? `${_isLessThanTen(_m) ? "0"+ _m : _m}:00:${_ms}` 
+			: `${_isLessThanTen(_m) ? "0"+ _m : _m}:${_isLessThanTen(_s) ? "0"+ _s : _s}:${_ms}`;
 };
+
+export const getPercentage = (valA: number, valB: number): number => {
+    return Math.floor((valA/valB) * 100);
+}
 
 export const animateCounter = options => {
     const { 
