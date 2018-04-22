@@ -17,6 +17,7 @@ import {
 interface IProps {
     addPoints: any;
     order: any;
+    orderMatched: any;
 }
 
 class Order extends React.Component<IProps, {}> {
@@ -29,27 +30,24 @@ class Order extends React.Component<IProps, {}> {
         // @ts-ignore: compile error
         let values: any = Object.values(alreadyMatchedTiles);
         
-        if(!!values.length && this.isValidPointer()) 
-            this.props.addPoints(values[values.length - 1 || 0].isMatched ? MAX_SCORE : MIN_SCORE)
+        if(!!values.length && this.isValidPointer()){
+            this.props.addPoints(values[values.length - 1 || 0].orderMatched ? MAX_SCORE : MIN_SCORE);
+            this.props.orderMatched(alreadyMatchedTiles);
+        }
     }
 
-    tileMatched = src => {
-        const { alreadyMatchedTiles } = this.props.order;
-        return alreadyMatchedTiles[src] && alreadyMatchedTiles[src].isMatched;
-    }
-
-    currentPointer = src => {
+    currentPointer = (src: string): boolean | number => {
         const { tiles, pointer } = this.props.order;
         return this.isValidPointer() ? tiles[pointer].src === src : 0;
     }
 
-    isValidPointer = () => {
+    isValidPointer = (): boolean => {
         const { tiles, pointer } = this.props.order;
-        return pointer < Object.values(tiles).length;
+        return pointer < tiles.length;
     }
 
     render(){
-        const { tiles } = this.props.order;
+        const { tiles, pointer } = this.props.order;
         return(
             <View style={{ 
                     flex: 1, 
@@ -59,16 +57,10 @@ class Order extends React.Component<IProps, {}> {
                     justifyContent: 'center'
                 }}>
                 {
-                    Object.values(tiles).map((val, idx) => {
-                        return (
-                            <OrderTile 
-                                key={idx}
-                                {...val}
-                                tileMatched={this.tileMatched}
-                                currentPointer={this.currentPointer}
-                            />
-                        );
-                    } )
+                    this.isValidPointer() ?
+                    (<OrderTile 
+                        {...tiles[pointer]}
+                    />) : null
                 }
             </View>
         );

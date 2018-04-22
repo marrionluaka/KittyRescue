@@ -57,7 +57,6 @@ export default (timerOptions: ITimerOptions = initialTimerOptions, action: IActi
 
         return timerOptions;
     }
-        
 
     if(action.type === FLIP_TO_BACK){
         if(action.isThereATrap 

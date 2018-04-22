@@ -5,19 +5,10 @@ import {
     StyleSheet
 } from "react-native";
 
-const OrderTile = ({
-    tileMatched, 
-    matched, 
-    src, 
-    currentPointer 
-}) => {
-
-    let _style = !!matched ? tileMatched(src) ? 'green' : 'red' : null;
-    let _border = currentPointer(src) ? 1 : 0;
-  
+const OrderTile = ({ src }) => {
     return (
         <View
-            style={{ padding: "4%", backgroundColor: _style, borderWidth: _border }}
+            style={{ padding: "4%" }}
         >
             <Text>{src}</Text>
         </View>

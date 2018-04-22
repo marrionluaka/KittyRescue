@@ -13,6 +13,7 @@ import {
 
   interface IProps {
     tile: any;
+    matchedTiles?: any;
     onTileFlipped: any;
     width?: number;
     height: number;
@@ -124,16 +125,20 @@ import {
         frontOpacity,
         backOpacity
     ) => {
-        const { tile, width, height, margin } = this.props;
+        const { tile, width, height, margin, matchedTiles } = this.props;
         const { flipCard, fronFace, backFace } = styles;
         const tileDimensions = {width, height, margin};
         const animatedDimensions = {width: "100%", height: "100%"};
 
-        if(tile.isMatched)
+        if(tile.isMatched){
+            if(matchedTiles[tile.src] && matchedTiles[tile.src].orderMatched)
+                return (<View style={[tileDimensions, { backgroundColor: 'green' }]}></View>);
+
             return (
-                <View style={[tileDimensions, { opacity: 0 }]}>
+                <View style={[tileDimensions, { backgroundColor: 'red' }]}>
                 </View>
             );
+        }
         
         return(
             <View style={[flipCard, tileDimensions]}>

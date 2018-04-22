@@ -45,7 +45,7 @@ export default (order: IOrder = initialOrder, action: IAction) => {
             { matched: _matchedTile.src }, 
             order.tiles
         );
-        let pointer =  _updated.filter( tile => tile.matched).length;
+        let pointer =  _updated.filter(tile => tile.matched).length;
 
         return {
             tiles: _updated,
@@ -53,7 +53,7 @@ export default (order: IOrder = initialOrder, action: IAction) => {
             alreadyMatchedTiles: Object.assign({}, order.alreadyMatchedTiles, {
                 [_matchedTile.src]: {
                     [_matchedTile.src]: _matchedTile.src,
-                    isMatched: _matchedTile.src === order.tiles[order.pointer].src
+                    orderMatched: _matchedTile.src === order.tiles[order.pointer].src
                 }
             })
         };

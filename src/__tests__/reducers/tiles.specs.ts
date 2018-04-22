@@ -41,7 +41,10 @@ describe("Tiles reducer spec", () => {
 
     it("adds isMatched property to matched tiles", () => {
         // Arrange
-        const tiles = [{id: "cbc82e63-9ac9-442a-2318-e1394fc7828d"}, {id: "201020ab-b5f6-f9ea-2d30-98e7f01f3d91"}];
+        const tiles = [
+            {id: "cbc82e63-9ac9-442a-2318-e1394fc7828d"}, 
+            {id: "201020ab-b5f6-f9ea-2d30-98e7f01f3d91"}
+        ];
 
         // Act
         const grid = tilesReducer(state, {

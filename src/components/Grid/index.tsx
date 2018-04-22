@@ -137,6 +137,7 @@ class Grid extends React.Component<{
         <Tile 
           key={el.id}
           tile={el}
+          matchedTiles={tilesState.alreadyMatchedTiles}
           margin={gridSize.margin}
           width={_dimensions[gridSize.size].width}
           height={(windowWidth / _dimensions[gridSize.size].height)}

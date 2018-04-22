@@ -8,7 +8,8 @@ import {
     TILES_MATCHED,
     ADD_TO_MEMORY,
     INCREMENT_FLIPS,
-    EMPTY_MEMORY
+    EMPTY_MEMORY,
+    ORDER_MATCHED
 } from "../types";
 
 import { 
@@ -35,8 +36,16 @@ export default (function(){
                     duplicateEl(guid),
                     addTrapBasedOnLevelChosen(lvl)
                 )( prepareGridData(lvl, gridSize, data["grid"]) ),
-            tiles_flipped: 0
+            tiles_flipped: 0,
+            alreadyMatchedTiles: {}
         }),
+
+        [ORDER_MATCHED]: (state, { alreadyMatchedTiles }) => {
+            return {
+                ...state,
+                alreadyMatchedTiles
+            }
+        },
 
         [TILES_MATCHED]: (state, { tiles }) =>  
             {   
