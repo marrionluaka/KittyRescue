@@ -1,4 +1,3 @@
-import * as R from 'ramda';
 import orderReducer from '../../reducers/order';
 
 describe("Order Reducer Specs", () => {
@@ -35,6 +34,6 @@ describe("Order Reducer Specs", () => {
         // Assert
         expect(order.tiles[0].matched).toBeTruthy();
         expect(order.pointer).toBe(1);
-        expect(order.alreadyMatchedTiles[matchedTiles[0].src].isMatched).toBeTruthy();
+        expect(order.alreadyMatchedTiles[matchedTiles[0].src].orderMatched).toBeTruthy();
     });
 });

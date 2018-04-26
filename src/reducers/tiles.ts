@@ -20,61 +20,66 @@ import {
     prepareGridData,
     addTrapBasedOnLevelChosen
 } from "../lib";
-  
-export default (function(){
-    const initialState = {
-        tiles:{},
-        memory_tiles: [],
-        tiles_flipped: 0
-    };
 
-    const _actions = {
-        [NEW_GAME]: ({ gridSize, lvl }) => ({
-            tiles: R.compose(
-                    convertToObj,
-                    shuffle,
-                    duplicateEl(guid),
-                    addTrapBasedOnLevelChosen(lvl)
-                )( prepareGridData(lvl, gridSize, data["grid"]) ),
-            tiles_flipped: 0,
-            alreadyMatchedTiles: {}
-        }),
+export interface ITilesState {
+    tiles: any;
+    memory_tiles: any[];
+    tiles_flipped: number;
+}
 
-        [ORDER_MATCHED]: (state, { alreadyMatchedTiles }) => {
-            return {
-                ...state,
-                alreadyMatchedTiles
-            }
-        },
+const initialState = {
+    tiles:{},
+    memory_tiles: [],
+    tiles_flipped: 0
+};
 
-        [TILES_MATCHED]: (state, { tiles }) =>  
-            {   
-                const idx1 = tiles[0].id,
-                      idx2 = tiles[1].id;
+const _actions = {
+    [NEW_GAME]: ({ gridSize, lvl }) => ({
+        tiles: R.compose(
+                convertToObj,
+                shuffle,
+                duplicateEl(guid),
+                addTrapBasedOnLevelChosen(lvl)
+            )( prepareGridData(lvl, gridSize, data["grid"]) ),
+        tiles_flipped: 0,
+        alreadyMatchedTiles: {}
+    }),
 
-                return Object.assign({}, state, {
-                    tiles: Object.assign({}, state.tiles, {
-                        [idx1]: {
-                            ...state.tiles[idx1],
-                            isMatched: true
-                        },
-                        [idx2]: {
-                            ...state.tiles[idx2],
-                            isMatched: true
-                        },
-                    }),
-                    tiles_flipped: state.tiles_flipped + 2
-                });
-            }
-    };
+    [ORDER_MATCHED]: (state, { alreadyMatchedTiles }) => {
+        return {
+            ...state,
+            alreadyMatchedTiles
+        }
+    },
 
-    return (state = initialState, action) => 
-        !!_actions[action.type] ? action.type === NEW_GAME ?
-            execute(NEW_GAME, action) : execute(action.type, state, action) : state;
+    [TILES_MATCHED]: (state, { tiles }) =>  
+    {   
+        const idx1 = tiles[0].id;
+        const idx2 = tiles[1].id;
 
-    function execute(actionType: string, ...args: any[]){
-        const _slice = Array.prototype.slice;
-        return _actions[actionType].apply(null, _slice.call(arguments, 1));
+        return {
+            ...state,
+            tiles: {
+                ...state.tiles,
+                [idx1]: {
+                    ...state.tiles[idx1],
+                    isMatched: true
+                },
+                [idx2]: {
+                    ...state.tiles[idx2],
+                    isMatched: true
+                }
+            },
+            tiles_flipped: state.tiles_flipped + 2
+        };
     }
+};
 
-}());
+export default (state = initialState, action) => 
+    !!_actions[action.type] ? action.type === NEW_GAME ?
+        execute(NEW_GAME, action) : execute(action.type, state, action) : state;
+
+function execute(actionType: string, ...args: any[]){
+    const _slice = Array.prototype.slice;
+    return _actions[actionType].apply(null, _slice.call(arguments, 1));
+}

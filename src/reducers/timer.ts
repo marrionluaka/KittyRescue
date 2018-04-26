@@ -8,19 +8,19 @@ import {
 
 import { timerLvls, MIN_SCORE } from "../globals";
 
-interface ITimerOptions {
+export interface ITimerOptions {
     time: number;
     hasGameStarted: boolean;
-    invalidateTimer: string;
+    invalidateTimer?: string;
 }
 
-interface IAction {
+export interface IAction {
     type: string;
-    gridSize: number;
-    lvl: string;
-    msg: string;
-    isThereATrap: boolean;
-    amount: number;
+    gridSize?: number;
+    lvl?: string;
+    msg?: string;
+    isThereATrap?: boolean;
+    amount?: number;
 }
 
 const initialTimerOptions = {
