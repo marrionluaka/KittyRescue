@@ -7,9 +7,13 @@ import {
     StyleSheet
 } from 'react-native';
 
-const styles = StyleSheet.create({
+import styles from './styles';
 
-});
+const { 
+    panelDisplayText,
+    panelIconContainer,
+    panelDisplayContainer
+ } = styles;
 
 const _createTiles = (list: any[]): any[] => {
     const { height } = Dimensions.get('window');
@@ -24,13 +28,10 @@ const _createTiles = (list: any[]): any[] => {
                     flexDirection: 'row'
                 }}
             >
-                <View style={{ 
-                        flex: 1 , 
+                <View style={[ panelIconContainer, { 
                         height: height/ratio,
-                        backgroundColor: el.backgroundColor || "#03A9F4",
-                        justifyContent: 'center',
-                        alignContent: 'center'
-                    }}>
+                        backgroundColor: el.backgroundColor || "#03A9F4"
+                    }]}>
                     <Text
                         style={{ 
                             textAlign: 'center',
@@ -39,19 +40,8 @@ const _createTiles = (list: any[]): any[] => {
                     >{el.icon}</Text>
                 </View>
 
-                <View style={{ 
-                        flex: 3,  
-                        height: height/ratio,
-                        borderBottomWidth: 1,
-                        borderBottomColor: "#ddd",
-                        justifyContent: 'center',
-                        alignContent: 'center'
-                    }}>
-                    <Text style={{ 
-                        paddingLeft: 15,
-                        fontSize: 15,
-                        fontWeight: '500'
-                    }}
+                <View style={[ panelDisplayContainer, { height: height/ratio }]}>
+                    <Text style={panelDisplayText}
                     >{el.displayName}</Text>
                 </View>
             </TouchableOpacity>

@@ -5,52 +5,19 @@ import {
     TouchableHighlight,
     Text,
     Image,
-    StyleSheet,
     Animated,
     Easing
   } from "react-native";
-  import { Animator } from '../common/AbstractAnimator'
+import { Animator } from '../common/AbstractAnimator';
+import styles from './styles';
 
-  interface IProps {
+interface IProps {
     tile: any;
     matchedTiles?: any;
     onTileFlipped: any;
-    width?: number;
-    height: number;
-    margin?: number;
-  }
+}
 
-  const styles = StyleSheet.create({
-    flipCard: {
-        position: "relative",
-        top: 0,
-        left: 0,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    fronFace:{
-        zIndex: 1,
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backfaceVisibility: "hidden",
-        overflow: "hidden"
-    },
-    backFace:{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backfaceVisibility: "hidden",
-        overflow: "hidden",
-        backgroundColor: "blue"
-    }
-  })
-
-  export default class Tile extends Animator<IProps>{
+export default class Tile extends Animator<IProps>{
     private _rotationAnimated: Animated.Value
     private _frontInterpolate: Animated.AnimatedInterpolation
     private _backInterpolate: Animated.AnimatedInterpolation
@@ -125,23 +92,22 @@ import {
         frontOpacity,
         backOpacity
     ) => {
-        const { tile, width, height, margin, matchedTiles } = this.props;
+        const { tile, matchedTiles } = this.props;
         const { flipCard, fronFace, backFace } = styles;
-        const tileDimensions = {width, height, margin};
         const animatedDimensions = {width: "100%", height: "100%"};
 
         if(tile.isMatched){
             if(matchedTiles[tile.src] && matchedTiles[tile.src].orderMatched)
-                return (<View style={[tileDimensions, { backgroundColor: 'green' }]}></View>);
+                return (<View style={[flipCard, { backgroundColor: 'green' }]}></View>);
 
             return (
-                <View style={[tileDimensions, { backgroundColor: 'red' }]}>
+                <View style={[flipCard, { backgroundColor: 'red' }]}>
                 </View>
             );
         }
         
         return(
-            <View style={[flipCard, tileDimensions]}>
+            <View style={flipCard}>
                 {/* Front */}
                 <Animated.View style={[fronFace, frontAnimatedStyle, frontOpacity]}>
                     <TouchableHighlight 
@@ -200,4 +166,4 @@ import {
             backOpacity
         );
     }
-  }
+}

@@ -18,6 +18,9 @@ interface IProps {
     addPoints: any;
     order: any;
     orderMatched: any;
+    initOrder: any;
+    gridSize: number;
+    difficulty: string;
 }
 
 class Order extends React.Component<IProps, {}> {
@@ -25,8 +28,23 @@ class Order extends React.Component<IProps, {}> {
         super(props)
     }
 
+    componentWillMount(){
+        const { initOrder, gridSize, difficulty } = this.props;
+        initOrder(gridSize, difficulty);
+    }
+
     componentWillReceiveProps(prev, next){
-        const { alreadyMatchedTiles } = prev.order;
+        const {
+            initOrder,
+            gridSize,
+            difficulty
+        } = prev;
+
+        const { 
+            alreadyMatchedTiles,
+            tiles,
+            pointer
+        } = prev.order;
         // @ts-ignore: compile error
         let values: any = Object.values(alreadyMatchedTiles);
         
@@ -50,17 +68,23 @@ class Order extends React.Component<IProps, {}> {
         const { tiles, pointer } = this.props.order;
         return(
             <View style={{ 
-                    flex: 1, 
-                    flexDirection: 'row',
-                    flexWrap: "wrap", 
-                    alignItems: 'center', 
-                    justifyContent: 'center'
+                    position: "absolute",
+                    zIndex: 9,
+                    padding:"5%",
+                    width: 100,
+                    height: 100,
+                    borderRadius: 50,
+                    top: 5,
+                    alignSelf: 'center',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    backgroundColor: 'powderblue'
                 }}>
+                <Text style={{ top: -15 }}>Target</Text>
                 {
                     this.isValidPointer() ?
-                    (<OrderTile 
-                        {...tiles[pointer]}
-                    />) : null
+                    (<OrderTile {...tiles[pointer]} />) 
+                    : (<OrderTile {...tiles[tiles.length - 1]} />)
                 }
             </View>
         );

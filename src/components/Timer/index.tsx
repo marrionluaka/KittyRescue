@@ -52,7 +52,7 @@ class Timer extends React.Component<IProps, { timerID: any }>{
 
     render(){
         return(
-            <View style={{ flex: 1 , justifyContent: 'flex-end' }}>
+            <View>
                 <Bar
                     time={this.props.timer.time}
                 >

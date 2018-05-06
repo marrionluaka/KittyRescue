@@ -12,7 +12,6 @@ import { getPercentage } from '../../lib'
 
 const styles = StyleSheet.create({
     progress_container: {
-     
       borderColor: '#333',
       backgroundColor: '#ccc',
       position: 'relative'
@@ -71,7 +70,7 @@ export default class Bar extends Animator<{ time: number; }> {
 
     private getProgressStyles() {
         const { width } = Dimensions.get('window');
-        const available_width = width - 2 - 4;
+        const available_width = width - 2 - 6;
 
         const animated_width = this.progress.interpolate({
           inputRange: [0, 50, 100],
@@ -98,7 +97,10 @@ export default class Bar extends Animator<{ time: number; }> {
         } : this.getProgressStyles();
 
         return (
-            <View style={{ paddingLeft: 2, paddingRight: 2 }}>
+            <View style={{
+                marginLeft: 1, 
+                marginRight: 1
+            }}>
               <View style={styles.progress_container}>
                 <Animated.View style={_style} />
                 <Text style={styles.progress_status}>

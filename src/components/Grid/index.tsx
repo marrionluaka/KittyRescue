@@ -13,15 +13,9 @@ import Tile from "../Tile";
 import { GAME_OVER_MSG } from "../../types";
 import * as tileActions from "../../actions/tiles";
 import * as timerActions from "../../actions/timer";
+import styles from './styles';
 
-const styles = StyleSheet.create({
-  container:{
-    flex: 5,
-    flexDirection: "row",
-    flexWrap: "wrap",
-    overflow: "hidden"
-  }
-});
+const { container } = styles;
 
 const levels = {
   easy: 2,
@@ -29,7 +23,7 @@ const levels = {
   hard: 6
 };
 
-class Grid extends React.Component<{
+interface IGridProps {
   newGame: any;
   gridSize: number;
   difficulty: string;
@@ -39,7 +33,10 @@ class Grid extends React.Component<{
   addToMemory: any;
   tilesMatched: any;
   flipToBack: any;
-}, {}> {
+  onTileFlipped: any;
+}
+
+class Grid extends React.Component<IGridProps, {}> {
   private memory_tiles: any[]
   private tiles: any[]
 
@@ -71,7 +68,7 @@ class Grid extends React.Component<{
   }
 
   private memoryFlipTile = (tile, tileCtx) => {
-    const { tilesMatched } = this.props;
+    const { tilesMatched, onTileFlipped } = this.props;
     let { tiles, memory_tiles } = this;
     
     if(memory_tiles.length >= 2) return null;
@@ -89,15 +86,17 @@ class Grid extends React.Component<{
           if(tile.isTrap){
             this.emptyTilesContainer();
             return this.showPopup(GAME_OVER_MSG);
-          } 
+          }
          
           setTimeout(() => {
             tilesMatched(memory_tiles);
             this.emptyTilesContainer();
           }, 500);
+          onTileFlipped();
           
         } else {
           this.flip2Back(tiles);
+          onTileFlipped();
         }
     }
   }
@@ -112,49 +111,62 @@ class Grid extends React.Component<{
       tiles.forEach(tile => tile.flipToBack());
       this.props.flipToBack(!!this.memory_tiles.find( tile => tile.isTrap ));
       this.emptyTilesContainer();
-    }, 500);
+    }, 300);
   }
 
   private showPopup = msg => this.props.callback(msg, this.props.invalidateTimer);
 
-  private getPercentage = (size, windowWidth) => (((windowWidth / size) - size) / windowWidth * 100);
-  
-  private gridBuilder = size => {
-    const { tilesState } = this.props;
+  private _transform = (list: any[]): any[] => {
+    const { gridSize } = this.props;
     const FOUR_BY_FOUR = 8, SIX_BY_SIX = 18;
-    const windowWidth = Dimensions.get("window").width;
 
-    const gridSize = FOUR_BY_FOUR === size ? 
-      { size: "4x4", margin: FOUR_BY_FOUR / 4 } : { size: "6x6", margin: SIX_BY_SIX / 6 };
+    const _seed = FOUR_BY_FOUR === gridSize ? 4 : 6;
 
-    const _dimensions = {
-      "4x4": { width:  this.getPercentage(4, windowWidth) + "%", height: 4 },
-      "6x6": { width:  this.getPercentage(6, windowWidth) + "%", height: 6 }
-    };
-
-    return Object.values(tilesState.tiles).map( el => {
-      return (
-        <Tile 
-          key={el.id}
-          tile={el}
-          matchedTiles={tilesState.alreadyMatchedTiles}
-          margin={gridSize.margin}
-          width={_dimensions[gridSize.size].width}
-          height={(windowWidth / _dimensions[gridSize.size].height)}
-          onTileFlipped={this.memoryFlipTile}
-        />
-      )
-    });
+    return list.reduce((acc, val, idx) => {
+      if(!acc.length) { 
+        acc[0] = [].concat(val);
+        return acc;
+        }
+    
+      if(idx%_seed === 0) 
+        acc[acc.length] = [].concat(val);
+      else 
+        acc[acc.length - 1] = acc[acc.length - 1].concat(val);
+      
+      return acc;
+    }, []);
   }
 
   public render(){
-    const { gridSize } = this.props;
+    const { gridSize, tilesState } = this.props;
+    const matrix = this._transform(Object.values(tilesState.tiles));
     
     return(
-      <View style={styles.container}>
-        {
-          this.gridBuilder(gridSize)
-        }
+      <View style={{ flex:1 }}>
+        <View style={{ flex: 1 }}>
+          { 
+            matrix.map( (row, idx) =>{
+              return (
+                <View
+                  key={idx}
+                  style={{  flex: 1, flexDirection: 'row'}}>
+                  {
+                    row.map( el =>{
+                      return (
+                        <Tile 
+                          key={el.id}
+                          tile={el}
+                          matchedTiles={tilesState.alreadyMatchedTiles}
+                          onTileFlipped={this.memoryFlipTile}
+                        />
+                      );
+                    })
+                  }
+                </View>
+              );
+            })
+          }
+        </View>
       </View>
     );
   }

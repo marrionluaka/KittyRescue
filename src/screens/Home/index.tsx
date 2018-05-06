@@ -3,15 +3,8 @@ import * as React from "react";
 import {
     TouchableOpacity,
     View,
+    Text
 } from "react-native";
-
-import {
-    Body,
-    Button,
-    Container,
-    Content,
-    Text,
-} from "native-base";
 
 interface IProps {
     navigation: any;
@@ -24,33 +17,69 @@ export default class Home extends React.Component<IProps, {}> {
         const { navigation } = this.props;
 
         return(
-            <Container>
-                <Body>
-                    <Text>Home</Text>
-                    <Content>
-                        <Button
-                            bordered
-                            onPress={() => navigation.navigate("GameConfigurator")}
-                        >
-                            <Text>Play</Text>
-                        </Button>
+            <View style={{
+                flex:1
+            }}>
+                <View style={{
+                    flex: 1,
+                    alignItems: 'center',
+                    justifyContent: 'flex-end',
+                }}>
+                    <Text>Header</Text>
+                </View>
 
-                        <Button
-                            bordered
-                            onPress={() => navigation.navigate("HowToPlay")}
-                        >
-                            <Text>How To Play</Text>
-                        </Button>
+                <View style={{ 
+                    flex: 3,
+                    justifyContent: 'center',
+                    alignItems: 'center'}}>
+                    
+                    <TouchableOpacity
+                        style={{
+                            padding: "8%",
+                            borderWidth: 1,
+                            width: "75%",
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        onPress={() => navigation.navigate("GameConfigurator")}
+                    >
+                        <Text>Play</Text>
+                    </TouchableOpacity>
 
-                        <Button
-                            bordered
-                            onPress={() => navigation.navigate("HighScores")}
-                        >
-                            <Text>High Scores</Text>
-                        </Button>
-                    </Content>
-                </Body>
-            </Container>
+                    <TouchableOpacity
+                        style={{
+                            padding: "8%",
+                            marginTop: 15,
+                            borderWidth: 1,
+                            width: "75%",
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        onPress={() => navigation.navigate("HowToPlay")}
+                    >
+                        <Text>How To Play</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{
+                            padding: "8%",
+                            marginTop: 15,
+                            borderWidth: 1,
+                            width: "75%",
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}
+                        onPress={() => navigation.navigate("HighScores")}
+                    >
+                        <Text>High Scores</Text>
+                    </TouchableOpacity>
+                    
+                </View>
+
+                <View style={{ alignItems: 'center', paddingBottom: 20 }}>
+                    <Text>Copyright 2018</Text>
+                </View>
+            </View>
         );
     }
 }

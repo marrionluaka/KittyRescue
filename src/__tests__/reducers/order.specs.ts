@@ -5,7 +5,7 @@ describe("Order Reducer Specs", () => {
     it("returns all tiles given a grid size", () => {
         // Act
         const grid = orderReducer({}, {
-             type: "NEW_GAME", 
+             type: "INIT_ORDER", 
              gridSize: 8,
              lvl: "easy"
         });

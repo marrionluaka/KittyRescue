@@ -1,4 +1,5 @@
 import * as React from "react";
+import { groupBy } from 'ramda';
 import {
     Text,
     View,
@@ -7,23 +8,26 @@ import {
 import { IRecord } from "../../interfaces";
 import ScoreQueries from "../../queries/scores";
 
-const HighScoresDetail = ({ navigation }) => {
-    const { gameMode, nameDisplay } = navigation.state.params;
+const HighScoresDetail = ({ gameMode, display }) => {
     const scores = ScoreQueries.fetchScore(gameMode);
-
+    const byDifficulty = groupBy((user: any) => user.difficulty);
+    const res = Object.values(byDifficulty(scores));
+    
     return (
         <View>
-             <Text>{nameDisplay}</Text>
+             <Text>{display}</Text>
             {
-                !!scores.length && scores.map((record: IRecord) => {
-                    return (
-                        <View key={record.id}>
-                            <Text>{record.name}</Text>
-                            <Text>{record.score}</Text>
-                            <Text>{record.difficulty}</Text>
-                            <Text>{record.gridSize}</Text>
-                        </View>
-                    );
+                !!res.length && res.map((diff: any[]) => {
+                    return diff.map((record: IRecord) => {
+                        return (
+                            <View key={record.id}>
+                                <Text>{record.name}</Text>
+                                <Text>{record.score}</Text>
+                                <Text>{record.difficulty}</Text>
+                                <Text>{record.gridSize}</Text>
+                            </View>
+                        );
+                    });
                 })
             }
         </View>

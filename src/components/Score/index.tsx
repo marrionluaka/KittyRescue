@@ -5,7 +5,6 @@ import { connect } from "react-redux";
 const Score = ({ score }) => {
     return(
         <View style={{ flex: 1, alignItems: "center"}}>
-            <Text>Score</Text>
             <Text>{score}</Text>
         </View>
     );

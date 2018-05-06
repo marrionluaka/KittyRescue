@@ -6,6 +6,7 @@ import {
     TextInput 
 } from "react-native";
 import { connect } from "react-redux";
+import { bindActionCreators } from 'redux';
 
 import Zen from "../Zen";
 import Grid from "../Grid";
@@ -22,7 +23,8 @@ import {
 import { formatTime, getPercentage } from "../../lib";
 import { GAME_OVER_MSG } from "../../types";
 import ScoreQueries from "../../queries/scores";
-import * as tileActions from "../../actions/tiles";
+import {newGame} from "../../actions/tiles";
+import {initOrder} from "../../actions/order";
 
 const scoreReducer = (currentTime, currentAccuracy) => currentTime + currentAccuracy;
 
@@ -30,13 +32,19 @@ class Board extends React.Component<{
     score: number;
     timer: any;
     newGame: any;
+    initOrder: any;
     navigation: any;
     order: any;
 }> {
 
     state = {
-      gameEndMsg: null
+      gameEndMsg: null,
+      moveCounter: 0
     }
+
+    private incrementMoveCounter = () => {
+        this.setState({ moveCounter: this.state.moveCounter + 1 });
+    };
 
     private hasTimeElasped = (gameEndMsg, fn) => {
         this.setState({ gameEndMsg });
@@ -60,7 +68,7 @@ class Board extends React.Component<{
     render(){
         const { data } = this.props.navigation.state.params;
 
-        const { score, timer, newGame } = this.props;
+        const { score, timer, newGame, initOrder } = this.props;
         
         const { gameMode, difficulty, gridSize } = data;
 
@@ -143,7 +151,13 @@ class Board extends React.Component<{
                         />
                         
                         <TouchableOpacity onPress={() => {
-                            this.setState({ gameEndMsg: null }, () => newGame(gridSize, difficulty) );
+                            this.setState(
+                                { gameEndMsg: null, moveCounter: 0 }, 
+                                () => {
+                                    initOrder(gridSize, difficulty);
+                                    newGame(gridSize, difficulty);
+                                } 
+                            );
                         }}>
                             <Text>Close</Text>
                         </TouchableOpacity>
@@ -154,38 +168,88 @@ class Board extends React.Component<{
                     pred={isZenMode}
                     render={Zen}
                     renderAlt={() => {
-                        const { gameMode, difficulty, gridSize } = data;
 
                         return (
                             <View style={{ flex: 1 }}>
-                                <Score 
-                                    gameMode={gameMode}
+                                
+                                {/* Turn into component */}
+                                <View 
+                                    style={{
+                                        position: "relative",
+                                        flexDirection: "row",
+                                        backgroundColor: "powderblue",
+                                        height: 75,
+                                        margin: 5,
+                                        borderRadius: 5
+                                    }}>
+                                    <View style={{ 
+                                        flex: 2,  
+                                        alignItems: "center",
+                                        margin: 10,
+                                        marginRight: 5,
+                                        marginLeft: 5,
+                                        borderRadius: 5,
+                                        elevation: 1,
+                                        paddingTop: 5
+                                    }}>
+                                        <Text>Moves</Text>
+                                        <Text>{this.state.moveCounter}</Text>
+                                        
+                                    </View>
+
+                                    <View style={{ flex: 3 }}></View>
+
+                                    <View style={{ 
+                                        flex: 2,  
+                                        alignItems: "center",
+                                        margin: 10,
+                                        marginRight: 5,
+                                        marginLeft: 5,
+                                        borderRadius: 5,
+                                        elevation: 1,
+                                        paddingTop: 5
+                                    }}>
+                                        <Text>Score</Text>
+                                        <Score 
+                                            gameMode={gameMode}
+                                            difficulty={difficulty}
+                                        />
+                                    </View>
+                                </View>
+
+                                <Order 
                                     difficulty={difficulty}
+                                    gridSize={gridSize}
                                 />
-                                {
-                                    gameMode === "vsClock" ? this.renderTimer(gridSize, difficulty) : null
-                                }
+
+                                
                             </View>
                         );
                     }}
                 />
-
-                <Grid 
-                    {...data} 
-                    callback={this.hasTimeElasped}
-                />
-
-                <Maybe 
-                    pred={isZenMode}
-                    render={Zen}
-                    renderAlt={() => {
-                        return (
-                            <View style={{ flex: 1 }}>
-                                <Order />
+                
+                <View style={{ flex: 3 }}>
+                    {
+                        gameMode === "vsClock" ? this.renderTimer(gridSize, difficulty) : (
+                            <View style={{
+                                height: 20,
+                                width: "100%",
+                                backgroundColor: '#ccc',
+                                top: -4,
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                                <Text>Nill</Text>
                             </View>
-                        );
-                    }}
-                />
+                        )
+                    }
+
+                    <Grid 
+                        {...data} 
+                        callback={this.hasTimeElasped}
+                        onTileFlipped={this.incrementMoveCounter}
+                    />
+                </View>
 
             </View>
         );
@@ -198,4 +262,11 @@ class Board extends React.Component<{
     order: state.order
   });
 
-  export default connect(mapStateToProps, tileActions)(Board);
+  const mapDispatchToProps = dispatch => {
+    return {
+        newGame: bindActionCreators(newGame, dispatch),
+        initOrder: bindActionCreators(initOrder, dispatch)
+    };
+  };
+
+  export default connect(mapStateToProps, mapDispatchToProps)(Board);

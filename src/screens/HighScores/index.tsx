@@ -3,48 +3,57 @@ import * as React from "react";
 import {
     TouchableOpacity,
     View,
-} from "react-native";
-
-import {
-    Body,
-    Button,
-    Container,
-    Content,
     Text,
-} from "native-base";
+    ScrollView,
+} from "react-native";
+import styles from './styles';
+import HighScoresDetail from './HighScoresDetail';
 
-const HighScores = ({ navigation }) => {
+class HighScores extends React.Component{
+    constructor(props){
+        super(props);
+    }
 
-    const navigateTo = (gameMode, nameDisplay) => {
-        navigation.navigate("HighScoresDetail", {
-            gameMode,
-            nameDisplay,
-        });
+    state = {
+        gameMode: "vsClock",
+        display: "Vs Clock"
     };
 
-    return(
-        <Container>
-            <Body>
-                <Text>High Scores</Text>
-                <Content>
-                    <Button
-                        bordered
-                        onPress={() => navigateTo("vsClock", "Vs Clock")}
-                    >
+    render() {
+        const { header, content, tabs } = styles;
+        return(
+            <View style={{ flex: 1 }}>
+                {/* Tabs */}
+                <View style={{ flexDirection: "row"}}>
+
+                    <TouchableOpacity 
+                        style={[tabs, { backgroundColor: this.state.gameMode === "vsClock" ? "bisque" : "#ccc" }]}
+                        onPress={() => { this.setState({ gameMode: "vsClock", display: "Vs Clock" }); }}>
                         <Text>Vs Clock</Text>
-                    </Button>
-
-                    <Button
-                        bordered
-                        onPress={() => navigateTo("accuracy", "Accuracy")}
-                    >
+                    </TouchableOpacity>
+    
+                    <TouchableOpacity 
+                        style={[tabs, { backgroundColor: this.state.gameMode === "accuracy" ? "bisque" : "#ccc" }]}
+                        onPress={() => { this.setState({ gameMode: "accuracy", display: "Accuracy" }); }}>
                         <Text>Accuracy</Text>
-                    </Button>
-
-                </Content>
-            </Body>
-        </Container>
-    );
+                    </TouchableOpacity>
+                </View>
+    
+                {/* Header */}
+                <View style={header}>
+                    <Text>{this.state.display}</Text>
+                </View>
+    
+                {/* Content */}
+                <ScrollView style={content}>
+                    <HighScoresDetail 
+                        gameMode={this.state.gameMode}
+                        display={this.state.display}
+                    />
+                </ScrollView>
+            </View>
+        );
+    }
 };
 
 export default HighScores;

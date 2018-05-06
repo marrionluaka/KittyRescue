@@ -6,16 +6,9 @@ import {
     Modal
 } from "react-native";
 import score from "../../reducers/score";
+import styles from './styles';
 
-const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "rgba(0,0,0,0.5)",
-        zIndex: 99,
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    }
-});
+const { container } = styles;
 
 const Popup = ({ isVisible, children }) => {
     return (

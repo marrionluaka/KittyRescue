@@ -11,5 +11,6 @@ export const INCREASE_LIFE = "INCREASE_LIFE";
 export const DECREASE_LIFE = "DECREASE_LIFE";
 export const STOP_TIMER = "STOP_TIMER";
 export const ORDER_MATCHED = "ORDER_MATCHED";
+export const INIT_ORDER = "INIT_ORDER";
 
 export const GAME_OVER_MSG = "Game Over";

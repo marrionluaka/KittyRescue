@@ -22,17 +22,3 @@ export const flipToBack = (isThereATrap: boolean) => ({
     type: FLIP_TO_BACK,
     isThereATrap
 });
-
-export const addToMemory = tile => ({
-    type: ADD_TO_MEMORY,
-    tile
-});
-
-export const incrementFlips = numFlip => ({
-    type: INCREMENT_FLIPS,
-    numFlip
-});
-
-export const emptyMemory = () => ({
-    type: EMPTY_MEMORY
-});

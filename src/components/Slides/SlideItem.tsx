@@ -5,25 +5,15 @@ import {
     StyleSheet,
     Dimensions
 } from "react-native";
-
-const styles = StyleSheet.create({
-    container:{
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        width: Dimensions.get("window").width
-    },
-
-    slideText:{
-        fontSize: 30,
-        color: "white"
-    }
-});
+import styles from './styles';
 
 const SlideItem = ({ text, slideStyles, children }) => {
     const { container, slideText } = styles;
     return (
-        <View style={[container, slideStyles ]}>
+        <View style={[container, slideStyles, { 
+                width: Dimensions.get("window").width 
+            } 
+        ]}>
             <Text style={slideText}>{text}</Text>
             { children }
         </View>

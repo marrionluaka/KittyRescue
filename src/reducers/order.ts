@@ -1,6 +1,6 @@
 import { 
     TILES_MATCHED,
-    NEW_GAME
+    INIT_ORDER
 } from "../types";
 
 import data from "../dataTiles";
@@ -25,13 +25,13 @@ interface IAction {
 }
 
 const initialOrder = {
-    tiles: null,
+    tiles: [],
     alreadyMatchedTiles: null,
     pointer: 0
 }
 
 export default (order: IOrder = initialOrder, action: IAction) => {
-    if(action.type === NEW_GAME)
+    if(action.type === INIT_ORDER)
         return {
             tiles: shuffle( prepareGridData(action.lvl, action.gridSize, data["grid"]) ),
             pointer: 0,

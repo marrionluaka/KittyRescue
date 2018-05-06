@@ -7,11 +7,11 @@ import {
 
 const OrderTile = ({ src }) => {
     return (
-        <View
-            style={{ padding: "4%" }}
-        >
-            <Text>{src}</Text>
-        </View>
+        
+        <Text
+            style={{
+                fontSize: 20
+            }}>{src}</Text>
     );
 };
 
