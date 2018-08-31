@@ -33,18 +33,21 @@ class Order extends React.Component<IProps, {}> {
         initOrder(gridSize, difficulty);
     }
 
-    componentWillReceiveProps(prev, next){
+    componentWillReceiveProps(newProps){
         const {
             initOrder,
             gridSize,
             difficulty
-        } = prev;
+        } = newProps;
 
         const { 
             alreadyMatchedTiles,
             tiles,
             pointer
-        } = prev.order;
+        } = newProps.order;
+
+        if(pointer === 0) return;
+
         // @ts-ignore: compile error
         let values: any = Object.values(alreadyMatchedTiles);
         

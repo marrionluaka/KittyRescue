@@ -1,17 +1,13 @@
 import * as React from "react";
 import {
     View,
-    Text,
+    Image,
     StyleSheet
 } from "react-native";
 
 const OrderTile = ({ src }) => {
     return (
-        
-        <Text
-            style={{
-                fontSize: 20
-            }}>{src}</Text>
+        <Image source={src} style={{ width: 45, height: 45 }}/>
     );
 };
 

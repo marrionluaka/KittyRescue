@@ -15,7 +15,7 @@ const s4 = () =>
         .substring(1);
 
 
-export const duplicateEl = R.curry((idGen, arr) => {
+export const duplicateEl = R.curry((idGen: any, arr: any) => {
    return arr.reduce((acc, val) => 
     [
         ...acc,
@@ -29,9 +29,9 @@ export const addTrapBasedOnLevelChosen =  lvl => arr => {
     let array = new Array(chosenLvl);
     
     let traps = chosenLvl > 1 ? 
-        array.fill({ src: "TRAP", isTrap: true }) :
+        array.fill({ src: require("../img/trap.png"), isTrap: true }) :
         !!chosenLvl ?
-        [ { src: "TRAP", isTrap: true } ] : [];
+        [ { src: require("../img/trap.png"), isTrap: true } ] : [];
 
     return arr.concat(traps);
 };

@@ -25,6 +25,7 @@ const levels = {
 
 interface IGridProps {
   newGame: any;
+  gameMode: string;
   gridSize: number;
   difficulty: string;
   callback: any;
@@ -68,7 +69,7 @@ class Grid extends React.Component<IGridProps, {}> {
   }
 
   private memoryFlipTile = (tile, tileCtx) => {
-    const { tilesMatched, onTileFlipped } = this.props;
+    const { tilesMatched, onTileFlipped, gameMode } = this.props;
     let { tiles, memory_tiles } = this;
     
     if(memory_tiles.length >= 2) return null;
@@ -89,7 +90,7 @@ class Grid extends React.Component<IGridProps, {}> {
           }
          
           setTimeout(() => {
-            tilesMatched(memory_tiles);
+            tilesMatched(gameMode === "zen" ? memory_tiles.concat("zen") : memory_tiles);
             this.emptyTilesContainer();
           }, 500);
           onTileFlipped();
@@ -138,7 +139,7 @@ class Grid extends React.Component<IGridProps, {}> {
   }
 
   public render(){
-    const { gridSize, tilesState } = this.props;
+    const { gridSize, tilesState, gameMode } = this.props;
     const matrix = this._transform(Object.values(tilesState.tiles));
     
     return(
@@ -156,6 +157,8 @@ class Grid extends React.Component<IGridProps, {}> {
                         <Tile 
                           key={el.id}
                           tile={el}
+                          gridSize={gridSize}
+                          isZenMode={() => gameMode === "zen"}
                           matchedTiles={tilesState.alreadyMatchedTiles}
                           onTileFlipped={this.memoryFlipTile}
                         />

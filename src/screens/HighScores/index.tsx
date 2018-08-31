@@ -1,15 +1,21 @@
 import * as React from "react";
-
 import {
     TouchableOpacity,
     View,
     Text,
+    Image,
+    ImageBackground,
     ScrollView,
 } from "react-native";
+import { NavigationActions } from "react-navigation";
+import Icon from 'react-native-vector-icons/Feather';
+
 import styles from './styles';
 import HighScoresDetail from './HighScoresDetail';
 
-class HighScores extends React.Component{
+class HighScores extends React.Component<{ navigation: any }, {}>{
+    private static navigationOptions = { header: null };
+
     constructor(props){
         super(props);
     }
@@ -19,39 +25,80 @@ class HighScores extends React.Component{
         display: "Vs Clock"
     };
 
-    render() {
-        const { header, content, tabs } = styles;
-        return(
-            <View style={{ flex: 1 }}>
-                {/* Tabs */}
-                <View style={{ flexDirection: "row"}}>
+    _backHome = () => {
+        this.props.navigation.dispatch(
+            NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: "Home"}),
+            ],
+          })
+        )
+    }
 
-                    <TouchableOpacity 
-                        style={[tabs, { backgroundColor: this.state.gameMode === "vsClock" ? "bisque" : "#ccc" }]}
-                        onPress={() => { this.setState({ gameMode: "vsClock", display: "Vs Clock" }); }}>
-                        <Text>Vs Clock</Text>
-                    </TouchableOpacity>
-    
-                    <TouchableOpacity 
-                        style={[tabs, { backgroundColor: this.state.gameMode === "accuracy" ? "bisque" : "#ccc" }]}
-                        onPress={() => { this.setState({ gameMode: "accuracy", display: "Accuracy" }); }}>
-                        <Text>Accuracy</Text>
-                    </TouchableOpacity>
-                </View>
-    
-                {/* Header */}
-                <View style={header}>
-                    <Text>{this.state.display}</Text>
+    render() {
+        const { 
+            header, 
+            content, 
+            tabs,
+            tabs_c,
+            tabs_text,
+            backArrow,
+            leaderboard_text
+        } = styles;
+        return(
+            <ImageBackground 
+                style={{ flex: 1 }}
+                source={require("../../img/pastel.png")}
+            >
+                {/* Back Button */}
+                <TouchableOpacity
+                    onPress={this._backHome}
+                >
+                    <Icon 
+                        style={backArrow}
+                        name="arrow-left" 
+                        size={30} 
+                        color="#fff"
+                    />
+                </TouchableOpacity>
+
+                 {/* Header */}
+                <View style={header} >
+                    <Image source={require("../../img/cat-yarn.png")} />
+                    <Text style={leaderboard_text}>{"leaderboard".toUpperCase()}</Text>
+                    
+                    {/* Tabs */}
+                    <View style={tabs_c}>
+                        <TouchableOpacity 
+                            style={[tabs, { 
+                                backgroundColor: this.state.gameMode === "vsClock" ? "#fff" : "transparent",
+                            }]}
+                            onPress={() => { this.setState({ gameMode: "vsClock", display: "Vs Clock" }); }}>
+                            <Text style={[tabs_text, { color: this.state.gameMode === "vsClock" ? "#808080" : "#fff" }]}>Vs Clock</Text>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity 
+                            style={[tabs, { 
+                                backgroundColor: this.state.gameMode === "accuracy" ? "#fff" : "transparent"
+                            }]}
+                            onPress={() => { this.setState({ gameMode: "accuracy", display: "Accuracy" }); }}>
+                            <Text style={[tabs_text, { color: this.state.gameMode === "accuracy" ? "#808080" : "#fff" }]}>Accuracy</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
     
                 {/* Content */}
-                <ScrollView style={content}>
-                    <HighScoresDetail 
-                        gameMode={this.state.gameMode}
-                        display={this.state.display}
-                    />
-                </ScrollView>
-            </View>
+                <View style={content}>
+                    <ScrollView>
+                        <HighScoresDetail 
+                            gameMode={this.state.gameMode}
+                            display={this.state.display}
+                            backHome={this._backHome}
+                        />
+                    </ScrollView>
+                </View>
+            </ImageBackground>
         );
     }
 };

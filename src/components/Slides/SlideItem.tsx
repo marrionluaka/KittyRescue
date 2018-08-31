@@ -3,20 +3,69 @@ import {
     View, 
     Text, 
     StyleSheet,
-    Dimensions
+    Dimensions,
+    ImageBackground,
+    Image
 } from "react-native";
 import styles from './styles';
 
-const SlideItem = ({ text, slideStyles, children }) => {
+const images = {
+    "fridge": require("../../img/cat-fridge-big.png"),
+    "fight": require("../../img/cat-banjo-big.png"),
+    "cart": require("../../img/cat-cart-big.png")
+};
+
+const SlideItem = ({ 
+        title, 
+        text, 
+        slideImg, 
+        children,
+        renderButton
+    }) => {
     const { container, slideText } = styles;
     return (
-        <View style={[container, slideStyles, { 
-                width: Dimensions.get("window").width 
-            } 
-        ]}>
-            <Text style={slideText}>{text}</Text>
-            { children }
-        </View>
+        <ImageBackground 
+            source={require("../../img/pastel.png")}
+            style={container}>
+            <View style={{
+                    flex:3,
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <View
+                    style={{
+                        borderWidth: 1,
+                        borderColor: "#808080",
+                        height: "85%",
+                        width: "85%",
+                        borderRadius: 5,
+                        justifyContent: "center",
+                        alignItems: "center"
+                    }}>
+                        <Image source={images[slideImg]} />
+                    </View>
+            </View>
+
+            <View style={{
+                    flex:2,
+                    alignItems: 'flex-start',
+                   // marginTop: 30,
+                    paddingLeft: 20,
+                    paddingRight: 20
+                }}>
+                <View>
+                    <Text style={{ 
+                        color: "#808080", 
+                        fontWeight: "bold",
+                        paddingBottom: 5,
+                        fontSize: 21,
+                        textAlign: 'center'
+                    }}>{title.toUpperCase()}</Text>
+                    <Text style={slideText}>{text}</Text>
+                </View>
+            </View>
+            {renderButton()}
+        </ImageBackground>
     );
 };
 

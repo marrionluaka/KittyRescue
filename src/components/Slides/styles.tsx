@@ -1,14 +1,14 @@
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 export default StyleSheet.create({
     container:{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center"
+        width: Dimensions.get("window").width
     },
 
     slideText:{
-        fontSize: 30,
-        color: "white"
+        color: "#808080",
+        textAlign: 'center',
+        lineHeight: 25
     }
 });

@@ -1,34 +1,132 @@
 import * as React from "react";
-import { groupBy } from 'ramda';
+import { groupBy, memoize } from 'ramda';
 import {
     Text,
     View,
+    Image,
+    StyleSheet,
+    TouchableOpacity
 } from "react-native";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { IRecord } from "../../interfaces";
+import { NoScores } from "./NoScores";
 import ScoreQueries from "../../queries/scores";
+import styles from './styles';
 
-const HighScoresDetail = ({ gameMode, display }) => {
-    const scores = ScoreQueries.fetchScore(gameMode);
-    const byDifficulty = groupBy((user: any) => user.difficulty);
-    const res = Object.values(byDifficulty(scores));
+const _scoreCache = {},
+      _diffCache = {};
+
+const _getScores = mode => {
+    const _scores = ScoreQueries.fetchScore(mode);
+    return(_scoreCache[mode] = _scores) && _scores;
+};
+
+const _getDifficulty = (mode: string, scores: any) => {
+    const _groups = Object.values(groupBy((user: any) => user.difficulty)(scores));
+    return(_diffCache[mode] = _groups) && _groups;
+};
+
+const HighScoresDetail = ({ gameMode, display, backHome }) => {
+    const scores = !!_scoreCache[gameMode] ? _scoreCache[gameMode] : memoize(_getScores)(gameMode);
+    const res = !!_diffCache[gameMode] ? _diffCache[gameMode] : memoize(_getDifficulty)(gameMode, scores);
+    const {
+        tbl_c,
+        row_c,
+        grid_s,
+        name_s,
+        score_s,
+        square,
+        diff_text,
+        separator,
+        playNow,
+        noScoreText
+    } = styles;
+
+    const winners = [
+        "#C98910",
+        "#A8A8A8",
+        "#965A38"
+    ];
+
+    const gridColors = {
+        "4x4": "#FF598F",
+        "6x6": "#FEA564"
+    };
     
     return (
-        <View>
-             <Text>{display}</Text>
+        <View style={{flex:1}}>
             {
-                !!res.length && res.map((diff: any[]) => {
-                    return diff.map((record: IRecord) => {
-                        return (
-                            <View key={record.id}>
-                                <Text>{record.name}</Text>
-                                <Text>{record.score}</Text>
-                                <Text>{record.difficulty}</Text>
-                                <Text>{record.gridSize}</Text>
-                            </View>
-                        );
-                    });
-                })
+                !!res.length ? res.map((diff: any[]) => {
+                    return(
+                        <View 
+                            key={diff[0].id}
+                            style={tbl_c}>
+                            <Text style={diff_text}>{diff[0].difficulty.toUpperCase()}</Text>
+                            {
+                                diff.map((record: IRecord, idx: number) => {
+                                    return (
+                                        <View key={record.id}>
+                                            <View style={row_c}>
+
+                                                <View style={{ flex: .5, justifyContent: "center" }}>
+                                                    {
+                                                        idx <= 2 ? (
+                                                            <Icon 
+                                                                style={{ marginLeft: -5 }}
+                                                                name="trophy" 
+                                                                size={20} 
+                                                                color={winners[idx]}
+                                                            />
+                                                        ) : (
+                                                            <Text style={{ fontSize: 16, fontFamily: "riffic" }}>{idx + 1 }</Text>
+                                                        )
+                                                    }
+                                                </View>
+
+                                                <View style={{ flex: 1, marginLeft: 5 }}>
+                                                    <Text style={[grid_s, { backgroundColor: record.gridSize > 8 ? gridColors["6x6"] : gridColors["4x4"]}]}> 
+                                                        {record.gridSize > 8 ? "6x6" : "4x4"} 
+                                                    </Text>
+                                                </View>
+
+                                                <View style={{ flex: 4, justifyContent: "center" }}>
+                                                    <Text style={name_s}>{record.name.trim()}</Text>
+                                                </View>
+                                                
+                                                <View style={{ flex: 1, justifyContent: "center" }}>
+                                                    <Text style={[score_s]}>{record.score}</Text>
+                                                </View>
+                                            </View>
+
+                                            {
+                                                diff.length-1 === idx ? null : (<View style={separator}></View>)
+                                            }
+                                        </View>
+                                    );
+                                })
+                            }
+                        </View>
+                    )
+                }) : (
+                    <NoScores>
+                        <View style={{ alignItems: "center" }}>
+                            <Image source={require("../../img/cat-walk.png")} />
+                        </View>
+                        <Text style={[noScoreText, { paddingTop: "5%" }]}>
+                            Unbelievable! There are no high scores yet.
+                        </Text>
+
+                        <Text style={[noScoreText, { paddingTop: "2%" }]}>
+                            Play meow and be the very first on the leaderboard!
+                        </Text>
+                        <TouchableOpacity
+                            style={playNow}
+                            onPress={backHome}>
+                            <Text style={[noScoreText,{ color: "#fff" }]}>Play Meow!</Text>
+                        </TouchableOpacity>
+                    </NoScores>
+                )
             }
         </View>
     );

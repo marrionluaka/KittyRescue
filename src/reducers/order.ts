@@ -39,6 +39,8 @@ export default (order: IOrder = initialOrder, action: IAction) => {
         };
 
     if(action.type === TILES_MATCHED){
+        if(!!action.tiles[2]) return order;
+
         let _matchedTile = action.tiles[0];
         let _updated = update(
             order.tiles.findIndex(o => o.src === _matchedTile.src), 

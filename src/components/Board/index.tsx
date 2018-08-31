@@ -235,17 +235,18 @@ class Board extends React.Component<{
                                 height: 20,
                                 width: "100%",
                                 backgroundColor: '#ccc',
-                                top: -4,
+                                marginLeft: 1,
+                                marginRight:1,
                                 justifyContent: 'center',
                                 alignItems: 'center'
                             }}>
-                                <Text>Nill</Text>
+                                <Text>ZEN</Text>
                             </View>
                         )
                     }
 
                     <Grid 
-                        {...data} 
+                        {...data}
                         callback={this.hasTimeElasped}
                         onTileFlipped={this.incrementMoveCounter}
                     />

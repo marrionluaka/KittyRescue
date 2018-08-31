@@ -5,6 +5,7 @@ import {
     TouchableHighlight,
     Text,
     Image,
+    ImageBackground,
     Animated,
     Easing
   } from "react-native";
@@ -13,8 +14,10 @@ import styles from './styles';
 
 interface IProps {
     tile: any;
+    gridSize: number;
     matchedTiles?: any;
     onTileFlipped: any;
+    isZenMode: any;
 }
 
 export default class Tile extends Animator<IProps>{
@@ -25,10 +28,14 @@ export default class Tile extends Animator<IProps>{
     private _backOpacity: Animated.AnimatedInterpolation
     private _value: number
 
+    private readonly _FOUR_BY_FOUR = 8
+    private readonly _is4x4
+
     constructor(props){
         super(props);
         this.flipToFront = this.flipToFront.bind(this);
         this.flipToBack  = this.flipToBack.bind(this);
+        this._is4x4 = props.gridSize === this._FOUR_BY_FOUR
     }
 
     componentWillMount() {
@@ -86,22 +93,55 @@ export default class Tile extends Animator<IProps>{
         }).start();
     }
 
+    private getMatchedTile = (pred) => {
+        const size = this._is4x4 ? 48 : 24;
+
+        const _matched = pred() 
+                        ?<Image 
+                            source={require('../../img/greencheck.png')}
+                            style={{width: size, height: size }}
+                        /> 
+                        : 
+                        <Image 
+                            source={require('../../img/redx.png')}
+                            style={{width: size, height: size}}
+                        />
+                        
+        return _matched;
+    }
+
     private tileGenerator = (
         frontAnimatedStyle, 
         backAnimatedStyle,
         frontOpacity,
         backOpacity
     ) => {
-        const { tile, matchedTiles } = this.props;
-        const { flipCard, fronFace, backFace } = styles;
+        const { tile, matchedTiles, isZenMode } = this.props;
+        const { 
+            flipCard, 
+            fronFace, 
+            backFace,
+            overlay,
+
+         } = styles;
         const animatedDimensions = {width: "100%", height: "100%"};
+        const size = this._is4x4 ? 72 : 48;
 
         if(tile.isMatched){
-            if(matchedTiles[tile.src] && matchedTiles[tile.src].orderMatched)
-                return (<View style={[flipCard, { backgroundColor: 'green' }]}></View>);
-
             return (
-                <View style={[flipCard, { backgroundColor: 'red' }]}>
+                <View style={[{position: 'relative'}, flipCard]}>
+                    <ImageBackground
+                        source={tile.src}
+                        style={{width: size, height: size}}
+                    >
+                        <View style={overlay}>
+                            {
+                                isZenMode() ? null : this.getMatchedTile(
+                                    () => matchedTiles[tile.src] && matchedTiles[tile.src].orderMatched
+                                )
+                            }
+                        </View>
+                    </ImageBackground>
                 </View>
             );
         }
@@ -132,7 +172,9 @@ export default class Tile extends Animator<IProps>{
                             alignItems: 'center',
                             justifyContent: 'center'
                         }}>
-                        <Text style={{color:'#fff'}}>{tile.src}</Text>
+                        <Image 
+                            source={tile.src} 
+                            style={{ width: size, height: size }} />
                     </View>
                 </Animated.View>
             </View>

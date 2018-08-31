@@ -3,8 +3,15 @@ import * as React from "react";
 import {
     TouchableOpacity,
     View,
-    Text
+    Text,
+    Image,
+    ImageBackground,
+    Dimensions,
+    StyleSheet
 } from "react-native";
+
+import Pill from './Pill';
+import { styles } from './styles';
 
 interface IProps {
     navigation: any;
@@ -15,71 +22,79 @@ export default class Home extends React.Component<IProps, {}> {
 
     public render() {
         const { navigation } = this.props;
+        const {
+            imgBackground, 
+            header, 
+            container,
+            headerContent,
+            catText,
+            rescueText,
+            catsContainer,
+            catBox,
+            catLady,
+            catFish,
+            catEyes,
+            catGift
+        } = styles;
 
         return(
-            <View style={{
-                flex:1
-            }}>
+            <ImageBackground
+                style={imgBackground}
+                source={require("../../img/pastel.png")}
+            >
                 <View style={{
-                    flex: 1,
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
+                    flex:1
                 }}>
-                    <Text>Header</Text>
+                    <View style={container}>
+                        <View style={header}>
+                            <View
+                                style={headerContent}
+                            >
+                                <Text
+                                    style={catText}
+                                >
+                                    Kitty
+                                </Text>
+                                <Text
+                                    style={rescueText}
+                                >Rescue</Text> 
+                            </View>
+                            <View
+                                style={catsContainer}
+                            >
+                                <Image source={require("../../img/cat-box.png")} style={catBox}/>
+                                <Image source={require("../../img/cat-lady.png")} style={catLady}/>
+                                <Image source={require("../../img/cat-fish.png")} style={catFish}/>
+                                <Image source={require("../../img/cat-eyes.png")} style={catEyes}/>
+                                <Image source={require("../../img/cat-gift.png")} style={catGift}/>
+                            </View>
+                        </View>
+                    </View>
+
+                    <View style={{ flex: 1 , justifyContent: 'flex-end'}}>
+                        
+                        <Pill 
+                            title="Play"
+                            subTitle="Start a new adventure!"
+                            onNavigate={() => navigation.navigate("GameConfigurator")}/>
+
+                        <Pill
+                            title="How To Play"
+                            subTitle="Learn to play the game!"
+                            onNavigate={() => navigation.navigate("HowToPlay")}/>
+
+                        <Pill
+                            title="High Scores"
+                            subTitle="See your best scores!" 
+                            onNavigate={() => navigation.navigate("HighScores")}/>
+                        
+                    </View>
+
+                    <View style={{ alignItems: 'center', paddingBottom: 20 }}>
+                        <Text>{'\u00A9'} {new Date().getFullYear()}</Text>
+                    </View>
                 </View>
-
-                <View style={{ 
-                    flex: 3,
-                    justifyContent: 'center',
-                    alignItems: 'center'}}>
-                    
-                    <TouchableOpacity
-                        style={{
-                            padding: "8%",
-                            borderWidth: 1,
-                            width: "75%",
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                        onPress={() => navigation.navigate("GameConfigurator")}
-                    >
-                        <Text>Play</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={{
-                            padding: "8%",
-                            marginTop: 15,
-                            borderWidth: 1,
-                            width: "75%",
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                        onPress={() => navigation.navigate("HowToPlay")}
-                    >
-                        <Text>How To Play</Text>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-                        style={{
-                            padding: "8%",
-                            marginTop: 15,
-                            borderWidth: 1,
-                            width: "75%",
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}
-                        onPress={() => navigation.navigate("HighScores")}
-                    >
-                        <Text>High Scores</Text>
-                    </TouchableOpacity>
-                    
-                </View>
-
-                <View style={{ alignItems: 'center', paddingBottom: 20 }}>
-                    <Text>Copyright 2018</Text>
-                </View>
-            </View>
+            </ImageBackground>
         );
     }
 }
