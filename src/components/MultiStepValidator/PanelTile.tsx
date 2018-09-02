@@ -16,33 +16,38 @@ const {
  } = styles;
 
 const _createTiles = (list: any[]): any[] => {
-    const { height } = Dimensions.get('window');
-    const ratio = 6.58;
-
     return list.map(el => {
         return ( 
             <TouchableOpacity
                 key={el.displayName}
                 onPress={el.push}
                 style={{ 
-                    flexDirection: 'row'
+                    flexDirection: 'row',
+                    flex: 1
                 }}
             >
-                <View style={[ panelIconContainer, { 
-                        height: height/ratio,
+                <View style={[ panelIconContainer, {
                         backgroundColor: el.backgroundColor || "#03A9F4"
                     }]}>
                     <Text
                         style={{ 
-                            textAlign: 'center',
-                            color: "#fff"
+                            textAlign: 'center'
                         }}
-                    >{el.icon}</Text>
+                    >{
+                        Array.isArray(el.icon) ? (
+                            el.icon.map((icon, idx) => <Text key={idx}>{icon}</Text>)
+                        ) : el.icon
+                    }</Text>
                 </View>
 
-                <View style={[ panelDisplayContainer, { height: height/ratio }]}>
+                <View style={panelDisplayContainer}>
                     <Text style={panelDisplayText}
                     >{el.displayName}</Text>
+                    <Text style={{
+                        paddingLeft: 15
+                    }}>{
+                        !!el.subTitle && el.subTitle
+                    }</Text>
                 </View>
             </TouchableOpacity>
         ); 

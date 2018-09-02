@@ -5,38 +5,53 @@ import {
     Text,
     Dimensions
 } from 'react-native';
+
 import styles from './styles';
+import { PreventDoubleClick } from "../common/PreventDoubleClick";
 
 const { 
+    playBtn,
+    gridSize,
     gridTitle,
+    playBtnText,
     gridContainer,
     gridTouchable,
+    gridSizeContainer,
     gridThumbnailContiner
  } = styles;
 
-const GridSelector = ({ size = "Normal" , push, thumbnail, title, marginRight = false }) => {
-    const { height } = Dimensions.get('window');
-    const ratio = 2.5;
+ const gridColors = {
+    "4x4": "#FF598F",
+    "6x6": "#FEA564"
+};
+
+const Btn = PreventDoubleClick(TouchableOpacity);
+
+const GridSelector = ({ 
+    size = "Normal" , 
+    push, 
+    title, 
+    subTitle,
+    disabled,
+    marginRight = false }) => {
 
     return (
-        <View style={[ gridContainer, { marginRight: marginRight ? 0 : 5 }]}>
-            <TouchableOpacity
-                style={[ gridTouchable, { height: height/ratio }]}
-                onPress={push}
-            >
+        <View style={[ gridContainer, { paddingRight: marginRight ? 0 : 15 } ]}>
+
+            <Btn onPress={!!disabled ? () => {} : push} style={gridTouchable}>
                 <View style={gridThumbnailContiner}>
-                    <Text>{thumbnail}</Text>
+                    <Text style={[gridTitle, { backgroundColor: gridColors[title] }]}>{title}</Text>
                 </View>
-                <View style={{
-                    flex: 1, 
-                    justifyContent: 'center'
-                }}>
-                    <Text style={gridTitle}>
-                        {title}
-                    </Text>
-                    <Text style={{textAlign: 'center'}}>{size}</Text>
+
+                <View style={gridSizeContainer}>
+                    <Text style={gridSize}>{size}</Text>
+                    <Text style={{ textAlign: "center", lineHeight: 25 }}>{subTitle}</Text>
                 </View>
-            </TouchableOpacity>
+
+                <View style={playBtn}>
+                    <Text style={playBtnText}>Play</Text>
+                </View>
+            </Btn>
         </View>
     );
 };

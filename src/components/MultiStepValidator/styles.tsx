@@ -4,31 +4,68 @@ export default StyleSheet.create({
     // GridSelector Styles
     gridContainer: {
         flex: 1,
-        marginTop: 15,
-        margin: 5
+        justifyContent:"center",
+        padding: 15,
+        paddingTop: 45,
+        paddingBottom: 40
     },
 
     gridTouchable: {
-        padding: 10,
-        borderRadius: 5,
+        flex: 1,
+        backgroundColor:"#fff",
         shadowColor: '#000',
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 1.0,
-        shadowRadius: 5,
-        elevation: 2
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.9,
+        shadowRadius: 4,
+        elevation: 5
+
+        // shadowColor: '#000',
+        // shadowOffset: { width: 0, height: 1 },
+        // shadowOpacity: 0.8,
+        // shadowRadius: 2,  
+        // elevation: 1
     },
 
     gridThumbnailContiner: {
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: "#fff"
+        alignItems: 'center'
     },
 
     gridTitle: {
+        fontFamily: "riffic",
+        borderRadius: 50,
+        textAlign: "center",
+        color: "#fff",
+        fontSize: 20,
+        padding: 20,
+        paddingTop: 25,
+        paddingBottom: 25,
+        marginTop: "35%"
+    },
+
+    gridSizeContainer: { 
+        flex: 1, 
+        justifyContent: 'flex-start', 
+        marginTop: "30%" 
+    },
+
+    gridSize: {
         textAlign: 'center',
-        color: '#fff',
-        fontWeight: 'bold',
+        fontFamily: "riffic",
+        fontSize: 15
+    },
+
+    playBtn: { 
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#d1dce2"
+    },
+
+    playBtnText: {
+        fontFamily: "riffic",
+        color: "#fff",
         fontSize: 20
     },
 
@@ -50,7 +87,7 @@ export default StyleSheet.create({
 
     panelDisplayText: {
         paddingLeft: 15,
-        fontSize: 15,
-        fontWeight: '500'
+        fontSize: 17,
+        fontFamily: "riffic"
     }
 });

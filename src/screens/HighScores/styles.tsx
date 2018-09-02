@@ -1,11 +1,6 @@
 import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
-    backArrow:{
-        marginTop: 15,
-        marginLeft: 15
-    },
-
     tabs_c:{
         flexDirection: "row", 
         backgroundColor: "rgba(0,0,0,.2)",

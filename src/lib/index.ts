@@ -121,3 +121,19 @@ export const animateCounter = options => {
     
     _intervalId = setInterval(_update, frequency || 10);
 }
+
+export const debounce = (fn, threshold) => {
+    var timeout;
+    threshold = threshold || 100;
+    return function debounced() {
+      clearTimeout( timeout );
+      var args = arguments;
+      var _this = this;
+      function delayed() {
+        fn.apply( _this, args );
+      }
+      timeout = setTimeout( delayed, threshold );
+    };
+};
+
+export const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);

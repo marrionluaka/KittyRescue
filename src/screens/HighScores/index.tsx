@@ -12,6 +12,7 @@ import Icon from 'react-native-vector-icons/Feather';
 
 import styles from './styles';
 import HighScoresDetail from './HighScoresDetail';
+import { BackButton } from '../../components/common/BackButton';
 
 class HighScores extends React.Component<{ navigation: any }, {}>{
     private static navigationOptions = { header: null };
@@ -43,7 +44,6 @@ class HighScores extends React.Component<{ navigation: any }, {}>{
             tabs,
             tabs_c,
             tabs_text,
-            backArrow,
             leaderboard_text
         } = styles;
         return(
@@ -51,17 +51,7 @@ class HighScores extends React.Component<{ navigation: any }, {}>{
                 style={{ flex: 1 }}
                 source={require("../../img/pastel.png")}
             >
-                {/* Back Button */}
-                <TouchableOpacity
-                    onPress={this._backHome}
-                >
-                    <Icon 
-                        style={backArrow}
-                        name="arrow-left" 
-                        size={30} 
-                        color="#fff"
-                    />
-                </TouchableOpacity>
+                <BackButton backHomeFn={this._backHome}/>
 
                  {/* Header */}
                 <View style={header} >

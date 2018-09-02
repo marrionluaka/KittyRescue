@@ -13,6 +13,7 @@ import { IRecord } from "../../interfaces";
 import { NoScores } from "./NoScores";
 import ScoreQueries from "../../queries/scores";
 import styles from './styles';
+import { capitalizeFirstLetter } from "../../lib";
 
 const _scoreCache = {},
       _diffCache = {};
@@ -52,7 +53,7 @@ const HighScoresDetail = ({ gameMode, display, backHome }) => {
     const gridColors = {
         "4x4": "#FF598F",
         "6x6": "#FEA564"
-    };
+    };    
     
     return (
         <View style={{flex:1}}>
@@ -62,7 +63,9 @@ const HighScoresDetail = ({ gameMode, display, backHome }) => {
                         <View 
                             key={diff[0].id}
                             style={tbl_c}>
-                            <Text style={diff_text}>{diff[0].difficulty.toUpperCase()}</Text>
+                            <Text style={diff_text}>
+                                Difficulty: {capitalizeFirstLetter(diff[0].difficulty)}
+                            </Text>
                             {
                                 diff.map((record: IRecord, idx: number) => {
                                     return (

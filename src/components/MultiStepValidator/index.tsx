@@ -1,14 +1,17 @@
 import * as React from "react";
 import { 
     View, 
-    Text
+    Text,
+    Image
  } from 'react-native';
  import { ProgressBar } from '../common/ProgressBar';
+import { BackButton } from "../common";
 
 interface Props {
     activeBtn: any;
     inactiveBtn: any;
-    bannersSrc: string[];
+    bannersSrc: any[];
+    backHomeFn: any;
 }
 
 interface State { 
@@ -24,9 +27,10 @@ export default class MultiStepValidator extends React.Component<Props, State> {
     }
     
     private _order: any[] = [];
-    private panels: React.ReactChild[] = React.Children.toArray(this.props.children);
-    private ONE_HUNDRED_PERCENT: number = 100;
-    private _loadingPercentage: number = this.ONE_HUNDRED_PERCENT/this.panels.length;
+    private readonly panels: React.ReactChild[] = React.Children.toArray(this.props.children);
+    private readonly ONE_HUNDRED_PERCENT: number = 100;
+    private readonly _loadingPercentage: number = this.ONE_HUNDRED_PERCENT/this.panels.length;
+    private readonly _panelBg = ["#b3ddd1", "#f5b994", "#d1dce2"]
 
     state = {
         item: "None",
@@ -123,29 +127,31 @@ export default class MultiStepValidator extends React.Component<Props, State> {
 
     public render() {
         let items = React.Children.map(this.props.children, this._prepareChildrenData);
-
+        
         return (
         <View style={{ flex: 1 }}>
-            <View style={{ 
-                    flex: 1.8, 
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    backgroundColor: "powderblue" 
-            }}>
-                <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-                    <Text>{this.props.bannersSrc[this.state.panel] || "No Image"}</Text>
-                </View>
-
-                <View style={{
-                    flex: 1,
-                    flexDirection: 'row',
-                    alignItems: 'flex-end'
+            <View style={{ flex: 1.8, backgroundColor: this._panelBg[this.state.panel] }}>
+                <BackButton backHomeFn={this.props.backHomeFn}/>
+                <View style={{ 
+                        flex: 1, 
+                        justifyContent: 'center',
+                        alignItems: 'center'
                 }}>
-                    { this._order.map(this._renderSteps) }
+                    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+                        <Image source={this.props.bannersSrc[this.state.panel]} />
+                    </View>
+
+                    <View style={{
+                        flexDirection: 'row',
+                        alignItems: 'flex-end'
+                    }}>
+                        { this._order.map(this._renderSteps) }
+                    </View>
                 </View>
             </View>
 
             <ProgressBar
+                color="#8ba753"
                 progress={this.state.progress}
                 seed={() => this.state.panel * this._loadingPercentage}
             />

@@ -15,6 +15,8 @@
 		"ramda": "^0.25.0",
 		"react": "16.0.0",
 		"react-native": "0.50.4",
+		"react-native-elements": "^0.19.1",
+		"react-native-sideswipe": "^1.4.2",
 		"react-native-vector-icons": "^4.6.0",
 		"react-navigation": "^1.0.0-beta.22",
 		"react-navigation-slide-from-right-transition": "^1.0.4",
@@ -30,6 +32,7 @@
 		"babel-jest": "21.2.0",
 		"babel-preset-react-native": "4.0.0",
 		"jest": "21.2.1",
+		"lodash.debounce": "^4.0.8",
 		"react-test-renderer": "16.0.0",
 		"ts-jest": "^22.4.2",
 		"typescript": "^2.8.1"

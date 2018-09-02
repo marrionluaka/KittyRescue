@@ -53,6 +53,7 @@ export default class Panel extends Animator<IPanel> {
     public render() {
         return (
             <Animated.View style={{
+                flex: 1,
                 right: this._offSetRightAnimated,
                 opacity: this._opacityAnimated 
             }}>

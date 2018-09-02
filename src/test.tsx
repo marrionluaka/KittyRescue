@@ -4,93 +4,111 @@ import {
     View,
     Text,
     Image,
-    Dimensions
+    Dimensions,
+    Animated
 } from 'react-native';
+import { 
+    Card, 
+    Button
+ } from "react-native-elements";
+import Icon from 'react-native-vector-icons/FontAwesome';
 
-interface IItem {
-    name: string;
-}
+const DATA = [
+    { id: 1, text: 'Card #1', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-04.jpg' },
+    { id: 2, text: 'Card #2', uri: 'http://www.fluxdigital.co/wp-content/uploads/2015/04/Unsplash.jpg' },
+    { id: 3, text: 'Card #3', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-09.jpg' },
+    // { id: 1, text: 'Card #1', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-04.jpg' },
+    // { id: 2, text: 'Card #2', uri: 'http://www.fluxdigital.co/wp-content/uploads/2015/04/Unsplash.jpg' },
+    // { id: 3, text: 'Card #3', uri: 'http://imgs.abduzeedo.com/files/paul0v2/unsplash/unsplash-09.jpg' }
+];
+
+const AnimatedFlatList = Animated.createAnimatedComponent(FlatList);
 
 export default class Test extends React.Component {
-    state = {
-        offset: 0
+
+    private readonly _animatedValue
+
+    constructor(props){
+        super(props);
+
+        this._animatedValue = new Animated.Value(0);
+    }
+    
+    renderCard(item, idx){
+
+        let scale = this._animatedValue.interpolate({
+			inputRange: [-1, 0, 1],
+            outputRange: [1, 1.6, 1],
+            extrapolate: 'clamp'
+        });
+
+        return (
+            <Animated.View
+                style={[
+                    {
+                        flex: 1,
+                        flexDirection: "row"
+                    },
+                    { transform: [{ scale }] }
+                ]}
+            >
+                <Card
+                    key={item.id}
+                    title={item.text}
+                    image={{ uri: item.uri }}
+                >
+                    
+                    <Text style={{ marginBottom: 10 }}>
+                        Sup ma dudes!
+                    </Text>
+
+                    <Button 
+                        backgroundColor="#ccc"
+                        title="Buy Now!"
+                        onPress={() => {}}
+                    />
+                </Card>
+            </Animated.View>
+        );
     }
 
-    render(){
-        const SCREEN_WIDTH = Dimensions.get("window").width;
-
-        const data = [
-            { name: "Cristiano Ronaldo", key: 1 },
-            { name: "Lionel Messi", key: 2 },
-            { name: "Neymar", key: 3 },
-            { name: "Mbappe", key: 4 }
-        ];
-    
-        const renderItem = item => {
-            return (
-                <View 
-                    key={item.key}
-                    style={{
-                        padding: "4%",
-                        backgroundColor: "bisque",
-                        flex: 1,
-                        width: SCREEN_WIDTH
-                    }}>
-                    <Text>{item.name}</Text>
-                </View>
-            );
-        };
-
-        const renderDots = data => {
-            return (
-                <View
-                    style={{
-                        flexDirection: "row",
-                        alignSelf: "center",
-                        position: "absolute",
-                        bottom: 15
-                    }}>
-                    {
-                        data.map((el, idx) => {
-                            const backgroundColor = this.state.offset/SCREEN_WIDTH === idx ? "#333" : "rgba(0,0,0,.2)";
-
-                            return(
-                                <View
-                                    key={Math.random()}
-                                    style={{
-                                        width: 10,
-                                        height: 10,
-                                        borderRadius: 50,
-                                        backgroundColor,
-                                        padding: "1%",
-                                        margin: 1
-                                    }}>
-                                </View>
-                            );
-                        })
-                    }
-                </View>
-            );
-        }
-    
-        return (
-            <View style={{flex:1}}>
-                <FlatList
+    render() {
+        return(
+            <View >
+                <View style={{ height: 150 }}>
+                <AnimatedFlatList 
                     horizontal
-                    data={data}
-                    renderItem={({item}) => renderItem(item)}
+                    scrollEventThrottle={16}
+                    onScroll={
+                        Animated.event(
+                            [
+                                {
+                                    nativeEvent: 
+                                    {
+                                        contentOffset: 
+                                        {
+                                            x: this._animatedValue
+                                        }
+                                    }
+                                }
+                            ],
+                            {
+                                useNativeDriver: true
+                            }
+                        )
+                    }
+                    data={DATA}
+                    renderItem={({item, index}) => this.renderCard(item, index)}
                     style={{ flex: 1, position: "relative" }}
                     showsHorizontalScrollIndicator={false}
                     directionalLockEnabled
+                    decelerationRate={0}
+                    snapToInterval={200}
+                    snapToAlignment={"center"}
                     pagingEnabled
-                    onScroll={ e => {
-                        if(e.nativeEvent.contentOffset.x % SCREEN_WIDTH === 0)
-                            this.setState({ offset: e.nativeEvent.contentOffset.x })
-                    } }
+                    keyExtractor={(item, i) => i}
                 />
-                {
-                    renderDots(data)
-                }
+                </View>
             </View>
         );
     }
