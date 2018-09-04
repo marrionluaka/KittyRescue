@@ -1,9 +1,8 @@
 import realm from '../models/scores';
 import { guid } from '../lib';
 
-const threshold = 5;
-
 export default class ScoreQueries {
+    private readonly _threshold: number = 5;
     private scores
     private lowestScore
     private gridSize: number
@@ -24,11 +23,11 @@ export default class ScoreQueries {
         this.lowestScore = Math.min.apply(Math, this.scores.map( x => x.score ));
     }
 
-    isNewHighScore = () => this.scores.length < threshold;
+    public isNewHighScore = () => this.scores.length < this._threshold;
     
-    isLowestScore = score => this.lowestScore < score;
+    public isLowestScore = score => this.lowestScore < score;
 
-    insertScore = (name, score) => {
+    public insertScore = (name, score) => {
         realm.write(() => {
             realm.create('Scores', {
                 id: guid(),
@@ -41,7 +40,7 @@ export default class ScoreQueries {
         });
     }
 
-    updateScore = (name, score) => {
+    public updateScore = (name, score) => {
         realm.write(() => {
             let record = this.scores.find( x => x.score === this.lowestScore );
             

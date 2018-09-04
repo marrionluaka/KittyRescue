@@ -15,7 +15,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         fontFamily: "riffic",
         fontSize: 20,
-        paddingTop: 15,
+        paddingTop: 10,
         paddingBottom: 15,
     },
     input:{
@@ -41,24 +41,27 @@ export default class NewHighScore extends React.Component<{
     score: number;
     method: any;
     render: any;
-}, { input: string; }> {
+}, { input: string; callOnce: boolean }> {
 
     constructor(props){
         super(props);
     }
 
     state = {
-        input: ""
+        input: "",
+        callOnce: false
     }
 
     private _onSubmit = (method: any, score: number) => {
+        if(this.state.callOnce) return;
+
         if(this.state.input.length < 1){
             // @ts-ignore: compile error
             alert("The text field cannot be empty. Please enter your name.");
             return;
         }
 
-        method(this.state.input, score);
+        this.setState({ callOnce: true }, () => method(this.state.input, score));
     };
         
     render(){
@@ -67,24 +70,28 @@ export default class NewHighScore extends React.Component<{
         return (
             <View>
                 {render}
-                <Text style={high_score}>New High Score!</Text>
+                
+                { this.state.callOnce ? null : <Text style={high_score}>New High Score!</Text> }
 
-                <View style={form}>
-                    <TextInput
-                        maxLength={15}
-                        autoFocus
-                        placeholder="Enter your name."
-                        style={input}
-                        onChangeText={(text) => this.setState({ input: text })}
-                    />
-                    
-                    <TouchableOpacity
-                        style={btn}
-                        onPress={() => this._onSubmit(method, score) }
-                    >
-                        <Text style={btn_txt}>Submit</Text>
-                    </TouchableOpacity>
-                </View>
+                {
+                    this.state.callOnce ? null :
+                    <View style={form}>
+                        <TextInput
+                            maxLength={15}
+                            autoFocus
+                            placeholder="Enter your name."
+                            style={input}
+                            onChangeText={(text) => this.setState({ input: text })}
+                        />
+                        
+                        <TouchableOpacity
+                            style={btn}
+                            onPress={() => this._onSubmit(method, score) }
+                        >
+                            <Text style={btn_txt}>Submit</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
             </View>
         );
     }

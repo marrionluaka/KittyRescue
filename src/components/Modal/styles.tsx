@@ -28,4 +28,19 @@ export default StyleSheet.create({
         paddingTop: 10,
         paddingBottom: 10
     },
+    btn_c:{
+        flexDirection: "row"
+    },
+    btn:{
+        flex: 1,
+        padding: 20,
+        margin: 10,
+        borderRadius: 5
+    },
+    btn_txt:{
+        fontFamily: FONT,
+        fontSize: 15,
+        color: "#fff",
+        textAlign: "center"
+    }
 });
