@@ -175,8 +175,9 @@ class Board extends React.Component<{
                                     <View style={metadata_c}>
                                         <View style={metadata}>
                                             <Text style={meta_title}>Accuracy</Text>
-                                            {
-                                                gameMode === "accuracy" ?
+                                            <Maybe 
+                                                pred={() => gameMode === "accuracy"}
+                                                render={() => (
                                                     this.state.gameEndMsg !== GAME_OVER_MSG ?
                                                         (<Text style={meta}>
                                                             <AnimatedCounter 
@@ -186,9 +187,10 @@ class Board extends React.Component<{
                                                                 render={accuracy => accuracy + "%"}
                                                             />
                                                         </Text>) : 
-                                                        <Text style={meta}>{accuracy + "%"}</Text> : 
-                                                        <Text style={meta}>-</Text>
-                                            }
+                                                        <Text style={meta}>{accuracy + "%"}</Text>
+                                                )}
+                                                renderAlt={() => <Text style={meta}>-</Text>}
+                                            />
                                         </View>
 
                                         <View style={metadata}>
@@ -198,9 +200,10 @@ class Board extends React.Component<{
 
                                         <View style={metadata}>
                                             <Text style={meta_title}>Time</Text>
-                                            {
-                                                gameMode === "vsClock" ?
-                                                this.state.gameEndMsg !== GAME_OVER_MSG ?
+                                            <Maybe 
+                                                pred={() => gameMode === "vsClock"}
+                                                render={() =>(
+                                                    this.state.gameEndMsg !== GAME_OVER_MSG ?
                                                     (<Text style={meta}>
                                                         <AnimatedCounter 
                                                             fn={ (val, counter) => val - counter }
@@ -209,9 +212,10 @@ class Board extends React.Component<{
                                                             render={formatTime}
                                                         />
                                                     </Text>) : 
-                                                    <Text style={meta}>{formatTime(timer.time)}</Text> :
-                                                    <Text style={meta}>-</Text>
-                                            }
+                                                    <Text style={meta}>{formatTime(timer.time)}</Text>
+                                                )}
+                                                renderAlt={() => <Text style={meta}>-</Text>}
+                                            />
                                         </View>
                                     </View>
                                 </View>
