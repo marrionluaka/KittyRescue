@@ -223,7 +223,7 @@ export default class GameConfigurator extends React.Component<{ navigation: any 
                             <View style={{ flex:1, flexDirection: 'row' }}>
                                 <GridSelector 
                                     push={() => this._push(FOUR_BY_FOUR, push, onComplete)}
-                                    title="4x4"
+                                    title="4 x 4"
                                     subTitle="Standard size."
                                     marginRight
                                     size="Normal"
@@ -232,7 +232,7 @@ export default class GameConfigurator extends React.Component<{ navigation: any 
     
                                 <GridSelector 
                                     push={() => this._push(SIX_BY_SIX, push, onComplete)}
-                                    title="6x6"
+                                    title="6 x 6"
                                     subTitle="Complex size."
                                     size="Large"
                                     disabled={this.state.alreadyCalled}

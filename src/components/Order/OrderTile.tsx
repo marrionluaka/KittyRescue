@@ -7,7 +7,7 @@ import {
 
 const OrderTile = ({ src }) => {
     return (
-        <Image source={src} style={{ width: 45, height: 45 }}/>
+        <Image source={src} style={{ width: 50, height: 50 }}/>
     );
 };
 

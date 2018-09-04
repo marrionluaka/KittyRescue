@@ -6,3 +6,4 @@ export * from './AnimatedText';
 export * from './Deck';
 export * from './BackButton';
 export * from './PreventDoubleClick';
+export * from './Separator';

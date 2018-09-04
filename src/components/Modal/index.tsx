@@ -8,9 +8,14 @@ import {
 import score from "../../reducers/score";
 import styles from './styles';
 
-const { container } = styles;
+const { 
+    container, 
+    popup,
+    title_c,
+    title_txt
+} = styles;
 
-const Popup = ({ isVisible, children }) => {
+const Popup = ({ isVisible, children, title }) => {
     return (
         <Modal 
             transparent
@@ -19,7 +24,12 @@ const Popup = ({ isVisible, children }) => {
             onRequestClose={() => {}}
         >
             <View style={styles.container}>
-                {children}
+                <View style={popup}>
+                    <View style={title_c}>
+                        <Text style={title_txt}>{title}</Text>
+                    </View>
+                    {children}
+                </View>
             </View>
             
         </Modal>

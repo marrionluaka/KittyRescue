@@ -7,10 +7,10 @@ export default StyleSheet.create({
         left: 0,
         alignItems: 'center',
         justifyContent: 'center',
-        margin: 1,
+        margin: 3,
         flex: 1
     },
-    fronFace:{
+    frontFace:{
         zIndex: 1,
         position: "absolute",
         top: 0,
@@ -35,6 +35,18 @@ export default StyleSheet.create({
         right:0,
         bottom: 0,
         left: 0,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    gloss:{
+        borderRadius: 5,
+        borderWidth: 5,
+        borderColor: "#fff",
+        backgroundColor:"rgba(250,250,250,.4)"
+    },
+    card_c:{
+        width: "100%",
+        height: "100%",
         alignItems: 'center',
         justifyContent: 'center'
     }

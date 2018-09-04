@@ -55,6 +55,7 @@ class Timer extends React.Component<IProps, { timerID: any }>{
             <View>
                 <Bar
                     time={this.props.timer.time}
+                    colors={["#e25b45","#febd3d","#a2b798"]}
                 >
                     { formatTime(this.props.timer.time) }
                 </Bar>

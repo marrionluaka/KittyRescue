@@ -18,12 +18,6 @@ export default StyleSheet.create({
         shadowOpacity: 0.9,
         shadowRadius: 4,
         elevation: 5
-
-        // shadowColor: '#000',
-        // shadowOffset: { width: 0, height: 1 },
-        // shadowOpacity: 0.8,
-        // shadowRadius: 2,  
-        // elevation: 1
     },
 
     gridThumbnailContiner: {
@@ -38,9 +32,9 @@ export default StyleSheet.create({
         textAlign: "center",
         color: "#fff",
         fontSize: 20,
-        padding: 20,
-        paddingTop: 25,
-        paddingBottom: 25,
+        padding: 10,
+        paddingTop: 20,
+        paddingBottom: 20,
         marginTop: "35%"
     },
 

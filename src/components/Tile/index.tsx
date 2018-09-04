@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { 
     View,
-    TouchableHighlight,
+    TouchableOpacity,
     Text,
     Image,
     ImageBackground,
@@ -119,10 +119,11 @@ export default class Tile extends Animator<IProps>{
         const { tile, matchedTiles, isZenMode } = this.props;
         const { 
             flipCard, 
-            fronFace, 
+            frontFace, 
             backFace,
             overlay,
-
+            card_c,
+            gloss
          } = styles;
         const animatedDimensions = {width: "100%", height: "100%"};
         const size = this._is4x4 ? 72 : 48;
@@ -149,29 +150,22 @@ export default class Tile extends Animator<IProps>{
         return(
             <View style={flipCard}>
                 {/* Front */}
-                <Animated.View style={[fronFace, frontAnimatedStyle, frontOpacity]}>
-                    <TouchableHighlight 
-                        style={{
-                            backgroundColor:"#000",
-                            width: "100%",
-                            height: "100%",
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}
+                <Animated.View style={[frontFace, frontAnimatedStyle, frontOpacity]}>
+                    <TouchableOpacity 
+                        style={[gloss, card_c]}
                         onPress={() => this.tileFlipHandler()}>
-                        <Text style={{ color: "#fff" }}>Back</Text>
-                    </TouchableHighlight>
+                        <Image source={require("../../img/cat-yarn.png")} style={{ 
+                            width:15, 
+                            height: 15,
+                            padding: "25%"
+                        }}/>
+                    </TouchableOpacity>
                 </Animated.View>
                 
                 {/* Back */}
                 <Animated.View style={[backFace, backAnimatedStyle, backOpacity]}>
                     <View 
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            alignItems: 'center',
-                            justifyContent: 'center'
-                        }}>
+                        style={[gloss, card_c]}>
                         <Image 
                             source={tile.src} 
                             style={{ width: size, height: size }} />

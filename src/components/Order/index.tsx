@@ -14,6 +14,8 @@ import {
     MAX_SCORE
 } from '../../globals';
 
+import styles from './styles';
+
 interface IProps {
     addPoints: any;
     order: any;
@@ -70,25 +72,15 @@ class Order extends React.Component<IProps, {}> {
     render(){
         const { tiles, pointer } = this.props.order;
         return(
-            <View style={{ 
-                    position: "absolute",
-                    zIndex: 9,
-                    padding:"5%",
-                    width: 100,
-                    height: 100,
-                    borderRadius: 50,
-                    top: 5,
-                    alignSelf: 'center',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    backgroundColor: 'powderblue'
-                }}>
-                <Text style={{ top: -15 }}>Target</Text>
-                {
-                    this.isValidPointer() ?
-                    (<OrderTile {...tiles[pointer]} />) 
-                    : (<OrderTile {...tiles[tiles.length - 1]} />)
-                }
+            <View style={styles.circle}>
+                <View style={styles.innerCircle}>
+                    <Text style={styles.text}>Target</Text>
+                    {
+                        this.isValidPointer() ?
+                        (<OrderTile {...tiles[pointer]} />) 
+                        : (<OrderTile {...tiles[tiles.length - 1]} />)
+                    }
+                </View>
             </View>
         );
     }

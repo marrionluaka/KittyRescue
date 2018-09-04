@@ -65,7 +65,7 @@ class Grid extends React.Component<IGridProps, {}> {
     const len = Object.values(tilesState.tiles).length - (levels[difficulty] || 0);
 
     if(tilesState.tiles_flipped === len) 
-      this.showPopup("Board cleared... generating new board");
+      this.showPopup(GAME_OVER_MSG);
   }
 
   private memoryFlipTile = (tile, tileCtx) => {

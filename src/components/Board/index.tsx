@@ -3,10 +3,14 @@ import {
     View, 
     Text, 
     TouchableOpacity, 
-    TextInput 
+    TextInput, 
+    ImageBackground,
+    Image
 } from "react-native";
 import { connect } from "react-redux";
 import { bindActionCreators } from 'redux';
+import { NavigationActions } from "react-navigation";
+import Icon from 'react-native-vector-icons/Entypo';
 
 import Zen from "../Zen";
 import Grid from "../Grid";
@@ -17,7 +21,8 @@ import Popup from "../Modal";
 import NewHighScore from "../NewHighScore";
 import { 
     Maybe,
-    AnimatedCounter 
+    AnimatedCounter, 
+    Separator
 } from "../common";
 
 import { formatTime, getPercentage } from "../../lib";
@@ -25,6 +30,8 @@ import { GAME_OVER_MSG } from "../../types";
 import ScoreQueries from "../../queries/scores";
 import {newGame} from "../../actions/tiles";
 import {initOrder} from "../../actions/order";
+import styles from "./styles";
+import MetaBox from "./MetaBox";
 
 const scoreReducer = (currentTime, currentAccuracy) => currentTime + currentAccuracy;
 
@@ -36,6 +43,8 @@ class Board extends React.Component<{
     navigation: any;
     order: any;
 }> {
+
+    private readonly _moveCounterThreshold: number = 7
 
     state = {
       gameEndMsg: null,
@@ -62,8 +71,19 @@ class Board extends React.Component<{
     };
 
     private calcScore(score, time=0, accuracy=0){
-        return Math.floor(score + time + accuracy);
-    }
+        return Math.floor(score + time + accuracy) - Math.floor(this.state.moveCounter/this._moveCounterThreshold);
+    };
+
+    private _backHome = () => {
+        this.props.navigation.dispatch(
+            NavigationActions.reset({
+            index: 0,
+            actions: [
+              NavigationActions.navigate({ routeName: "Home"}),
+            ],
+          })
+        )
+    };
 
     render(){
         const { data } = this.props.navigation.state.params;
@@ -74,60 +94,54 @@ class Board extends React.Component<{
 
         const isZenMode = () => gameMode === "zen";
 
+        const { 
+            zen_s, 
+            info_c,
+            points_c,
+            points,
+            img,
+            metadata_c,
+            metadata,
+            meta,
+            meta_title,
+            btn_c,
+            btn,
+            btn_txt
+        } = styles;
+
         return (
-            <View style={{ flex: 1}}>
-
-                <Popup isVisible={!!this.state.gameEndMsg}>
-                    <View
-                        style={{
-                            backgroundColor: "#fff",
-                            padding: 30
-                        }}>
-                        <Text>Title: {this.state.gameEndMsg}</Text>
-
-                        <Maybe 
-                            pred={isZenMode}
-                            render={() => <Text>No Score</Text>}
-                            renderAlt={() => {
-                                const query        = new ScoreQueries(gameMode, difficulty, gridSize),
-                                      // @ts-ignore: compile error
-                                      matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.isMatched).length,
-                                      totalTiles   = this.props.order.tiles.length,
-                                      accuracy     = getPercentage(matchedTiles, totalTiles),
-                                      renderScore  = <AnimatedCounter 
+            <ImageBackground
+                style={{ flex: 1 }}
+                source={require("../../img/pastel.png")}
+            >
+                <Popup 
+                    title={this.state.gameEndMsg}
+                    isVisible={!!this.state.gameEndMsg}>
+                    <Maybe 
+                        pred={isZenMode}
+                        render={() => <Text>No Score</Text>}
+                        renderAlt={() => {
+                            const query        = new ScoreQueries(gameMode, difficulty, gridSize),
+                                    // @ts-ignore: compile error
+                                    matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.isMatched).length,
+                                    totalTiles   = this.props.order.tiles.length,
+                                    accuracy     = getPercentage(matchedTiles, totalTiles),
+                                    renderScore  = (
+                                            <Text style={points}>
+                                                <AnimatedCounter 
                                                         fn={ (val, counter) => val + counter }
                                                         reducer={scoreReducer}
                                                         counter={score}
                                                         firstAcc={timer.time}
                                                         secondAcc={accuracy}
-                                                    />
+                                                    /> points!
+                                            </Text>
+                                        );
 
-                                return (
-                                    <View>
-                                        {
-                                            gameMode === "vsClock" ?
-                                            this.state.gameEndMsg !== GAME_OVER_MSG ?
-                                                <AnimatedCounter 
-                                                    fn={ (val, counter) => val - counter }
-                                                    counter={timer.time}
-                                                    firstAcc={timer.time}
-                                                    render={formatTime}
-                                                /> : 
-                                                <Text>Time: {formatTime(timer.time)}</Text> :
-                                                null
-                                        }
-
-                                        {
-                                            this.state.gameEndMsg !== GAME_OVER_MSG ?
-                                                <AnimatedCounter 
-                                                    fn={ (val, counter) => val - counter }
-                                                    counter={accuracy}
-                                                    firstAcc={accuracy}
-                                                    render={accuracy => accuracy + "%"}
-                                                /> : 
-                                                <Text>Accuracy: {accuracy + "%"}</Text>
-                                        }
-                                        
+                            return (
+                                <View>
+                                    <View style={points_c}>
+                                        <Image source={require("../../img/cat-box.png")} style={img}/>
                                         {
                                             this.state.gameEndMsg !== GAME_OVER_MSG ?
                                                 query.isNewHighScore() ? 
@@ -142,26 +156,88 @@ class Board extends React.Component<{
                                                         method={query.updateScore}
                                                         render={renderScore}
                                                     /> :
-                                                    renderScore :
-                                                <Text>Score: {score}</Text>
+                                                    renderScore : <Text style={points}>{score} points!</Text> 
                                         }
                                     </View>
-                                )
-                            }}
-                        />
-                        
-                        <TouchableOpacity onPress={() => {
-                            this.setState(
-                                { gameEndMsg: null, moveCounter: 0 }, 
-                                () => {
-                                    initOrder(gridSize, difficulty);
-                                    newGame(gridSize, difficulty);
-                                } 
-                            );
-                        }}>
-                            <Text>Close</Text>
-                        </TouchableOpacity>
-                    </View>
+
+                                    <Separator />
+
+                                    <View style={metadata_c}>
+                                        <View style={metadata}>
+                                            <Text style={meta_title}>Accuracy</Text>
+                                            {
+                                                this.state.gameEndMsg !== GAME_OVER_MSG ?
+                                                    (<Text style={meta}>
+                                                        <AnimatedCounter 
+                                                            fn={ (val, counter) => val - counter }
+                                                            counter={accuracy}
+                                                            firstAcc={accuracy}
+                                                            render={accuracy => accuracy + "%"}
+                                                        />
+                                                    </Text>) : 
+                                                    <Text style={meta}>{accuracy + "%"}</Text>
+                                            }
+                                        </View>
+
+                                        <View style={metadata}>
+                                            <Text style={meta_title}>Moves</Text>
+                                            <Text style={meta}>{this.state.moveCounter}</Text>
+                                        </View>
+
+                                        <View style={metadata}>
+                                            <Text style={meta_title}>Time</Text>
+                                            {
+                                                gameMode === "vsClock" ?
+                                                this.state.gameEndMsg !== GAME_OVER_MSG ?
+                                                    (<Text style={meta}>
+                                                        <AnimatedCounter 
+                                                            fn={ (val, counter) => val - counter }
+                                                            counter={timer.time}
+                                                            firstAcc={timer.time}
+                                                            render={formatTime}
+                                                        />
+                                                    </Text>) : 
+                                                    <Text style={meta}>{formatTime(timer.time)}</Text> :
+                                                    null
+                                            }
+                                        </View>
+                                    </View>
+
+                                    <View style={btn_c}>
+                                        <TouchableOpacity
+                                            onPress={() => {
+                                                this.setState(
+                                                    { gameEndMsg: null, moveCounter: 0 }, 
+                                                    () => {
+                                                        initOrder(gridSize, difficulty);
+                                                        newGame(gridSize, difficulty);
+                                                    } 
+                                                );
+                                            }}
+                                            style={[btn, {
+                                                 backgroundColor: "#a2b798", 
+                                                 flexDirection: "row",
+                                                marginRight: 0 
+                                            }]}>
+                                            <Icon 
+                                                style={{ paddingRight: 3 }} 
+                                                name="cw" 
+                                                size={18} 
+                                                color="#fff"
+                                            />
+                                            <Text style={btn_txt}>Play again</Text>
+                                        </TouchableOpacity>
+
+                                        <TouchableOpacity 
+                                            onPress={this._backHome}
+                                            style={[btn, { backgroundColor: "#e25b45" }]}>
+                                            <Text style={btn_txt}>Exit</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            )
+                        }}
+                    />
                 </Popup>
                 
                 <Maybe 
@@ -171,58 +247,26 @@ class Board extends React.Component<{
 
                         return (
                             <View style={{ flex: 1 }}>
-                                
-                                {/* Turn into component */}
                                 <View 
-                                    style={{
-                                        position: "relative",
-                                        flexDirection: "row",
-                                        backgroundColor: "powderblue",
-                                        height: 75,
-                                        margin: 5,
-                                        borderRadius: 5
-                                    }}>
-                                    <View style={{ 
-                                        flex: 2,  
-                                        alignItems: "center",
-                                        margin: 10,
-                                        marginRight: 5,
-                                        marginLeft: 5,
-                                        borderRadius: 5,
-                                        elevation: 1,
-                                        paddingTop: 5
-                                    }}>
-                                        <Text>Moves</Text>
-                                        <Text>{this.state.moveCounter}</Text>
-                                        
-                                    </View>
+                                    style={info_c}>
+                                    <MetaBox title="Moves">
+                                        {this.state.moveCounter}
+                                    </MetaBox>
 
                                     <View style={{ flex: 3 }}></View>
 
-                                    <View style={{ 
-                                        flex: 2,  
-                                        alignItems: "center",
-                                        margin: 10,
-                                        marginRight: 5,
-                                        marginLeft: 5,
-                                        borderRadius: 5,
-                                        elevation: 1,
-                                        paddingTop: 5
-                                    }}>
-                                        <Text>Score</Text>
+                                    <MetaBox title="Score">
                                         <Score 
                                             gameMode={gameMode}
                                             difficulty={difficulty}
                                         />
-                                    </View>
+                                    </MetaBox>
                                 </View>
 
                                 <Order 
                                     difficulty={difficulty}
                                     gridSize={gridSize}
                                 />
-
-                                
                             </View>
                         );
                     }}
@@ -231,15 +275,7 @@ class Board extends React.Component<{
                 <View style={{ flex: 3 }}>
                     {
                         gameMode === "vsClock" ? this.renderTimer(gridSize, difficulty) : (
-                            <View style={{
-                                height: 20,
-                                width: "100%",
-                                backgroundColor: '#ccc',
-                                marginLeft: 1,
-                                marginRight:1,
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}>
+                            <View style={zen_s}>
                                 <Text>ZEN</Text>
                             </View>
                         )
@@ -252,7 +288,7 @@ class Board extends React.Component<{
                     />
                 </View>
 
-            </View>
+            </ImageBackground>
         );
     }
 }

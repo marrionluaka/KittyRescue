@@ -40,7 +40,7 @@ const GridSelector = ({
 
             <Btn onPress={!!disabled ? () => {} : push} style={gridTouchable}>
                 <View style={gridThumbnailContiner}>
-                    <Text style={[gridTitle, { backgroundColor: gridColors[title] }]}>{title}</Text>
+                    <Text style={[gridTitle, { backgroundColor: gridColors[title.replace(/ /g, '')] }]}>{title}</Text>
                 </View>
 
                 <View style={gridSizeContainer}>

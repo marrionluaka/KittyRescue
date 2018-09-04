@@ -17,20 +17,23 @@ const styles = StyleSheet.create({
       position: 'relative'
     },
     progress_status: {
-      color: '#333',
-      fontSize: 20,
-      fontWeight: 'bold',
+      color: '#fff',
+      fontSize: 16,
+      paddingTop: 1,
+      paddingBottom: 1,
+      fontFamily: "riffic",
       alignSelf: 'center',
       position: 'absolute',
-      top: -4
+      top: -1
     }
 });
 
-export default class Bar extends Animator<{ time: number; }> {
+export default class Bar extends Animator<{ time: number; colors?: string[] }> {
     private progress: Animated.Value
     private initialVal: number
     public state: any
-    private initialState: any = { progress: null }
+    private readonly initialState: any = { progress: null }
+    private readonly initialColors: string[] = ['rgb(199, 45, 50)', 'rgb(224, 150, 39)', 'rgb(101, 203, 25)'];
 
     constructor(props) {
       super(props);
@@ -70,6 +73,7 @@ export default class Bar extends Animator<{ time: number; }> {
 
     private getProgressStyles() {
         const { width } = Dimensions.get('window');
+        const { colors } = this.props;
         const available_width = width - 2 - 6;
 
         const animated_width = this.progress.interpolate({
@@ -79,7 +83,7 @@ export default class Bar extends Animator<{ time: number; }> {
         
         const animated_color = this.progress.interpolate({
           inputRange: [0, 50, 100],
-          outputRange: ['rgb(199, 45, 50)', 'rgb(224, 150, 39)', 'rgb(101, 203, 25)']
+          outputRange: !!colors ? colors : this.initialColors
         });
         
         return {
@@ -90,10 +94,11 @@ export default class Bar extends Animator<{ time: number; }> {
     }
     
     public render() {
+        const { colors } = this.props;
         const _style = this.state.progress === this.initialVal ? {
             height: 20,
             width: "100%",
-            backgroundColor: 'rgb(101, 203, 25)'
+            backgroundColor: !!colors ? colors[colors.length-1] : this.initialColors[this.initialColors.length-1]
         } : this.getProgressStyles();
 
         return (
