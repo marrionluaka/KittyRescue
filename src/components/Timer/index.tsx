@@ -10,6 +10,7 @@ import Bar from './Bar';
 import { formatTime } from "../../lib";
 import { timerLvls } from "../../globals";
 import * as countdown from "../../actions/timer";
+import { TIMES_UP_MSG } from "../../types";
 
 interface IProps{
     gridSize: number;
@@ -41,7 +42,7 @@ class Timer extends React.Component<IProps, { timerID: any }>{
 
     componentDidUpdate(){
         if(this.props.timer.time === 0 || this.props.timer.invalidateTimer){
-            this.props.hasTimeElasped(this.props.timer.invalidateTimer || "Times Up!");
+            this.props.hasTimeElasped(this.props.timer.invalidateTimer || TIMES_UP_MSG);
             clearTimeout(this.state.timerID);
         } 
     }

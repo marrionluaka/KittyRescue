@@ -95,8 +95,7 @@ export default StyleSheet.create({
     },
     name_s: {
         fontFamily: "riffic",
-        paddingRight: 10,
-        paddingLeft: 10,
+        padding: 10,
         fontSize: 18,
         lineHeight: 18
     },

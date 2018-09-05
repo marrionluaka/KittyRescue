@@ -76,5 +76,12 @@ export default StyleSheet.create({
     },
     meta:{
         fontFamily: FONT
+    },
+    ohNoes:{
+        textAlign: "center",
+        paddingTop: 5,
+        paddingBottom: 5,
+        fontFamily: FONT,
+        fontSize: 13
     }
 });

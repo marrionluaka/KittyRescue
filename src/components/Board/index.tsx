@@ -24,7 +24,7 @@ import {
 } from "../common";
 
 import { formatTime, getPercentage } from "../../lib";
-import { GAME_OVER_MSG } from "../../types";
+import { CRUNCHED, TIMES_UP_MSG } from "../../types";
 import ScoreQueries from "../../queries/scores";
 import {newGame} from "../../actions/tiles";
 import {initOrder} from "../../actions/order";
@@ -101,7 +101,8 @@ class Board extends React.Component<{
             metadata_c,
             metadata,
             meta,
-            meta_title
+            meta_title,
+            ohNoes
         } = styles;
 
         return (
@@ -130,9 +131,9 @@ class Board extends React.Component<{
                             </View>
                         )}
                         renderAlt={() => {
-                            const query        = new ScoreQueries(gameMode, difficulty, gridSize),
+                            const   query        = new ScoreQueries(gameMode, difficulty, gridSize),
                                     // @ts-ignore: compile error
-                                    matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.isMatched).length,
+                                    matchedTiles = Object.values(this.props.order.alreadyMatchedTiles).filter( x => x.orderMatched).length,
                                     totalTiles   = this.props.order.tiles.length,
                                     accuracy     = getPercentage(matchedTiles, totalTiles),
                                     renderScore  = (
@@ -152,8 +153,9 @@ class Board extends React.Component<{
                                 <View>
                                     <View style={points_c}>
                                         <Image source={require("../../img/cat-box.png")} style={img}/>
-                                        {
-                                            this.state.gameEndMsg !== GAME_OVER_MSG && finalScore > 0 ?
+                                        <Maybe 
+                                            pred={() => this.state.gameEndMsg !== CRUNCHED && finalScore > 0}
+                                            render={() => (
                                                 query.isNewHighScore() ? 
                                                     <NewHighScore 
                                                         score={finalScore}
@@ -166,8 +168,17 @@ class Board extends React.Component<{
                                                         method={query.updateScore}
                                                         render={renderScore}
                                                     /> :
-                                                    renderScore : <Text style={points}>{score} points!</Text> 
-                                        }
+                                                    renderScore
+                                            )}
+                                            renderAlt={() => (
+                                            <View>
+                                                <Text style={points}>0 points!</Text>
+                                                { 
+                                                    this.state.gameEndMsg !== TIMES_UP_MSG && 
+                                                        <Text style={ohNoes}>Oh Noes! It appears you've been bitten!</Text>
+                                                }
+                                            </View>)}
+                                        />
                                     </View>
 
                                     <Separator />
@@ -178,16 +189,14 @@ class Board extends React.Component<{
                                             <Maybe 
                                                 pred={() => gameMode === "accuracy"}
                                                 render={() => (
-                                                    this.state.gameEndMsg !== GAME_OVER_MSG ?
-                                                        (<Text style={meta}>
-                                                            <AnimatedCounter 
-                                                                fn={ (val, counter) => val - counter }
-                                                                counter={accuracy}
-                                                                firstAcc={accuracy}
-                                                                render={accuracy => accuracy + "%"}
-                                                            />
-                                                        </Text>) : 
-                                                        <Text style={meta}>{accuracy + "%"}</Text>
+                                                    <Text style={meta}>
+                                                        <AnimatedCounter 
+                                                            fn={ (val, counter) => val - counter }
+                                                            counter={accuracy}
+                                                            firstAcc={accuracy}
+                                                            render={accuracy => accuracy + "%"}
+                                                        />
+                                                    </Text>
                                                 )}
                                                 renderAlt={() => <Text style={meta}>-</Text>}
                                             />
@@ -203,16 +212,14 @@ class Board extends React.Component<{
                                             <Maybe 
                                                 pred={() => gameMode === "vsClock"}
                                                 render={() =>(
-                                                    this.state.gameEndMsg !== GAME_OVER_MSG ?
-                                                    (<Text style={meta}>
+                                                    <Text style={meta}>
                                                         <AnimatedCounter 
                                                             fn={ (val, counter) => val - counter }
                                                             counter={timer.time}
                                                             firstAcc={timer.time}
                                                             render={formatTime}
                                                         />
-                                                    </Text>) : 
-                                                    <Text style={meta}>{formatTime(timer.time)}</Text>
+                                                    </Text>
                                                 )}
                                                 renderAlt={() => <Text style={meta}>-</Text>}
                                             />

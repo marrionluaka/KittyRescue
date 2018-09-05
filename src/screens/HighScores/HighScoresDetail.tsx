@@ -1,5 +1,5 @@
 import * as React from "react";
-import { groupBy, memoize } from 'ramda';
+import * as R from 'ramda';
 import {
     Text,
     View,
@@ -13,7 +13,7 @@ import { IRecord } from "../../interfaces";
 import { NoScores } from "./NoScores";
 import ScoreQueries from "../../queries/scores";
 import styles from './styles';
-import { capitalizeFirstLetter } from "../../lib";
+import { capitalizeFirstLetter, removeAt } from "../../lib";
 
 const _scoreCache = {},
       _diffCache = {};
@@ -24,13 +24,28 @@ const _getScores = mode => {
 };
 
 const _getDifficulty = (mode: string, scores: any) => {
-    const _groups = Object.values(groupBy((user: any) => user.difficulty)(scores));
+    const move2Last = R.curry(_moveToLast);
+    const _groups = R.compose(
+        Object.values,
+        move2Last("hard"),
+        R.groupBy(R.prop('difficulty'))
+    )(scores);
+    
     return(_diffCache[mode] = _groups) && _groups;
 };
 
+const _moveToLast = (el: string, diff: any) => {
+    const keys = Object.keys(diff);
+    const idx = keys.indexOf(el);
+    const sorted = removeAt(idx, keys).concat(keys.slice(idx, idx+1));
+    
+    return sorted.reduce((acc, key) => (acc[key] = diff[key]) && acc, {});
+};
+
 const HighScoresDetail = ({ gameMode, display, backHome }) => {
-    const scores = !!_scoreCache[gameMode] ? _scoreCache[gameMode] : memoize(_getScores)(gameMode);
-    const res = !!_diffCache[gameMode] ? _diffCache[gameMode] : memoize(_getDifficulty)(gameMode, scores);
+    const scores = !!_scoreCache[gameMode] ? _scoreCache[gameMode] : R.memoize(_getScores)(gameMode);
+    const res = !!_diffCache[gameMode] ? _diffCache[gameMode] : R.memoize(_getDifficulty)(gameMode, scores);
+
     const {
         tbl_c,
         row_c,

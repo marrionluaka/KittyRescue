@@ -137,3 +137,5 @@ export const debounce = (fn, threshold) => {
 };
 
 export const capitalizeFirstLetter = str => str.charAt(0).toUpperCase() + str.slice(1);
+
+export const removeAt = (index, array) => array.slice(0, index).concat(array.slice(index + 1));

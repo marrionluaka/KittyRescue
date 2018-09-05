@@ -10,7 +10,7 @@ import {
 import { connect } from "react-redux";
 
 import Tile from "../Tile";
-import { GAME_OVER_MSG } from "../../types";
+import { CRUNCHED } from "../../types";
 import * as tileActions from "../../actions/tiles";
 import * as timerActions from "../../actions/timer";
 import styles from './styles';
@@ -65,7 +65,7 @@ class Grid extends React.Component<IGridProps, {}> {
     const len = Object.values(tilesState.tiles).length - (levels[difficulty] || 0);
 
     if(tilesState.tiles_flipped === len) 
-      this.showPopup(GAME_OVER_MSG);
+      this.showPopup("Game Over!");
   }
 
   private memoryFlipTile = (tile, tileCtx) => {
@@ -86,7 +86,7 @@ class Grid extends React.Component<IGridProps, {}> {
 
           if(tile.isTrap){
             this.emptyTilesContainer();
-            return this.showPopup(GAME_OVER_MSG);
+            return this.showPopup(CRUNCHED);
           }
          
           setTimeout(() => {

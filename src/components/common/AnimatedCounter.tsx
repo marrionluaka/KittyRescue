@@ -52,7 +52,8 @@ class AnimatedCounter extends React.Component<{
     }
 
     render(){
-        return !!this.props.render ? this.props.render(this.state.counter) : this.state.counter;
+        const _counter = !!this.props.render ? this.props.render(this.state.counter) : this.state.counter;
+        return <Text>{_counter}</Text>
     }
 }
 

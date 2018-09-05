@@ -13,4 +13,5 @@ export const STOP_TIMER = "STOP_TIMER";
 export const ORDER_MATCHED = "ORDER_MATCHED";
 export const INIT_ORDER = "INIT_ORDER";
 
-export const GAME_OVER_MSG = "Game Over";
+export const CRUNCHED = "Crunched!";
+export const TIMES_UP_MSG = "Times Up!";
