@@ -4,11 +4,11 @@ export default StyleSheet.create({
     circle: { 
         position: "absolute",
         zIndex: 9,
-        
+        justifyContent: "center",
         width: 100,
         height: 100,
         borderRadius: 50,
-        top: 5,
+        top: "20%",
         alignSelf: 'center'
     },
     innerCircle:{ 
@@ -18,6 +18,8 @@ export default StyleSheet.create({
         justifyContent: 'center',
         width: "95%",
         height: "95%",
+        borderWidth: 1,
+        borderColor: "#fff"
         //backgroundColor: "#e5acad"
     },
     text: { 

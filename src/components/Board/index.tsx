@@ -30,6 +30,8 @@ import {newGame} from "../../actions/tiles";
 import {initOrder} from "../../actions/order";
 import styles from "./styles";
 import MetaBox from "./MetaBox";
+import Audio from "../../services/Audio";
+import { IAudioService } from "../../interfaces";
 
 const scoreReducer = (currentTime, currentAccuracy) => currentTime + currentAccuracy;
 
@@ -42,7 +44,14 @@ class Board extends React.Component<{
     order: any;
 }> {
 
+    private readonly audioService: IAudioService;
     private readonly _moveCounterThreshold: number = 7
+
+    constructor(props){
+        super(props);
+
+        this.audioService = new Audio();
+    }
 
     state = {
       gameEndMsg: null,
@@ -152,24 +161,40 @@ class Board extends React.Component<{
                             return (
                                 <View>
                                     <View style={points_c}>
-                                        <Image source={require("../../img/cat-box.png")} style={img}/>
+                                        {
+                                            this.state.gameEndMsg === CRUNCHED ? 
+                                                <Image source={require("../../img/trap.png")} style={img}/> :
+                                                <Image source={require("../../img/cat-box.png")} style={img}/>
+                                        }
                                         <Maybe 
                                             pred={() => this.state.gameEndMsg !== CRUNCHED && finalScore > 0}
-                                            render={() => (
-                                                query.isNewHighScore() ? 
-                                                    <NewHighScore 
-                                                        score={finalScore}
-                                                        method={query.insertScore}
-                                                        render={renderScore}
-                                                    /> :
-                                                    query.isLowestScore(finalScore) ?
-                                                    <NewHighScore 
-                                                        score={finalScore}
-                                                        method={query.updateScore}
-                                                        render={renderScore}
-                                                    /> :
-                                                    renderScore
-                                            )}
+                                            render={() => {
+
+                                                if(query.isNewHighScore()){
+                                                    this.audioService.playSound("win");
+                                                    return <NewHighScore 
+                                                            score={finalScore}
+                                                            method={query.insertScore}
+                                                            render={renderScore}
+                                                        /> 
+                                                }
+                                                else if(query.isLowestScore(finalScore)){
+                                                    this.audioService.playSound("win");
+                                                    return <NewHighScore 
+                                                            score={finalScore}
+                                                            method={query.updateScore}
+                                                            render={renderScore}
+                                                        /> 
+                                                }
+                                                else{
+                                                    if(this.state.gameEndMsg === CRUNCHED) 
+                                                        this.audioService.playSound("youLose");
+                                                    else
+                                                        this.audioService.playSound("gameOver");
+                                                        
+                                                    return renderScore
+                                                }
+                                            }}
                                             renderAlt={() => (
                                             <View>
                                                 <Text style={points}>0 points!</Text>

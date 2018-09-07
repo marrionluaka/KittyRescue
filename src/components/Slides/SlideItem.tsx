@@ -11,7 +11,7 @@ import styles from './styles';
 
 const images = {
     "fridge": require("../../img/cat-fridge-big.png"),
-    "fight": require("../../img/cat-banjo-big.png"),
+    "bite": require("../../img/dog.png"),
     "cart": require("../../img/cat-cart-big.png")
 };
 
@@ -56,11 +56,11 @@ const SlideItem = ({
                 <View>
                     <Text style={{ 
                         color: "#808080", 
-                        fontWeight: "bold",
+                        fontFamily: "riffic",
                         paddingBottom: 5,
                         fontSize: 21,
                         textAlign: 'center'
-                    }}>{title.toUpperCase()}</Text>
+                    }}>{title}</Text>
                     <Text style={slideText}>{text}</Text>
                 </View>
             </View>

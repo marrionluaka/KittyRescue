@@ -1,4 +1,5 @@
 import * as React from 'react';
+import * as R from 'ramda';
 import { 
     View, 
     Text, 
@@ -15,6 +16,8 @@ import {
 } from '../../globals';
 
 import styles from './styles';
+import { IAudioService } from '../../interfaces';
+import Audio from '../../services/Audio';
 
 interface IProps {
     addPoints: any;
@@ -26,8 +29,14 @@ interface IProps {
 }
 
 class Order extends React.Component<IProps, {}> {
+    private readonly audioService: IAudioService
+    private readonly sorter: any
+
     constructor(props){
         super(props)
+
+        this.audioService = new Audio();
+        this.sorter = R.sortBy(R.prop("idx"));
     }
 
     componentWillMount(){
@@ -54,19 +63,30 @@ class Order extends React.Component<IProps, {}> {
         let values: any = Object.values(alreadyMatchedTiles);
         
         if(!!values.length && this.isValidPointer()){
-            this.props.addPoints(values[values.length - 1 || 0].orderMatched ? MAX_SCORE : MIN_SCORE);
+            const orderMatched = this.sorter(values)[pointer-1].orderMatched;
+            
+            this.soundManager(() => orderMatched);
+            this.props.addPoints(orderMatched ? MAX_SCORE : MIN_SCORE);
             this.props.orderMatched(alreadyMatchedTiles);
         }
     }
 
-    currentPointer = (src: string): boolean | number => {
+    private currentPointer = (src: string): boolean | number => {
         const { tiles, pointer } = this.props.order;
         return this.isValidPointer() ? tiles[pointer].src === src : 0;
     }
 
-    isValidPointer = (): boolean => {
+    private isValidPointer = (): boolean => {
         const { tiles, pointer } = this.props.order;
         return pointer < tiles.length;
+    }
+
+    private soundManager = pred => {
+        return R.ifElse(
+            pred,
+            () => this.audioService.playSound("ding"),
+            () => this.audioService.playSound("wrong")
+        )(null);
     }
 
     render(){

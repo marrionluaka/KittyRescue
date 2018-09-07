@@ -5,3 +5,7 @@ export interface IRecord {
     difficulty: string;
     gridSize: number;
 }
+
+export interface IAudioService{
+    playSound(sound: any): void
+}

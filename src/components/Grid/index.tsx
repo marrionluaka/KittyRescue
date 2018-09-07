@@ -14,6 +14,8 @@ import { CRUNCHED } from "../../types";
 import * as tileActions from "../../actions/tiles";
 import * as timerActions from "../../actions/timer";
 import styles from './styles';
+import { IAudioService } from "../../interfaces";
+import Audio from "../../services/Audio";
 
 const { container } = styles;
 
@@ -40,12 +42,15 @@ interface IGridProps {
 class Grid extends React.Component<IGridProps, {}> {
   private memory_tiles: any[]
   private tiles: any[]
+  private readonly audioService: IAudioService
 
   constructor(props){
     super(props); 
     
     this.memory_tiles = [];
     this.tiles = [];
+
+    this.audioService = new Audio();
   }
 
   componentWillMount(){
@@ -79,6 +84,7 @@ class Grid extends React.Component<IGridProps, {}> {
 
     if(memory_tiles.length == 0){
       memory_tiles.push(tile)
+      if(tile.isTrap) this.audioService.playSound("bite");
     } else if(memory_tiles.length == 1 && memory_tiles[0].id !== tile.id){
       memory_tiles.push(tile);
 
@@ -96,6 +102,7 @@ class Grid extends React.Component<IGridProps, {}> {
           onTileFlipped();
           
         } else {
+          if(tile.isTrap) this.audioService.playSound("bite");
           this.flip2Back(tiles);
           onTileFlipped();
         }
@@ -161,6 +168,7 @@ class Grid extends React.Component<IGridProps, {}> {
                           isZenMode={() => gameMode === "zen"}
                           matchedTiles={tilesState.alreadyMatchedTiles}
                           onTileFlipped={this.memoryFlipTile}
+                          zenSound={this.audioService.playSound}
                         />
                       );
                     })

@@ -5,26 +5,23 @@ import { NavigationActions } from "react-navigation";
 
 const SLIDE_DATA = [
     { 
-        title: "Search Engine Optimization",
-        text: "Lorem ipsum dolor sit amet, onsectetur adipisicing elit, sed do eiusmod tem incidunt ut labore. Roses are red, violets are blue.", 
+        title: "Gotta match 'em all",
+        text: "Match all the kitties and rescue them from the evil jaws of the vicious dogs!", 
         slideImg: "cart", 
         key: 1 
     },
     { 
-        title: "Search Engine Optimization",
-        text: "Lorem ipsum dolor sit amet, onsectetur adipisicing elit, sed do eiusmod tem incidunt ut labore. Roses are red, violets are blue.", 
-        slideImg: "fight",  
-        key: 2 
+        title: "The order matters",
+        text: `In order to gain the maximum amount of points, you must find the kitty that is directly being targeted.`, 
+        slideImg: "fridge", 
+        key: 2
     },
     { 
-        title: "Search Engine Optimization",
-        text: `
-            Lorem ipsum dolor sit amet, onsectetur adipisicing elit, sed do eiusmod tem incidunt 
-            ut labore. Roses are red, violets are blue.
-        `, 
-        slideImg: "fridge", 
-        key: 3 
-    }
+        title: "Don't get bit",
+        text: `Watch out for the traps that lay ahead. You lose points every time you accounter a dog and if you find two dogs then game over!`, 
+        slideImg: "bite",  
+        key: 3
+    },
 ];
 
 const resetAction = NavigationActions.reset({

@@ -55,7 +55,8 @@ export default (order: IOrder = initialOrder, action: IAction) => {
             alreadyMatchedTiles: Object.assign({}, order.alreadyMatchedTiles, {
                 [_matchedTile.src]: {
                     [_matchedTile.src]: _matchedTile.src,
-                    orderMatched: _matchedTile.src === order.tiles[order.pointer].src
+                    orderMatched: _matchedTile.src === order.tiles[order.pointer].src,
+                    idx: pointer
                 }
             })
         };

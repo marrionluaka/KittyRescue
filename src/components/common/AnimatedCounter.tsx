@@ -48,7 +48,7 @@ class AnimatedCounter extends React.Component<{
                 onComplete,
                 reset
             });
-        }, 700);
+        }, 900);
     }
 
     render(){

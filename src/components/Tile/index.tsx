@@ -17,6 +17,7 @@ interface IProps {
     gridSize: number;
     matchedTiles?: any;
     onTileFlipped: any;
+    zenSound: any;
     isZenMode: any;
 }
 
@@ -116,7 +117,7 @@ export default class Tile extends Animator<IProps>{
         frontOpacity,
         backOpacity
     ) => {
-        const { tile, matchedTiles, isZenMode } = this.props;
+        const { tile, matchedTiles, isZenMode, zenSound } = this.props;
         const { 
             flipCard, 
             frontFace, 
@@ -137,7 +138,7 @@ export default class Tile extends Animator<IProps>{
                     >
                         <View style={overlay}>
                             {
-                                isZenMode() ? null : this.getMatchedTile(
+                                isZenMode() ? (zenSound("ding") && null) : this.getMatchedTile(
                                     () => matchedTiles[tile.src] && matchedTiles[tile.src].orderMatched
                                 )
                             }
