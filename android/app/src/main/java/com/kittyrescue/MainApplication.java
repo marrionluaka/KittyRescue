@@ -1,4 +1,4 @@
-package com.cookmeright;
+package com.kittyrescue;
 
 import android.app.Application;
 
