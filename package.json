@@ -7,6 +7,8 @@
 		"test": "jest",
 		"test:watch": "jest --watch",
 		"compile": "npm run copy-img && tsc -w",
+		"compile:mac": "npm run copy-img-mac && tsc -w",
+		"copy-img-mac": "ditto ./src/img ./dist/img",
 		"copy-img": "xcopy src\\img dist\\img /i/y"
 	},
 	"dependencies": {

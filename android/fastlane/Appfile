@@ -1,0 +1,2 @@
+json_key_file("./secure/api-5709788459067523492-70912-210c39a63823.json") # Path to the json secret file - Follow https://docs.fastlane.tools/actions/supply/#setup to get one
+package_name("com.kittyrescue") # e.g. com.krausefx.app
