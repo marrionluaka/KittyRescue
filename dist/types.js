@@ -1,0 +1,18 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.NEW_GAME = "NEW_GAME";
+exports.FLIP_TO_BACK = "FLIP_TO_BACK";
+exports.TILES_MATCHED = "TILES_MATCHED";
+exports.ADD_POINTS = "ADD_POINTS";
+exports.DECREASE_TIME = "DECREASE_TIME";
+exports.INVALIDATE_TIMER = "INVALIDATE_TIMER";
+exports.INCREMENT_FLIPS = "INCREMENT_FLIPS";
+exports.ADD_TO_MEMORY = "ADD_TO_MEMORY";
+exports.EMPTY_MEMORY = "EMPTY_MEMORY";
+exports.INCREASE_LIFE = "INCREASE_LIFE";
+exports.DECREASE_LIFE = "DECREASE_LIFE";
+exports.STOP_TIMER = "STOP_TIMER";
+exports.ORDER_MATCHED = "ORDER_MATCHED";
+exports.INIT_ORDER = "INIT_ORDER";
+exports.CRUNCHED = "Crunched!";
+exports.TIMES_UP_MSG = "Times Up!";
