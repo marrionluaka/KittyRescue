@@ -15,36 +15,30 @@ import ScoreQueries from "../../queries/scores";
 import styles from './styles';
 import { capitalizeFirstLetter, removeAt } from "../../lib";
 
-const _scoreCache = {},
-      _diffCache = {};
-
-const _getScores = mode => {
-    const _scores = ScoreQueries.fetchScore(mode);
-    return(_scoreCache[mode] = _scores) && _scores;
-};
-
 const _getDifficulty = (mode: string, scores: any) => {
     const move2Last = R.curry(_moveToLast);
-    const _groups = R.compose(
+
+    return R.compose(
         Object.values,
         move2Last("hard"),
-        R.groupBy(R.prop('difficulty'))
+        R.compose( 
+            R.groupBy( R.prop('difficulty') ),
+            R.sortBy( R.prop('difficulty') )
+        )
     )(scores);
-    
-    return(_diffCache[mode] = _groups) && _groups;
 };
 
 const _moveToLast = (el: string, diff: any) => {
-    const keys = Object.keys(diff);
-    const idx = keys.indexOf(el);
-    const sorted = removeAt(idx, keys).concat(keys.slice(idx, idx+1));
+    const keys = Object.keys(diff),
+          idx = keys.indexOf(el),
+          sorted = removeAt(idx, keys).concat(keys.slice(idx, idx+1));
     
     return sorted.reduce((acc, key) => (acc[key] = diff[key]) && acc, {});
 };
 
 const HighScoresDetail = ({ gameMode, display, backHome }) => {
-    const scores = !!_scoreCache[gameMode] ? _scoreCache[gameMode] : R.memoize(_getScores)(gameMode);
-    const res = !!_diffCache[gameMode] ? _diffCache[gameMode] : R.memoize(_getDifficulty)(gameMode, scores);
+    const scores = ScoreQueries.fetchScore(gameMode);
+    const res = _getDifficulty(gameMode, scores);
 
     const {
         tbl_c,
